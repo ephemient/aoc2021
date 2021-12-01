@@ -1,0 +1,72 @@
+name:                aoc2021
+version:             0.1.0.0
+github:              "ephemient/aoc2021"
+license:             BSD3
+author:              "Daniel Lin"
+maintainer:          "ephemient@gmail.com"
+copyright:           "2021 Daniel Lin"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/ephemient/aoc2021/blob/main/hs/README.md>
+
+dependencies:
+- base >= 4.7 && < 5
+
+library:
+  source-dirs: src
+  dependencies:
+  - text
+
+executables:
+  aoc2021-exe:
+    main:                Main.hs
+    other-modules:
+    - Paths_aoc2021
+    source-dirs:         app
+    c-sources:           app/cbits/main.c
+    ghc-options:
+    - -no-hs-main
+    - -threaded
+    dependencies:
+    - aoc2021
+    - text
+
+data-files:
+- day*.txt
+
+tests:
+  aoc2021-test:
+    main:                Main.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - '"-with-rtsopts=-N -qg"'
+    dependencies:
+    - QuickCheck
+    - aoc2021
+    - hspec
+    - text
+
+benchmarks:
+  aoc2021-bench:
+    main:                Main.hs
+    source-dirs:         bench
+    c-sources:           bench/cbits/main.c
+    ghc-options:
+    - -no-hs-main
+    - -threaded
+    dependencies:
+    - aoc2021
+    - criterion
+    - text
