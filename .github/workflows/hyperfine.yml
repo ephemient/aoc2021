@@ -144,12 +144,13 @@ jobs:
       - name: Run hyperfine
         run: |
           hyperfine \
-            -n Haskell 'aoc2021-hs/aoc2021-exe' \
+            -n Haskell 'aoc2021_datadir=inputs aoc2021-hs/aoc2021-exe' \
             -n Kotlin 'aoc2021-kt/aoc2021/bin/aoc2021' \
             -n Python 'PYTHON_HOME=aoc2021-py aoc2021-py/bin/aoc2021' \
             -n Rust 'aoc2021-rs/aoc2021' \
             --export-markdown hyperfine.md
       - uses: EndBug/add-and-commit@v5
         with:
+          branch: gh-docs
           add: hyperfine.md
           message: 'Hyperfine ${{ github.sha }}'
