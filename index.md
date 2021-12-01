@@ -29,3 +29,7 @@
 ## Rust
 
 [Criterion](criterion/index.html)
+
+## [Hyperfine](https://github.com/sharkdp/hyperfine)
+
+{% include_relative hyperfine.md %}
