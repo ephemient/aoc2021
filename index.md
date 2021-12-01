@@ -20,3 +20,7 @@
   </script>
 </details>
 {% endfor %}
+
+## Python
+
+[pytest-benchmark](benchmark.svg)
