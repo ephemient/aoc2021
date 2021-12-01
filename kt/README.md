@@ -9,6 +9,12 @@ Run the [JUnit 5](https://junit.org/junit5/) test suite:
 ./gradlew jvmTest
 ```
 
+Run [kotlinx.benchmark](https://github.com/Kotlin/kotlinx-benchmark) benchmarks:
+
+```sh
+./gradlew benchmark
+```
+
 Print solutions for the inputs provided in local data files:
 
 ```sh

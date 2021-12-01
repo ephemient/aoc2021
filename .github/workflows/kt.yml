@@ -30,7 +30,7 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: gradle
-      - run: ./gradlew --no-daemon --info build
+      - run: ./gradlew --no-daemon --info build assembleBenchmarks
         working-directory: kt
 
   gradle-wrapper-validation:
