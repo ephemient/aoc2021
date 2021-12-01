@@ -22,7 +22,6 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: inputs
-          path: hs
       - id: rust-toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -42,7 +41,7 @@ jobs:
         working-directory: rs
       - name: Inline Criterion benchmark results
         run: |
-          cat >>docs/criterion/index.html <<'EOF'
+          cat >>gh-docs/criterion/index.html <<'EOF'
           <script>
             document.querySelectorAll('li a[href]')
               .forEach(a => {
