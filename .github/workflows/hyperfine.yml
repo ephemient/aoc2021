@@ -1,0 +1,155 @@
+name: Hyperfine
+
+on:
+  workflow_dispatch:
+
+jobs:
+  get-inputs:
+    uses: ephemient/aoc2021/.github/workflows/get-inputs.yml@main
+    secrets:
+      SESSION: ${{ secrets.SESSION }}
+
+  haskell:
+    needs: [ get-inputs ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: inputs
+          path: hs
+      - uses: haskell/actions/setup@v1
+        with:
+          enable-stack: true
+      - uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-hyperfine-${{ hashFiles('**/stack.*') }}-${{ hashFiles('**/package.yaml') }}
+          restore-keys: ${{ runner.os }}-hyperfine-${{ hashFiles('**/stack.*') }}-
+          path: ~/.stack
+      - id: build
+        run: |
+          stack build --ghc-options -O2
+          echo "::set-output name=exe::$(ls .stack-work/dist/*/*/build/aoc2021-exe/aoc2021-exe)"
+        working-directory: hs
+      - uses: actions/upload-artifact@v2
+        with:
+          name: aoc2021-hs
+          path: hs/${{ steps.build.outputs.exe }}
+
+  kotlin:
+    needs: [ get-inputs ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: inputs
+      - uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+      - run: ./gradlew distZip
+        working-directory: kt
+      - uses: actions/upload-artifact@v2
+        with:
+          name: aoc2021-kt
+          path: kt/build/distributions/aoc2021.zip
+
+  python:
+    needs: [ get-inputs ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: inputs
+          path: py/aoc2021
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+      - uses: snok/install-poetry@v1
+      - uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-${{ hashFiles('**/pyproject.toml') }}-${{ hashFiles('**/poetry.lock') }}
+          path: ~/.cache/pypoetry
+      - run: poetry install --no-interaction --no-root
+        working-directory: py
+      - run: poetry build
+        working-directory: py
+      - uses: actions/upload-artifact@v2
+        with:
+          name: aoc2021-py
+          path: py/dist/*.whl
+
+  rust:
+    needs: [ get-inputs ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: inputs
+      - id: rust-toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          components: clippy, rustfmt
+          default: true
+      - uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-hyperfine-${{ steps.rust-toolchain.outputs.rustc_hash }}-${{ hashFiles('**/Cargo.*') }}
+          restore-keys: ${{ runner.os }}-hyperfine-${{ steps.rust-toolchain.outputs.rustc_hash }}-
+          path: ~/.cargo
+      - run: cargo build --release
+        working-directory: rs
+      - uses: actions/upload-artifact@v2
+        with:
+          name: aoc2021-rs
+          path: rs/target/release/aoc2021
+
+  hyperfine:
+    needs: [ haskell, kotlin, python, rust ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: gh-docs
+      - name: sudo apt install hyperfine
+        run: |
+          wget https://github.com/sharkdp/hyperfine/releases/download/v1.12.0/hyperfine_1.12.0_amd64.deb
+          sudo apt install ./hyperfine_1.12.0_amd64.deb
+      - uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+      - uses: actions/download-artifact@v2
+      - run: unzip -d aoc2021-kt aoc2021-kt/aoc2021.zip
+      - run: chmod -v +x aoc2021-hs/aoc2021-exe aoc2021-kt/aoc2021/bin/aoc2021 aoc2021-rs/aoc2021
+      - run: python -m venv aoc2021-py
+      - name: Run pip install aoc2021-py/*.whl
+        run: |
+          . bin/activate
+          pip install *.whl
+        working-directory: aoc2021-py
+      - name: Run hyperfine
+        run: |
+          hyperfine \
+            -n Haskell 'aoc2021-hs/aoc2021-exe' \
+            -n Kotlin 'aoc2021-kt/aoc2021/bin/aoc2021' \
+            -n Python 'PYTHON_HOME=aoc2021-py aoc2021-py/bin/aoc2021' \
+            -n Rust 'aoc2021-rs/aoc2021' \
+            --export-markdown hyperfine.md
+      - uses: EndBug/add-and-commit@v5
+        with:
+          add: hyperfine.md
+          message: 'Hyperfine ${{ github.sha }}'
