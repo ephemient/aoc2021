@@ -1,0 +1,75 @@
+name: Rust Criterion
+
+on:
+  workflow_dispatch:
+
+jobs:
+  get-inputs:
+    uses: ephemient/aoc2021/.github/workflows/get-inputs.yml@main
+    secrets:
+      SESSION: ${{ secrets.SESSION }}
+
+  build:
+    needs: [ get-inputs ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+        with:
+          ref: gh-docs
+          path: gh-docs
+      - uses: actions/download-artifact@v2
+        with:
+          name: inputs
+          path: hs
+      - id: rust-toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          default: true
+      - uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-criterion-${{ steps.rust-toolchain.outputs.rustc_hash }}-${{ hashFiles('**/Cargo.*') }}
+          restore-keys: ${{ runner.os }}-criterion-${{ steps.rust-toolchain.outputs.rustc_hash }}-
+          path: ~/.cargo
+      - run: cargo install cargo-criterion
+        working-directory: rs
+      - run: cargo criterion
+        working-directory: rs
+      - run: rsync --archive --delete --verbose --whole-file target/criterion/reports/ ../gh-docs/criterion/
+        working-directory: rs
+      - name: Inline Criterion benchmark results
+        run: |
+          cat >>docs/criterion/index.html <<'EOF'
+          <script>
+            document.querySelectorAll('li a[href]')
+              .forEach(a => {
+                let b = a.getAttribute('href');
+                b = b.substr(0, b.lastIndexOf('/') + 1);
+                fetch(a.href, {
+                  mode: 'same-origin',
+                  headers: {
+                    'Accept': 'text/html'
+                  }
+                })
+                  .then(r => r.text())
+                  .then(t => new DOMParser().parseFromString(t, 'text/html'))
+                  .then(d => {
+                    d.querySelectorAll('[src]')
+                      .forEach(e => e.setAttribute('src', `${b}${e.getAttribute('src')}`));
+                    d.querySelectorAll('[href]')
+                      .forEach(e => e.setAttribute('href', `${b}${e.getAttribute('href')}`));
+                    a.insertAdjacentElement('afterend', d.querySelector('.body'));
+                    d.querySelectorAll('style').forEach(e => document.head.append(e));
+                  });
+              });
+          </script>
+          EOF
+      - uses: EndBug/add-and-commit@v5
+        with:
+          cwd: gh-docs
+          branch: gh-docs
+          add: criterion
+          message: 'Rust Criterion ${{ github.sha }}'

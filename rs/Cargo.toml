@@ -1,0 +1,34 @@
+[package]
+name = "aoc2021"
+description = "Advent of Code 2021 - my answers"
+version = "0.1.0"
+authors = ["Daniel Lin <ephemient@gmail.com>"]
+license = "BSD-3-Clause"
+edition = "2021"
+readme = "README.md"
+homepage = "https://github.com/ephemient/aoc2021/tree/main/rs"
+build = "build.rs"
+
+[lib]
+name = "aoc2021"
+path = "src/lib.rs"
+
+[[bin]]
+name = "aoc2021"
+path = "src/main.rs"
+
+[build-dependencies]
+build_const = "0.2"
+
+[dependencies]
+build_const = "0.2"
+itertools = "0.10"
+regex = "1"
+
+[dev-dependencies]
+criterion = "0.3"
+pretty_assertions = "1"
+
+[[bench]]
+name = "criterion"
+harness = false

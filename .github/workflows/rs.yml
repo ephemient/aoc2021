@@ -1,0 +1,47 @@
+name: Rust CI
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ rs/** ]
+  pull_request:
+    branches: [ main ]
+    paths: [ rs/** ]
+
+  workflow_dispatch:
+
+jobs:
+  get-inputs:
+    uses: ephemient/aoc2021/.github/workflows/get-inputs.yml@main
+    secrets:
+      SESSION: ${{ secrets.SESSION }}
+
+  build:
+    needs: [ get-inputs ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: inputs
+      - id: rust-toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          components: clippy, rustfmt
+          default: true
+      - uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-${{ steps.rust-toolchain.outputs.rustc_hash }}-${{ hashFiles('**/Cargo.*') }}
+          restore-keys: ${{ runner.os }}-${{ steps.rust-toolchain.outputs.rustc_hash }}-
+          path: ~/.cargo
+      - run: cargo fmt -- --check
+        working-directory: rs
+      - run: cargo clippy -- --deny warnings
+        working-directory: rs
+      - run: cargo build --all-features --all-targets --release
+        working-directory: rs
+      - run: cargo test --release
+        working-directory: rs
