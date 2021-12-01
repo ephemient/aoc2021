@@ -66,7 +66,7 @@ jobs:
               });
           </script>
           EOF
-      - uses: EndBug/add-and-commit@v5
+      - uses: EndBug/add-and-commit@v7
         with:
           cwd: gh-docs
           branch: gh-docs

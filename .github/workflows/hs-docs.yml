@@ -36,7 +36,7 @@ jobs:
       - run: rsync --archive --delete --verbose --whole-file hs/.stack-work/dist/*/*/doc/html/aoc2021/* gh-docs/haddock/
       - name: Rewrite links to Hackage
         run: find gh-docs/haddock -name '*.html' -print0 | xargs -0r sed -i -e 's!"\.\./\([^"/]\+\)/!"https://hackage.haskell.org/package/\1/docs/!g'
-      - uses: EndBug/add-and-commit@v5
+      - uses: EndBug/add-and-commit@v7
         with:
           cwd: gh-docs
           branch: gh-docs

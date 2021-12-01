@@ -33,7 +33,7 @@ jobs:
           path: ~/.stack
       - run: stack bench --ba '-o ${{ github.workspace }}/gh-docs/aoc2021-bench.html'
         working-directory: hs
-      - uses: EndBug/add-and-commit@v5
+      - uses: EndBug/add-and-commit@v7
         with:
           cwd: gh-docs
           branch: gh-docs

@@ -149,7 +149,7 @@ jobs:
             -n Python 'PYTHON_HOME=aoc2021-py aoc2021-py/bin/aoc2021' \
             -n Rust 'aoc2021-rs/aoc2021' \
             --export-markdown hyperfine.md
-      - uses: EndBug/add-and-commit@v5
+      - uses: EndBug/add-and-commit@v7
         with:
           branch: gh-docs
           add: hyperfine.md
