@@ -1,4 +1,5 @@
 import io.gitlab.arturbosch.detekt.Detekt
+import org.gradle.api.plugins.ApplicationPlugin.APPLICATION_GROUP
 import org.gradle.language.base.plugins.LifecycleBasePlugin.VERIFICATION_GROUP
 
 plugins {
@@ -7,6 +8,7 @@ plugins {
     alias(libs.plugins.detekt)
     alias(libs.plugins.dokka)
     alias(libs.plugins.kotlinx.benchmark)
+    distribution
 }
 
 dependencies {
@@ -75,9 +77,45 @@ benchmark {
     }
 }
 
+val jvmJar by tasks.existing
+val jvmRuntimeClasspath by configurations.existing
+
 tasks.register<JavaExec>("runJvm") {
-    classpath(tasks.named("jvmJar"), configurations["jvmRuntimeClasspath"])
+    description = "Runs this project as a JVM application"
+    group = APPLICATION_GROUP
+    classpath(jvmJar, jvmRuntimeClasspath)
     mainClass.set("com.github.ephemient.aoc2021.MainKt")
+}
+
+val jvmStartScripts by tasks.registering(CreateStartScripts::class) {
+    description = "Creates OS specific scripts to run the project as a JVM application."
+    classpath = files(jvmJar, jvmRuntimeClasspath)
+    applicationName = project.name
+    outputDir = File(buildDir, "scripts")
+    mainClass.set("com.github.ephemient.aoc2021.MainKt")
+}
+
+distributions {
+    main {
+        contents.with(
+            copySpec {
+                from("src/dist")
+                with(
+                    copySpec {
+                        from(jvmJar, jvmRuntimeClasspath)
+                        into("lib")
+                    }
+                )
+                with(
+                    copySpec {
+                        from(jvmStartScripts)
+                        into("bin")
+                        fileMode = "755".toInt(8)
+                    }
+                )
+            }
+        )
+    }
 }
 
 tasks.named<Test>("jvmTest") {
@@ -88,16 +126,16 @@ tasks.withType<org.gradle.jvm.tasks.Jar>().matching { it.name.endsWith("Benchmar
     duplicatesStrategy = DuplicatesStrategy.WARN
 }
 
-detekt {
-    config.from("detekt.yml")
-    buildUponDefaultConfig = true
-    autoCorrect = !System.getenv("CI").isNullOrEmpty()
-}
-
 val detektKotlinScripts by tasks.registering(Detekt::class) {
     group = VERIFICATION_GROUP
     description = "Run detekt analysis for Kotlin scripts"
     source(files().apply { from(layout.projectDirectory.asFileTree.matching { include("*.kts") }) })
+}
+
+tasks.withType<Detekt>().configureEach {
+    config.from("detekt.yml")
+    buildUponDefaultConfig = true
+    autoCorrect = !System.getenv("CI").isNullOrEmpty()
 }
 tasks.check { dependsOn(tasks.withType<Detekt>()) }
 
