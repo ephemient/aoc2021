@@ -1,4 +1,4 @@
-name: Python pytest-benchmark
+name: Python benchmarks
 
 on:
   workflow_dispatch:
@@ -39,5 +39,5 @@ jobs:
         with:
           cwd: gh-docs
           branch: gh-docs
-          add: benchmark
+          add: benchmark.svg
           message: 'pytest-benchmark ${{ github.sha }}'
