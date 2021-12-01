@@ -15,6 +15,12 @@ Print solutions for the inputs provided in local data files:
 ./gradlew runJvm
 ```
 
+Generate [Dokka](https://github.com/Kotlin/dokka) API documentation:
+
+```sh
+./gradlew dokkaHtml
+```
+
 Run all checks, including [Detekt](https://detekt.github.io/) static code analysis and [ktlint](https://ktlint.github.io/) formatter:
 
 ```sh

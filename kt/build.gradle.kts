@@ -5,6 +5,7 @@ plugins {
     kotlin("multiplatform") version libs.versions.kotlin.get()
     alias(libs.plugins.dependency.updates)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.dokka)
 }
 
 dependencies {

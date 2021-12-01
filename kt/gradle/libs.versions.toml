@@ -1,12 +1,14 @@
 [versions]
 dependency-updates = "0.39.0"
 detekt = "1.19.0"
+dokka = "1.6.0"
 junit-jupiter = "5.8.2"
 kotlin = "1.6.0"
 
 [plugins]
 dependency-updates = { id = "com.github.ben-manes.versions", version.ref = "dependency-updates" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 
 [libraries]
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }

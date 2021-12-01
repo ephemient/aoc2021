@@ -1,0 +1,38 @@
+name: Kotlin docs
+
+on:
+  workflow_dispatch:
+
+jobs:
+  get-inputs:
+    uses: ephemient/aoc2021/.github/workflows/get-inputs.yml@main
+    secrets:
+      SESSION: ${{ secrets.SESSION }}
+
+  build:
+    needs: [ get-inputs ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+        with:
+          ref: gh-docs
+          path: gh-docs
+      - uses: actions/download-artifact@v2
+        with:
+          name: inputs
+      - uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+      - run: ./gradlew --no-daemon --info dokkaHtml
+        working-directory: kt
+      - run: rsync --archive --delete --verbose --whole-file kt/build/dokka/html/ gh-docs/dokka/
+      - uses: EndBug/add-and-commit@v5
+        with:
+          cwd: gh-docs
+          branch: gh-docs
+          add: dokka
+          message: 'Dokka ${{ github.sha }}'
