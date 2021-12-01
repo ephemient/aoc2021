@@ -1,0 +1,30 @@
+name: Get inputs
+
+on:
+  workflow_call:
+    secrets:
+      SESSION:
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get Day
+        id: get-day
+        run: echo "::set-output name=day::$(seq 1 $(expr '(' $(date +%s) - $(TZ=UTC+5 date +%s --date=2021-12-01) ')' / 86400 + 1) | head -n25 | tail -n1)"
+      - uses: actions/cache@v2
+        with:
+          key: inputs-${{ steps.get-day.outputs.day }}
+          restore-keys: inputs-
+          path: day*.txt
+      - name: Get inputs
+        run: make
+        env:
+          SESSION: ${{ secrets.SESSION }}
+      - uses: actions/upload-artifact@v2
+        with:
+          name: inputs
+          path: day*.txt

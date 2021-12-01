@@ -1,0 +1,38 @@
+name: Haskell CI
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ hs/** ]
+  pull_request:
+    branches: [ main ]
+    paths: [ hs/** ]
+
+  workflow_dispatch:
+
+jobs:
+  get-inputs:
+    uses: ephemient/aoc2021/.github/workflows/get-inputs.yml@main
+    secrets:
+      SESSION: ${{ secrets.SESSION }}
+
+  build:
+    needs: [ get-inputs ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: inputs
+          path: hs
+      - uses: haskell/actions/setup@v1
+        with:
+          enable-stack: true
+      - uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-${{ hashFiles('**/stack.*') }}-${{ hashFiles('**/package.yaml') }}
+          restore-keys: ${{ runner.os }}-${{ hashFiles('**/stack.*') }}-
+          path: ~/.stack
+      - run: stack build --test --bench --no-run-benchmarks
+        working-directory: hs
