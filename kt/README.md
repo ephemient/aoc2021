@@ -18,7 +18,7 @@ Run [kotlinx.benchmark](https://github.com/Kotlin/kotlinx-benchmark) benchmarks:
 Print solutions for the inputs provided in local data files:
 
 ```sh
-./gradlew runJvm
+./gradlew jvmRun
 ```
 
 Generate [Dokka](https://github.com/Kotlin/dokka) API documentation:

@@ -6,7 +6,7 @@ import kotlinx.benchmark.Setup
 import kotlinx.benchmark.State
 
 @State(Scope.Benchmark)
-open class Day1Bench {
+class Day1Bench {
     private lateinit var lines: List<String>
 
     @Setup

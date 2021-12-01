@@ -4,6 +4,7 @@ import org.gradle.language.base.plugins.LifecycleBasePlugin.VERIFICATION_GROUP
 
 plugins {
     kotlin("multiplatform") version libs.versions.kotlin.get()
+    kotlin("plugin.allopen") version libs.versions.kotlin.get()
     alias(libs.plugins.dependency.updates)
     alias(libs.plugins.detekt)
     alias(libs.plugins.dokka)
@@ -62,6 +63,10 @@ kotlin {
     }
 }
 
+allOpen {
+    annotation("org.openjdk.jmh.annotations.State")
+}
+
 benchmark {
     targets {
         register("jvmBench")
@@ -80,7 +85,7 @@ benchmark {
 val jvmJar by tasks.existing
 val jvmRuntimeClasspath by configurations.existing
 
-tasks.register<JavaExec>("runJvm") {
+tasks.register<JavaExec>("jvmRun") {
     description = "Runs this project as a JVM application"
     group = APPLICATION_GROUP
     classpath(jvmJar, jvmRuntimeClasspath)
