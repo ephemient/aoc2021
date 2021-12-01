@@ -1,0 +1,41 @@
+name: Haskell benchmarks
+
+on:
+  workflow_dispatch:
+
+jobs:
+  get-inputs:
+    uses: ephemient/aoc2021/.github/workflows/get-inputs.yml@main
+    secrets:
+      SESSION: ${{ secrets.SESSION }}
+
+  build:
+    needs: [ get-inputs ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+        with:
+          ref: gh-docs
+          path: gh-docs
+      - uses: actions/download-artifact@v2
+        with:
+          name: inputs
+          path: hs
+      - uses: haskell/actions/setup@v1
+        with:
+          enable-stack: true
+      - uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-criterion-${{ hashFiles('**/stack.*') }}-${{ hashFiles('**/package.yaml') }}
+          restore-keys: ${{ runner.os }}-criterion-${{ hashFiles('**/stack.*') }}-
+          path: ~/.stack
+      - run: stack bench --ba '-o ${{ github.workspace }}/gh-docs/aoc2021-bench.html'
+        working-directory: hs
+      - uses: EndBug/add-and-commit@v5
+        with:
+          cwd: gh-docs
+          branch: gh-docs
+          add: aoc2021-bench.html
+          message: 'Haskell Criterion ${{ github.sha }}'
