@@ -145,6 +145,9 @@ GEM
       jekyll (>= 3.8, < 5.0)
     jekyll-sitemap (1.4.0)
       jekyll (>= 3.7, < 5.0)
+    jekyll-theme-minimal (0.2.0)
+      jekyll (> 3.5, < 5.0)
+      jekyll-seo-tag (~> 2.0)
     jekyll-titles-from-headings (0.5.3)
       jekyll (>= 3.3, < 5.0)
     jekyll-watch (2.2.1)
@@ -219,6 +222,7 @@ DEPENDENCIES
   github-pages
   jekyll
   jekyll-mentions
+  jekyll-theme-minimal
   jemoji
 
 BUNDLED WITH

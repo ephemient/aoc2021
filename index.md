@@ -4,3 +4,5 @@
 ## Haskell
 
 [Haddock](haddock/index.html)
+
+[Criterion](aoc2021-bench.html)
