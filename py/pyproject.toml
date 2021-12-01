@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "aoc2021"
+version = "0.1.0"
+description = ""
+license = "BSD-2-Clause"
+authors = ["Daniel Lin <ephemient@gmail.com>"]
+readme = "README.md"
+repository = "https://github.com/ephemient/aoc2021/tree/main/py"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Operating System :: OS Independent"
+]
+include = ["aoc2021/day*.txt"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+[tool.poetry.dev-dependencies]
+black = "^21.11b1"
+flake8 = "^4.0.1"
+isort = "^5.10.1"
+pytest = "^6.2.5"
+pytest-benchmark = { version = "^3.4.1", extras = ["histogram"] }
+
+[tool.poetry.scripts]
+aoc2021 = "aoc2021.main:main"
+
+[tool.poetry.plugins."aoc2021.days"]
+1 = "aoc2021.day1:parts"
+
+[tool.pytest.ini_options]
+addopts = '--doctest-modules --benchmark-disable --benchmark-sort=fullname'
+required_plugins = ['pytest-benchmark']
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,43 @@
+name: Python pytest-benchmark
+
+on:
+  workflow_dispatch:
+
+jobs:
+  get-inputs:
+    uses: ephemient/aoc2021/.github/workflows/get-inputs.yml@main
+    secrets:
+      SESSION: ${{ secrets.SESSION }}
+
+  build:
+    needs: [ get-inputs ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+        with:
+          ref: gh-docs
+          path: gh-docs
+      - uses: actions/download-artifact@v2
+        with:
+          name: inputs
+          path: py/aoc2021
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+      - uses: snok/install-poetry@v1
+      - uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-${{ hashFiles('**/pyproject.toml') }}-${{ hashFiles('**/poetry.lock') }}
+          path: ~/.cache/pypoetry
+      - run: poetry install --no-interaction --no-root
+        working-directory: py
+      - run: poetry run pytest --benchmark-enable --benchmark-only --benchmark-histogram=../gh-docs/benchmark
+        working-directory: py
+      - uses: EndBug/add-and-commit@v5
+        with:
+          cwd: gh-docs
+          branch: gh-docs
+          add: benchmark
+          message: 'pytest-benchmark ${{ github.sha }}'

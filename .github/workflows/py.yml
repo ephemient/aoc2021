@@ -1,0 +1,46 @@
+name: Python CI
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ py/** ]
+  pull_request:
+    branches: [ main ]
+    paths: [ py/** ]
+
+  workflow_dispatch:
+
+jobs:
+  get-inputs:
+    uses: ephemient/aoc2021/.github/workflows/get-inputs.yml@main
+    secrets:
+      SESSION: ${{ secrets.SESSION }}
+
+  build:
+    needs: [ get-inputs ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: inputs
+          path: py/aoc2021
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+      - uses: snok/install-poetry@v1
+      - uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-${{ hashFiles('**/pyproject.toml') }}-${{ hashFiles('**/poetry.lock') }}
+          path: ~/.cache/pypoetry
+      - run: poetry install --no-interaction --no-root
+        working-directory: py
+      - run: poetry run flake8 .
+        working-directory: py
+      - run: poetry run black . --check
+        working-directory: py
+      - run: poetry run isort . --check
+        working-directory: py
+      - run: poetry run pytest
+        working-directory: py
