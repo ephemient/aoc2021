@@ -7,7 +7,7 @@ where
     I: IntoIterator<Item = &'a S>,
     S: AsRef<str> + 'a,
 {
-    let nums = util::parse_many::<'a, i32, _, _>(lines)?;
+    let nums: Vec<i32> = util::parse_many(lines)?;
     Ok(nums
         .iter()
         .zip(nums.iter().skip(1))
@@ -20,14 +20,8 @@ where
     I: IntoIterator<Item = &'a S>,
     S: AsRef<str> + 'a,
 {
-    let nums = util::parse_many::<'a, i32, _, _>(lines)?;
-    let sums = nums
-        .iter()
-        .zip(nums.iter().skip(1))
-        .map(|(x, y)| x + y)
-        .zip(nums.iter().skip(2))
-        .map(|(x, y)| x + y)
-        .collect::<Vec<_>>();
+    let nums: Vec<i32> = util::parse_many(lines)?;
+    let sums: Vec<i32> = nums.windows(3).map(|w| w.iter().sum()).collect();
     Ok(sums
         .iter()
         .zip(sums.iter().skip(1))
