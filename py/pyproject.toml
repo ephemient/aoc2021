@@ -31,6 +31,10 @@ aoc2021 = "aoc2021.main:main"
 
 [tool.poetry.plugins."aoc2021.days"]
 1 = "aoc2021.day1:parts"
+2 = "aoc2021.day2:parts"
+
+[tool.black]
+target_version = ["py310"]
 
 [tool.pytest.ini_options]
 addopts = '--doctest-modules --benchmark-disable --benchmark-sort=fullname'
