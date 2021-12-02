@@ -31,8 +31,12 @@ jobs:
           enable-stack: true
       - uses: actions/cache@v2
         with:
-          key: ${{ runner.os }}-${{ hashFiles('**/stack.*') }}-${{ hashFiles('**/package.yaml') }}
-          restore-keys: ${{ runner.os }}-${{ hashFiles('**/stack.*') }}-
+          key: ${{ runner.os }}-${{ hashFiles('**/stack.*') }}-${{ hashFiles('**/package.yaml') }}-hlint
+          restore-keys: |
+            ${{ runner.os }}-${{ hashFiles('**/stack.*') }}-${{ hashFiles('**/package.yaml') }}-
+            ${{ runner.os }}-${{ hashFiles('**/stack.*') }}-
           path: ~/.stack
+      - run: stack build hlint --exec 'hlint .'
+        working-directory: hs
       - run: stack build --test --bench --no-run-benchmarks
         working-directory: hs
