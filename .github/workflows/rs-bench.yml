@@ -1,4 +1,4 @@
-name: Rust Criterion
+name: Rust benchmarks
 
 on:
   workflow_dispatch:
