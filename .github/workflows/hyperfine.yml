@@ -51,7 +51,7 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: gradle
-      - run: ./gradlew distZip
+      - run: ./gradlew --no-daemon --info distZip
         working-directory: kt
       - uses: actions/upload-artifact@v2
         with:
