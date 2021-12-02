@@ -2,7 +2,6 @@ module Main (main) where
 
 import Criterion.Main (bench, bgroup, defaultMain, env, nf)
 import Data.Text (Text)
-import qualified Data.Text as T (unpack)
 import qualified Data.Text.IO as TIO (readFile)
 import Day1 (day1a, day1b)
 import Paths_aoc2021 (getDataFileName)
