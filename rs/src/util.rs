@@ -37,6 +37,36 @@ where
         .collect::<Result<_, _>>()
 }
 
+pub struct Transpose<I> {
+    iterators: Vec<I>,
+}
+
+pub fn transpose<T>(iterators: T) -> Transpose<<<T as Iterator>::Item as IntoIterator>::IntoIter>
+where
+    T: Iterator,
+    <T as Iterator>::Item: IntoIterator,
+{
+    Transpose {
+        iterators: iterators.map(|it| it.into_iter()).collect(),
+    }
+}
+
+impl<I> Iterator for Transpose<I>
+where
+    I: Iterator,
+{
+    type Item = Vec<<I as Iterator>::Item>;
+    fn next(&mut self) -> Option<Self::Item> {
+        Some(
+            self.iterators
+                .iter_mut()
+                .filter_map(|it| it.next())
+                .collect::<Vec<_>>(),
+        )
+        .filter(|v| !v.is_empty())
+    }
+}
+
 pub struct Unpeekable<T>
 where
     T: Iterator,
