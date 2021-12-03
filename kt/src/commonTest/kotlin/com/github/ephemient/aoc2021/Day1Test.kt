@@ -5,12 +5,12 @@ import kotlin.test.assertEquals
 
 class Day1Test {
     @Test
-    fun `part 1 examples`() {
+    fun part1() {
         assertEquals(7, Day1(SAMPLE_INPUT).part1())
     }
 
     @Test
-    fun `part 2 examples`() {
+    fun part2() {
         assertEquals(5, Day1(SAMPLE_INPUT).part2())
     }
 

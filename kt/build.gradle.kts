@@ -22,8 +22,59 @@ val jvmResources by tasks.registering(Sync::class) {
     include("day*.txt")
 }
 
+val nonJvmSources by tasks.registering {
+    inputs.files(fileTree(rootDir.parent).matching { include("day*.txt") })
+    outputs.dir(layout.buildDirectory.dir("generated/source/$name"))
+
+    doLast {
+        val outputDir = outputs.files.singleFile
+        delete(outputDir.listFiles())
+        File(outputDir, "Resources.kt").bufferedWriter().use { out ->
+            out.write("package com.github.ephemient.aoc2021\n\n")
+            out.write("actual fun getInput(day: Int): List<String> = when (day) {\n")
+            for (
+                (day, file) in inputs.files.files
+                    .mapNotNull { file ->
+                        val day = file.nameWithoutExtension.removePrefix("day").toIntOrNull()
+                            ?: return@mapNotNull null
+                        day to file
+                    }
+                    .sortedBy { it.first }
+            ) {
+                out.write("    $day -> \"\"\"\n")
+                file.useLines { lines ->
+                    for (line in lines) {
+                        out.write("        |")
+                        out.write(line.replace("$", "\${'$'}").replace("\"\"\"", "\"\"\${'\"'}"))
+                        out.write("\n")
+                    }
+                }
+                out.write("    \"\"\".trimMargin()\n\n")
+            }
+            out.write("    else -> throw IllegalArgumentException(\"No data for day \$day\")\n")
+            out.write("}.lines()\n")
+        }
+    }
+}
+
 kotlin {
     jvm {
+        compilations.create("bench")
+    }
+    // js(IR) // https://github.com/Kotlin/kotlinx-benchmark/issues/30
+    js {
+        binaries.executable()
+        nodejs {
+            testTask {
+                useMocha()
+            }
+        }
+        compilations.create("bench")
+    }
+    linuxX64 {
+        binaries.executable {
+            entryPoint("com.github.ephemient.aoc2021.main")
+        }
         compilations.create("bench")
     }
 
@@ -32,6 +83,18 @@ kotlin {
 
         val jvmMain by getting {
             resources.srcDir(jvmResources)
+        }
+
+        val nonJvmMain by creating {
+            kotlin.srcDir(nonJvmSources)
+        }
+
+        val jsMain by getting {
+            dependsOn(nonJvmMain)
+        }
+
+        val linuxX64Main by getting {
+            dependsOn(nonJvmMain)
         }
 
         getByName("commonTest") {
@@ -49,6 +112,12 @@ kotlin {
             }
         }
 
+        getByName("jsTest") {
+            dependencies {
+                implementation(kotlin("test-js"))
+            }
+        }
+
         val commonBench by creating {
             dependsOn(commonMain)
             dependencies {
@@ -60,6 +129,16 @@ kotlin {
             dependsOn(commonBench)
             dependsOn(jvmMain)
         }
+
+        getByName("jsBench") {
+            dependsOn(commonBench)
+            dependsOn(jsMain)
+        }
+
+        getByName("linuxX64Bench") {
+            dependsOn(commonBench)
+            dependsOn(linuxX64Main)
+        }
     }
 }
 
@@ -70,6 +149,8 @@ allOpen {
 benchmark {
     targets {
         register("jvmBench")
+        register("jsBench")
+        // register("linuxX64Bench") // https://github.com/Kotlin/kotlinx-benchmark/issues/67
     }
 
     configurations {
@@ -128,6 +209,7 @@ tasks.named<Test>("jvmTest") {
 }
 
 tasks.withType<org.gradle.jvm.tasks.Jar>().matching { it.name.endsWith("BenchmarkJar") }.configureEach {
+    // https://github.com/Kotlin/kotlinx-benchmark/issues/68
     duplicatesStrategy = DuplicatesStrategy.WARN
 }
 
@@ -141,7 +223,9 @@ tasks.withType<Detekt>().configureEach {
     config.from("detekt.yml")
     buildUponDefaultConfig = true
     autoCorrect = !System.getenv("CI").isNullOrEmpty()
+    exclude { it.file.toPath().startsWith(buildDir.toPath()) }
 }
+tasks.register("detektAll") { dependsOn(tasks.withType<Detekt>()) }
 tasks.check { dependsOn(tasks.withType<Detekt>()) }
 
 tasks.dependencyUpdates {

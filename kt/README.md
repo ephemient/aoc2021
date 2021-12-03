@@ -3,10 +3,10 @@
 
 This project builds with [Gradle](https://gradle.org/).
 
-Run the [JUnit 5](https://junit.org/junit5/) test suite:
+Run the test suite:
 
 ```sh
-./gradlew jvmTest
+./gradlew allTest
 ```
 
 Run [kotlinx.benchmark](https://github.com/Kotlin/kotlinx-benchmark) benchmarks:
@@ -19,6 +19,9 @@ Print solutions for the inputs provided in local data files:
 
 ```sh
 ./gradlew jvmRun
+./gradlew jsRun
+./gradlew runDebugExecutableLinuxX64
+./gradlew runReleaseExecutableLinuxX64
 ```
 
 Generate [Dokka](https://github.com/Kotlin/dokka) API documentation:
