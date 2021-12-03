@@ -1,0 +1,162 @@
+[
+  {
+    "benchmark" : "com.github.ephemient.aoc2021.Day1Bench.part1",
+    "mode" : "thrpt",
+    "warmupIterations" : 1,
+    "warmupTime" : "1 sec",
+    "measurementIterations" : 3,
+    "measurementTime" : "1 sec",
+    "params" : {
+          
+    },
+    "primaryMetric" : {
+       "score": 5.519420977741706,
+       "scoreError": 0.08358693879807805,
+       "scoreConfidence" : [
+          5.435834038943628,
+          5.6030079165397835
+       ],
+       "scorePercentiles" : {
+          "0.00" : 5.4733385609600305,
+          "25.00" : 5.4733385609600305,
+          "50.00" : 5.4803054989022995,
+          "75.00" : 5.604618873362783,
+          "90.00" : 5.604618873362783,
+          "99.00" : 5.604618873362783,
+          "99.90" : 5.604618873362783,
+          "99.99" : 5.604618873362783,
+          "100.00" : 5.604618873362783
+       },
+       "scoreUnit" : "ops/ms",
+       "rawData" : [
+           [
+             5.4803054989022995,
+             5.4733385609600305,
+             5.604618873362783
+           ]
+       ]
+    },
+    "secondaryMetrics" : {
+    }
+  },
+  {
+    "benchmark" : "com.github.ephemient.aoc2021.Day1Bench.part2",
+    "mode" : "thrpt",
+    "warmupIterations" : 1,
+    "warmupTime" : "1 sec",
+    "measurementIterations" : 3,
+    "measurementTime" : "1 sec",
+    "params" : {
+          
+    },
+    "primaryMetric" : {
+       "score": 3.122205886875913,
+       "scoreError": 0.027392643213201968,
+       "scoreConfidence" : [
+          3.0948132436627107,
+          3.149598530089115
+       ],
+       "scorePercentiles" : {
+          "0.00" : 3.095585305330381,
+          "25.00" : 3.095585305330381,
+          "50.00" : 3.1281350765513714,
+          "75.00" : 3.1428972787459877,
+          "90.00" : 3.1428972787459877,
+          "99.00" : 3.1428972787459877,
+          "99.90" : 3.1428972787459877,
+          "99.99" : 3.1428972787459877,
+          "100.00" : 3.1428972787459877
+       },
+       "scoreUnit" : "ops/ms",
+       "rawData" : [
+           [
+             3.1428972787459877,
+             3.095585305330381,
+             3.1281350765513714
+           ]
+       ]
+    },
+    "secondaryMetrics" : {
+    }
+  },
+  {
+    "benchmark" : "com.github.ephemient.aoc2021.Day2Bench.part1",
+    "mode" : "thrpt",
+    "warmupIterations" : 1,
+    "warmupTime" : "1 sec",
+    "measurementIterations" : 3,
+    "measurementTime" : "1 sec",
+    "params" : {
+          
+    },
+    "primaryMetric" : {
+       "score": 4.130663911000792,
+       "scoreError": 0.045731115784461894,
+       "scoreConfidence" : [
+          4.08493279521633,
+          4.176395026785254
+       ],
+       "scorePercentiles" : {
+          "0.00" : 4.085115088136481,
+          "25.00" : 4.085115088136481,
+          "50.00" : 4.144654616348253,
+          "75.00" : 4.162222028517642,
+          "90.00" : 4.162222028517642,
+          "99.00" : 4.162222028517642,
+          "99.90" : 4.162222028517642,
+          "99.99" : 4.162222028517642,
+          "100.00" : 4.162222028517642
+       },
+       "scoreUnit" : "ops/ms",
+       "rawData" : [
+           [
+             4.085115088136481,
+             4.162222028517642,
+             4.144654616348253
+           ]
+       ]
+    },
+    "secondaryMetrics" : {
+    }
+  },
+  {
+    "benchmark" : "com.github.ephemient.aoc2021.Day2Bench.part2",
+    "mode" : "thrpt",
+    "warmupIterations" : 1,
+    "warmupTime" : "1 sec",
+    "measurementIterations" : 3,
+    "measurementTime" : "1 sec",
+    "params" : {
+          
+    },
+    "primaryMetric" : {
+       "score": 4.237594680942479,
+       "scoreError": 0.02174135663282999,
+       "scoreConfidence" : [
+          4.2158533243096485,
+          4.259336037575309
+       ],
+       "scorePercentiles" : {
+          "0.00" : 4.216951286479909,
+          "25.00" : 4.216951286479909,
+          "50.00" : 4.240879312690926,
+          "75.00" : 4.2549534436566026,
+          "90.00" : 4.2549534436566026,
+          "99.00" : 4.2549534436566026,
+          "99.90" : 4.2549534436566026,
+          "99.99" : 4.2549534436566026,
+          "100.00" : 4.2549534436566026
+       },
+       "scoreUnit" : "ops/ms",
+       "rawData" : [
+           [
+             4.216951286479909,
+             4.2549534436566026,
+             4.240879312690926
+           ]
+       ]
+    },
+    "secondaryMetrics" : {
+    }
+  }
+]
