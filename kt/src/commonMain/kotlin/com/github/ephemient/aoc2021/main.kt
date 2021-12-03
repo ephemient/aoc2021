@@ -20,4 +20,12 @@ fun main(args: Array<String>) {
         println(day2.part2())
         println()
     }
+
+    if (days?.contains(3) != false) {
+        val day3 = Day3(getInput(3))
+        println("Day 3")
+        println(day3.part1())
+        println(day3.part2())
+        println()
+    }
 }
