@@ -19,3 +19,8 @@ day1b :: Text -> Either String Int
 module Day2
 day2a :: Text -> Either String Int
 day2b :: Text -> Either String Int
+
+
+module Day3
+day3a :: Text -> Either String Int
+day3b :: Text -> Either String Int
