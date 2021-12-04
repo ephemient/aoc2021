@@ -84,6 +84,13 @@ kotlin {
             compilations.create("bench")
         }
     }
+    targets.all {
+        compilations.all {
+            kotlinOptions {
+                freeCompilerArgs += "-Xopt-in=kotlin.ExperimentalStdlibApi"
+            }
+        }
+    }
 
     sourceSets {
         val commonMain by getting
