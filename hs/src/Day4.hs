@@ -2,38 +2,60 @@
 Module:         Day4
 Description:    <https://adventofcode.com/2021/day/4 Day 4: Giant Squid>
 -}
-{-# LANGUAGE TupleSections, TypeFamilies #-}
+{-# LANGUAGE NamedFieldPuns, TupleSections, TypeFamilies #-}
 module Day4 (day4a, day4b) where
 
 import Control.Arrow (left)
 import Control.Monad (foldM_)
 import Data.Either (lefts)
 import Data.Functor (($>))
-import Data.List (transpose)
 import Data.List.NonEmpty (nonEmpty)
-import Data.Maybe (isNothing)
+import Data.IntMap (IntMap)
+import qualified Data.IntMap as IntMap (assocs, fromListWith, updateLookupWithKey)
+import Data.IntSet (IntSet)
+import qualified Data.IntSet as IntSet (empty, fromDistinctAscList, isSubsetOf, singleton, size, union)
 import Data.Text (Text)
 import Data.Void (Void)
 import Text.Megaparsec (MonadParsec, ParseErrorBundle, Token, eof, parse, sepBy, sepBy1, sepEndBy, sepEndBy1, skipSome)
 import Text.Megaparsec.Char (char, hspace, hspace1, newline)
 import Text.Megaparsec.Char.Lexer (decimal)
 
-parser :: (Num a, MonadParsec e s m, Token s ~ Char) => m ([a], [[[Maybe a]]])
+data BingoBoard = BingoBoard
+  { range :: ((Int, Int), (Int, Int))
+  , unmarked :: IntMap IntSet
+  , marked :: IntSet
+  }
+
+parser :: (MonadParsec e s m, Token s ~ Char) => m ([Int], [BingoBoard])
 parser = do
     draws <- decimal `sepBy` char ',' <* skipSome newline
-    let board = line `sepEndBy1` newline
-        line = hspace *> (Just <$> decimal) `sepBy1` hspace1
     boards <- board `sepEndBy` newline
     eof $> (draws, boards)
-
-play :: (Eq a, Num a) => a -> [[Maybe a]] -> Either a [[Maybe a]]
-play draw board
-  | any (all isNothing) board' = Left score
-  | any (all isNothing) $ transpose board' = Left score
-  | otherwise = Right board'
   where
-    board' = [[if x == Just draw then Nothing else x | x <- line] | line <- board]
-    score = draw * sum [x | line <- board', Just x <- line]
+    board = convert <$> (hspace *> decimal `sepBy1` hspace1) `sepEndBy1` newline
+    convert rows = BingoBoard { range = ((0, 0), (w - 1, h - 1)), unmarked, marked = IntSet.empty } where
+        w = maximum $ length <$> rows
+        h = length rows
+        unmarked = IntMap.fromListWith IntSet.union
+            [(n, IntSet.singleton i) | (y, ns) <- zip [0..] rows, (i, n) <- zip [y, y + w..] ns]
+
+play :: Int -> BingoBoard -> Either Int BingoBoard
+play draw board = case IntMap.updateLookupWithKey (const $ const Nothing) draw $ unmarked board of
+    (Nothing, _) -> Right board
+    (Just marks, unmarked') ->
+        let board' = board
+              { unmarked = unmarked'
+              , marked = IntSet.union marks $ marked board
+              }
+        in if isBingo board'
+           then Left $ draw * sum [n * IntSet.size i | (n, i) <- IntMap.assocs unmarked']
+           else Right board'
+
+isBingo :: BingoBoard -> Bool
+isBingo BingoBoard { range = ((x0, y0), (x1, y1)), marked } =
+    any (flip IntSet.isSubsetOf marked . IntSet.fromDistinctAscList) $
+        [[start..start + y1 - y0] | start <- [0, y1 - y0 + 1..(y1 - y0 + 1) * (x1 - x0)]] ++
+        [[start, start + y1 - y0 + 1..start + (y1 - y0 + 1) * (x1 - x0)] | start <- [0..y1 - y0]]
 
 day4a :: Text -> Either (ParseErrorBundle Text Void) (Maybe Int)
 day4a input = do
