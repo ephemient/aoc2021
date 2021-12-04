@@ -59,7 +59,7 @@ val nonJvmSources by tasks.registering {
     }
 }
 
-val nativeTargets = setOf("linuxX64", "linuxArm64", "mingwX86", "mingwX64", "macosX64", "macosArm64")
+val nativeTargets = setOf("linuxX64", "linuxArm64", "mingwX86", "mingwX64", "macosX64", "macosArm64", "wasm32")
 
 kotlin {
     jvm {
