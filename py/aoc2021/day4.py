@@ -23,35 +23,53 @@ EXAMPLE = (
 )
 
 
+class BingoBoard:
+    def __init__(self, width, height, unmarked, marked):
+        self.width = width
+        self.height = height
+        self.unmarked = unmarked
+        self.marked = marked
+
+    def play(self, draw):
+        try:
+            marks = self.unmarked.pop(draw)
+        except KeyError:
+            return False
+        self.marked |= marks
+        for y in range(self.height):
+            mask = (1 << self.width) - 1 << y * self.width
+            if self.marked & mask == mask:
+                return True
+        for x in range(self.width):
+            mask = ((1 << self.width * self.height) - 1) // ((1 << self.width) - 1) << x
+            if self.marked & mask == mask:
+                return True
+        return False
+
+    def sum(self):
+        return sum(key * value.bit_count() for key, value in self.unmarked.items())
+
+
 def parse(lines):
     it = iter(lines)
     draws = [int(draw) for draw in next(it).split(",")]
-    boards = [
-        [[int(item) for item in line.split()] for line in group]
-        for key, group in itertools.groupby(it, key=lambda line: bool(line.strip()))
-        if key
-    ]
+    boards = []
+    for key, group in itertools.groupby(it, key=lambda line: bool(line.strip())):
+        if not key:
+            continue
+        width, height, unmarked = -1, 0, {}
+        for y, line in enumerate(group):
+            row = [int(item) for item in line.split()]
+            assert row
+            if height:
+                assert width == len(row)
+            else:
+                width = len(row)
+            height += 1
+            for x, item in enumerate(row):
+                unmarked[item] = unmarked.get(item, 0) | 1 << x + y * width
+        boards.append(BingoBoard(width, height, unmarked, 0))
     return draws, boards
-
-
-def mark(board, draw):
-    for row in board:
-        for i in range(len(row)):
-            if row[i] == draw:
-                row[i] = None
-
-
-def isbingo(board):
-    if any(all(item is None for item in row) for row in board):
-        return True
-    try:
-        column = 0
-        while True:
-            if all(row[column] is None for row in board):
-                return True
-            column += 1
-    except IndexError:
-        return False
 
 
 def part1(lines):
@@ -62,9 +80,8 @@ def part1(lines):
     draws, boards = parse(lines)
     for draw in draws:
         for board in boards:
-            mark(board, draw)
-            if isbingo(board):
-                return draw * sum(filter(None, itertools.chain.from_iterable(board)))
+            if board.play(draw):
+                return draw * board.sum()
 
 
 def part2(lines):
@@ -73,14 +90,14 @@ def part2(lines):
     1924
     """
     draws, boards = parse(lines)
-    for i, draw in enumerate(draws):
-        for board in boards:
-            mark(board, draw)
-            if isbingo(board):
-                score = draw * sum(filter(None, itertools.chain.from_iterable(board)))
-        boards = [board for board in boards if not isbingo(board)]
-        if not boards:
-            break
+    for draw in draws:
+        new_boards = []
+        for i, board in enumerate(boards):
+            if board.play(draw):
+                score = draw * board.sum()
+            else:
+                new_boards.append(board)
+        boards = new_boards
     return score
 
 
