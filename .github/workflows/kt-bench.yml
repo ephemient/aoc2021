@@ -27,10 +27,6 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: gradle
-      - uses: actions/cache@v2
-        with:
-          key: ${{ runner.os }}-${{ hashFiles('**/*gradle*') }}
-          path: ~/.gradle
       - run: ./gradlew --no-daemon --info benchmark
         working-directory: kt
       - run: rsync --archive --delete --verbose --whole-file kt/build/reports/benchmarks/main/*/*.json gh-docs/_data/benchmarks/

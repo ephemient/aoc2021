@@ -51,6 +51,11 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: gradle
+      - uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-konan-hyperfine-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: ${{ runner.os }}-konan-hyperfine-
+          path: ~/.konan
       - run: ./gradlew --no-daemon --info distZip linkReleaseExecutableLinuxX64
         working-directory: kt
       - uses: actions/upload-artifact@v2
@@ -139,9 +144,9 @@ jobs:
       - uses: actions/download-artifact@v2
       - run: unzip -d aoc2021-kt aoc2021-kt/aoc2021.zip
       - run: chmod -v +x aoc2021-hs/aoc2021-exe aoc2021-kt/aoc2021/bin/aoc2021 aoc2021-kexe/aoc2021.kexe aoc2021-rs/aoc2021
-      - run: python -m venv aoc2021-py
       - name: Run pip install aoc2021-py/*.whl
         run: |
+          python -m venv .
           . bin/activate
           pip install *.whl
         working-directory: aoc2021-py
