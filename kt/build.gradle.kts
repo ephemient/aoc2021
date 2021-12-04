@@ -1,6 +1,8 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import org.gradle.api.plugins.ApplicationPlugin.APPLICATION_GROUP
 import org.gradle.language.base.plugins.LifecycleBasePlugin.VERIFICATION_GROUP
+import org.jetbrains.kotlin.gradle.plugin.KotlinTargetPreset
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     kotlin("multiplatform") version libs.versions.kotlin.get()
@@ -57,6 +59,8 @@ val nonJvmSources by tasks.registering {
     }
 }
 
+val nativeTargets = setOf("linuxX64", "linuxArm64", "mingwX86", "mingwX64", "macosX64", "macosArm64")
+
 kotlin {
     jvm {
         compilations.create("bench")
@@ -71,53 +75,24 @@ kotlin {
         }
         compilations.create("bench")
     }
-    linuxX64 {
-        binaries.executable {
-            entryPoint("com.github.ephemient.aoc2021.main")
+    for (nativeTarget in nativeTargets) {
+        @Suppress("UNCHECKED_CAST")
+        targetFromPreset(presets[nativeTarget] as KotlinTargetPreset<KotlinNativeTarget>) {
+            binaries.executable {
+                entryPoint("com.github.ephemient.aoc2021.main")
+            }
+            compilations.create("bench")
         }
-        compilations.create("bench")
     }
 
     sourceSets {
         val commonMain by getting
-
-        val jvmMain by getting {
-            resources.srcDir(jvmResources)
-        }
-
-        val nonJvmMain by creating {
-            kotlin.srcDir(nonJvmSources)
-        }
-
-        val jsMain by getting {
-            dependsOn(nonJvmMain)
-        }
-
-        val linuxX64Main by getting {
-            dependsOn(nonJvmMain)
-        }
-
         getByName("commonTest") {
             dependencies {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
             }
         }
-
-        getByName("jvmTest") {
-            dependencies {
-                implementation(kotlin("test-junit5"))
-                implementation(libs.junit.jupiter.api)
-                runtimeOnly(libs.junit.jupiter.engine)
-            }
-        }
-
-        getByName("jsTest") {
-            dependencies {
-                implementation(kotlin("test-js"))
-            }
-        }
-
         val commonBench by creating {
             dependsOn(commonMain)
             dependencies {
@@ -125,19 +100,59 @@ kotlin {
             }
         }
 
+        val jvmMain by getting {
+            resources.srcDir(jvmResources)
+        }
+        getByName("jvmTest") {
+            dependencies {
+                implementation(kotlin("test-junit5"))
+                implementation(libs.junit.jupiter.api)
+                runtimeOnly(libs.junit.jupiter.engine)
+            }
+        }
         getByName("jvmBench") {
             dependsOn(commonBench)
             dependsOn(jvmMain)
         }
 
-        getByName("jsBench") {
-            dependsOn(commonBench)
-            dependsOn(jsMain)
+        for ((compilation, parentCompilation) in mapOf("Main" to null, "Test" to "Main", "Bench" to "Main")) {
+            val nonJvm = create("nonJvm$compilation") {
+                dependsOn(getByName("common$compilation"))
+                parentCompilation?.also { dependsOn(getByName("common$it")) }
+            }
+            getByName("js$compilation") {
+                dependsOn(nonJvm)
+                parentCompilation?.also { dependsOn(getByName("nonJvm$it")) }
+            }
+            val native = create("native$compilation") {
+                dependsOn(nonJvm)
+                parentCompilation?.also { dependsOn(getByName("native$it")) }
+            }
+            val parents = nativeTargets.groupingBy { nativeTarget -> nativeTarget.takeWhile { it.isLowerCase() } }
+                .eachCountTo(mutableMapOf())
+                .apply { values.retainAll { it > 1 } }
+                .mapValues { (nativeParent, _) ->
+                    create("$nativeParent$compilation") {
+                        dependsOn(native)
+                        parentCompilation?.also { dependsOn(getByName("$nativeParent$it")) }
+                    }
+                }
+            for (nativeTarget in nativeTargets) {
+                getByName("$nativeTarget$compilation") {
+                    dependsOn(parents[nativeTarget.takeWhile { it.isLowerCase() }] ?: native)
+                    parentCompilation?.also { dependsOn(getByName("$nativeTarget$it")) }
+                }
+            }
         }
 
-        getByName("linuxX64Bench") {
-            dependsOn(commonBench)
-            dependsOn(linuxX64Main)
+        getByName("nonJvmMain") {
+            kotlin.srcDir(nonJvmSources)
+        }
+
+        getByName("jsTest") {
+            dependencies {
+                implementation(kotlin("test-js"))
+            }
         }
     }
 }
@@ -150,7 +165,7 @@ benchmark {
     targets {
         register("jvmBench")
         register("jsBench")
-        // register("linuxX64Bench") // https://github.com/Kotlin/kotlinx-benchmark/issues/67
+        // for (nativeTarget in nativeTargets) register("${nativeTarget}Bench") // https://github.com/Kotlin/kotlinx-benchmark/issues/67
     }
 
     configurations {

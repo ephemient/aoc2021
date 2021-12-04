@@ -20,8 +20,7 @@ Print solutions for the inputs provided in local data files:
 ```sh
 ./gradlew jvmRun
 ./gradlew jsRun
-./gradlew runDebugExecutableLinuxX64
-./gradlew runReleaseExecutableLinuxX64
+./gradlew run{Debug,Release}Executable{Linux{X64,Arm64},MingwX86,Macos{X64,Arm64}}
 ```
 
 Generate [Dokka](https://github.com/Kotlin/dokka) API documentation:
