@@ -11,10 +11,15 @@ import Data.Text (Text)
 import qualified Data.Text.IO as TIO (readFile)
 import Paths_aoc2021 (getDataFileName)
 import System.Environment (getArgs)
+import Text.Megaparsec (ParseErrorBundle, ShowErrorComponent, TraversableStream, VisualStream, errorBundlePretty)
 import Text.Read (readMaybe)
 
 getDayInput :: Int -> IO Text
 getDayInput i = getDataFileName ("day" ++ show i ++ ".txt") >>= TIO.readFile
+
+rightOrFail :: (ShowErrorComponent e, TraversableStream s, VisualStream s, MonadFail m) =>
+    Either (ParseErrorBundle s e) a -> m a
+rightOrFail = either (fail . errorBundlePretty) return
 
 run :: Int -> (a -> IO ()) -> [Text -> a] -> IO ()
 run day showIO funcs = do
@@ -29,4 +34,4 @@ main :: IO ()
 main = do
     run 1 (print <=< either fail pure) [day1a, day1b]
     run 2 (print <=< either fail pure) [day2a, day2b]
-    run 3 (print <=< either fail pure) [day3a, day3b]
+    run 3 (print <=< rightOrFail) [day3a, day3b]

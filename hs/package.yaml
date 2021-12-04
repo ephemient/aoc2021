@@ -25,6 +25,7 @@ dependencies:
 library:
   source-dirs: src
   dependencies:
+  - megaparsec
   - text
 
 executables:
@@ -39,6 +40,7 @@ executables:
     - -threaded
     dependencies:
     - aoc2021
+    - megaparsec
     - text
 
 data-files:
