@@ -1,6 +1,6 @@
 package com.github.ephemient.aoc2021
 
-private typealias BingoBoard = List<List<Int>>
+private typealias BingoBoard = List<List<Int?>>
 private typealias MutableBingoBoard = MutableList<MutableList<Int?>>
 
 class Day4(lines: List<String>) {
@@ -17,7 +17,7 @@ class Day4(lines: List<String>) {
                     buildList {
                         for (line in iterator) {
                             if (line.isEmpty()) break
-                            add(line.split(WHITESPACE).filter { it.isNotEmpty() }.map { it.toInt() })
+                            add(line.split(WHITESPACE).filter { it.isNotEmpty() }.map { it.toIntOrNull() })
                         }
                     }
                 )
@@ -57,10 +57,10 @@ class Day4(lines: List<String>) {
                 }
             }
         }
-        private fun MutableBingoBoard.isBingo(): Boolean = any { row -> row.all { it == null } } ||
+        private fun BingoBoard.isBingo(): Boolean = any { row -> row.all { it == null } } ||
             (0 until (maxOfOrNull { it.size } ?: 0)).any { column ->
-                all { column < it.size && it[column] == null }
+                all { it.getOrNull(column) == null }
             }
-        private fun MutableBingoBoard.sum(): Int = sumOf { row -> row.sumOf { it ?: 0 } }
+        private fun BingoBoard.sum(): Int = sumOf { row -> row.sumOf { it ?: 0 } }
     }
 }
