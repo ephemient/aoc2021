@@ -20,8 +20,7 @@ jobs:
           key: inputs-${{ steps.get-day.outputs.day }}
           restore-keys: inputs-
           path: day*.txt
-      - name: Get inputs
-        run: make
+      - run: ./get-inputs.main.kts
         env:
           SESSION: ${{ secrets.SESSION }}
       - uses: actions/upload-artifact@v2
