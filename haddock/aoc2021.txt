@@ -22,5 +22,5 @@ day2b :: Text -> Either String Int
 
 
 module Day3
-day3a :: Text -> Either String Int
-day3b :: Text -> Either String Int
+day3a :: Text -> Either (ParseErrorBundle String Void) Int
+day3b :: Text -> Either (ParseErrorBundle String Void) Int
