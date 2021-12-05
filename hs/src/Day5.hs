@@ -5,7 +5,7 @@ Description:    <https://adventofcode.com/2021/day/5 Day 5: Hydrothermal Venture
 {-# LANGUAGE FlexibleContexts, MultiWayIf, OverloadedStrings, TupleSections, TypeApplications, TypeFamilies #-}
 module Day5 (day5a, day5b) where
 
-import qualified Data.Map as Map (filter, fromListWith, size)
+import qualified Data.Map as Map (elems, fromListWith)
 import Data.String (IsString)
 import Data.Text (Text)
 import Data.Void (Void)
@@ -21,7 +21,7 @@ parser = line `sepEndBy` newline <* eof where
 day5a :: Text -> Either (ParseErrorBundle Text Void) Int
 day5a input = do
     segments <- parse (parser @Int) "" input
-    pure $ Map.size $ Map.filter (> 1) $ Map.fromListWith (+) $ do
+    pure $ length $ filter (> 1) $ Map.elems $ Map.fromListWith (+) $ do
         ((x0, y0), (x1, y1)) <- segments
         (, 1 :: Int) <$> if
           | x0 == x1 -> [(x0, y) | y <- [min y0 y1..max y0 y1]]
@@ -31,7 +31,7 @@ day5a input = do
 day5b :: Text -> Either (ParseErrorBundle Text Void) Int
 day5b input = do
     segments <- parse (parser @Int) "" input
-    pure $ Map.size $ Map.filter (> 1) $ Map.fromListWith (+) $ do
+    pure $ length $ filter (> 1) $ Map.elems $ Map.fromListWith (+) $ do
         ((x0, y0), (x1, y1)) <- segments
         (, 1 :: Int) <$> if
           | x0 == x1 -> [(x0, y) | y <- [min y0 y1..max y0 y1]]
