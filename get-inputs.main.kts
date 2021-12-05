@@ -19,6 +19,7 @@ import java.time.temporal.TemporalUnit
 import java.util.concurrent.Callable
 import kotlin.system.exitProcess
 import net.rubygrapefruit.platform.Native
+import net.rubygrapefruit.platform.NativeIntegrationUnavailableException
 import net.rubygrapefruit.platform.terminal.Terminals
 import picocli.CommandLine
 
@@ -60,8 +61,13 @@ class GetInputs : Callable<Int> {
     var help = false
 
     override fun call(): Int {
-        val terminals: Terminals = Native.get(Terminals::class.java)
+        val terminals = try {
+            Native.get(Terminals::class.java)
+        } catch (_: NativeIntegrationUnavailableException) {
+            null
+        }
         val terminalOutput = when {
+            terminals == null -> null
             terminals.isTerminal(Terminals.Output.Stdout) -> terminals.getTerminal(Terminals.Output.Stdout)
             terminals.isTerminal(Terminals.Output.Stderr) -> terminals.getTerminal(Terminals.Output.Stderr)
             else -> null
