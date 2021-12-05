@@ -1,6 +1,8 @@
 #!/usr/bin/env kotlin
 
+@file:Repository("https://repo.gradle.org/gradle/libs-releases/")
 @file:DependsOn("info.picocli:picocli:4.6.2")
+@file:DependsOn("net.rubygrapefruit:native-platform:0.22-milestone-21")
 
 import java.io.File
 import java.net.HttpURLConnection
@@ -13,8 +15,11 @@ import java.time.OffsetDateTime
 import java.time.Year
 import java.time.ZoneOffset
 import java.time.temporal.ChronoUnit
+import java.time.temporal.TemporalUnit
 import java.util.concurrent.Callable
 import kotlin.system.exitProcess
+import net.rubygrapefruit.platform.Native
+import net.rubygrapefruit.platform.terminal.Terminals
 import picocli.CommandLine
 
 @CommandLine.Command(
@@ -55,6 +60,13 @@ class GetInputs : Callable<Int> {
     var help = false
 
     override fun call(): Int {
+        val terminals: Terminals = Native.get(Terminals::class.java)
+        val terminalOutput = when {
+            terminals.isTerminal(Terminals.Output.Stdout) -> terminals.getTerminal(Terminals.Output.Stdout)
+            terminals.isTerminal(Terminals.Output.Stderr) -> terminals.getTerminal(Terminals.Output.Stderr)
+            else -> null
+        }
+
         val session = session?.session
             ?: session?.sessionFile?.readText()?.trimEnd('\n')
             ?: System.getenv("SESSION")?.ifEmpty { null }
@@ -65,35 +77,41 @@ class GetInputs : Callable<Int> {
                 .takeWhile { base.plusDays(it - 1L).toInstant().isBefore(now) }
                 .ifEmpty { listOf(1) }
         }
+
         loop@for (day in days) {
             val file = File("day$day.txt")
-            while (true) {
-                if (mode?.force != true && file.exists()) {
-                    println("$file already exists")
-                    continue@loop
-                }
-                val target = base.plusDays(day - 1L)
-                val now = Instant.now()
-                if (!now.isBefore(target.toInstant())) break
-                val delta = Duration.between(now, target)
-                sequence {
-                    units.fold(now.atOffset(zoneOffset)) { from, unit ->
-                        val count = unit.between(from, target)
-                        yield(count to unit)
-                        from.plus(count, unit)
-                    }
-                }
-                    .dropWhile { (count, _) -> count == 0L }
-                    .ifEmpty { sequenceOf(delta.toMillis() to ChronoUnit.MILLIS) }
-                    .joinToString(prefix = "$file available in ") { (count, unit) -> "$count $unit" }
-                    .also(::println)
-                if (mode?.dryRun == true) break
-                Thread.sleep(delta.toMillis() + 1)
-            }
             if (mode?.force != true && file.exists()) {
                 println("$file already exists")
                 continue@loop
             }
+            if (mode?.dryRun != true) {
+                val target = base.plusDays(day - 1L)
+                var delta = Duration.between(Instant.now(), target)
+                while (delta > Duration.ZERO) {
+                    val message = "$file available in $delta"
+                    val sleep = if (terminalOutput == null) {
+                        println(message)
+                        delta
+                    } else {
+                        terminalOutput.write(message)
+                        when {
+                             delta > Duration.ofHours(2) -> delta % ChronoUnit.HOURS
+                             delta > Duration.ofMinutes(2) -> delta % ChronoUnit.MINUTES
+                            delta > Duration.ofSeconds(2) -> delta % ChronoUnit.SECONDS
+                            delta > Duration.ofMillis(20) -> delta % Duration.of(10, ChronoUnit.MILLIS)
+                            else -> delta
+                        }
+                    }
+                    Thread.sleep(sleep.toMillis(), (sleep - sleep.truncatedTo(ChronoUnit.MILLIS)).toNanosPart())
+                    terminalOutput?.write("\u001b[2K\r")
+                    if (mode?.force != true && file.exists()) {
+                        println("$file already exists")
+                        continue@loop
+                    }
+                    delta = Duration.between(Instant.now(), target)
+                }
+            }
+
             val url = URL("https://adventofcode.com/${base.year}/day/$day/input")
             println("$file = $url")
             if (mode?.dryRun == true) {
@@ -113,21 +131,16 @@ class GetInputs : Callable<Int> {
                 conn.disconnect()
             }
         }
+
         return 0
     }
 
     companion object {
         val zoneOffset: ZoneOffset = ZoneOffset.ofHours(-5)
 
-        val units = listOf(
-            ChronoUnit.YEARS,
-            ChronoUnit.MONTHS,
-            ChronoUnit.WEEKS,
-            ChronoUnit.DAYS,
-            ChronoUnit.HOURS,
-            ChronoUnit.MINUTES,
-            ChronoUnit.SECONDS,
-        )
+        operator fun Duration.rem(duration: Duration): Duration = this - duration.multipliedBy(dividedBy(duration))
+
+        operator fun Duration.rem(unit: TemporalUnit): Duration = this % Duration.of(1, unit)
     }
 }
 
