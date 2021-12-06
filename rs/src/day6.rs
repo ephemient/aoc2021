@@ -1,24 +1,23 @@
 use super::util;
 use std::error::Error;
 
-fn solve<'a, I, S>(times: usize, lines: I) -> Result<usize, Box<dyn Error + Send + Sync>>
+build_const!("libaoc2021_day6");
+
+fn solve<'a, I, S, const N: usize>(
+    lut: &[usize; N],
+    lines: I,
+) -> Result<usize, Box<dyn Error + Send + Sync>>
 where
     I: IntoIterator<Item = &'a S>,
     S: AsRef<str> + 'a,
 {
-    let mut fishes = [0; 9];
+    let mut ret = 0;
     for line in lines {
-        for fish in line.as_ref().split(',') {
-            *fishes.get_mut(fish.parse::<usize>()?).ok_or(util::Error)? += 1
+        for word in line.as_ref().split(',') {
+            ret += lut.get(word.parse::<usize>()?).ok_or(util::Error)?;
         }
     }
-    for _ in 0..times {
-        let zero = fishes[0];
-        fishes.copy_within(1..9, 0);
-        fishes[6] += zero;
-        fishes[8] = zero;
-    }
-    Ok(fishes.into_iter().sum())
+    Ok(ret)
 }
 
 pub fn part1<'a, I, S>(lines: I) -> Result<usize, Box<dyn Error + Send + Sync>>
@@ -26,7 +25,7 @@ where
     I: IntoIterator<Item = &'a S>,
     S: AsRef<str> + 'a,
 {
-    solve(80, lines)
+    solve(&LUT_80, lines)
 }
 
 pub fn part2<'a, I, S>(lines: I) -> Result<usize, Box<dyn Error + Send + Sync>>
@@ -34,7 +33,7 @@ where
     I: IntoIterator<Item = &'a S>,
     S: AsRef<str> + 'a,
 {
-    solve(256, lines)
+    solve(&LUT_256, lines)
 }
 
 #[cfg(test)]
