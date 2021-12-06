@@ -25,10 +25,10 @@ dependencies:
 library:
   source-dirs: src
   dependencies:
+  - array
   - containers
   - megaparsec
   - text
-  - vector
 
 executables:
   aoc2021-exe:
