@@ -8,7 +8,7 @@ module Day5 (day5a, day5b) where
 import Control.Monad (when)
 import Data.Bits (Bits((.&.), (.|.), bitSizeMaybe, shiftL, shiftR, xor), finiteBitSize)
 import Data.Function (on)
-import qualified Data.IntMap as IntMap (elems, fromSet, unionsWith)
+import qualified Data.IntMap.Strict as IntMap (elems, fromSet, unionsWith)
 import qualified Data.IntSet as IntSet (fromDistinctAscList)
 import Data.List.NonEmpty (nonEmpty)
 import qualified Data.Set as Set (empty)
