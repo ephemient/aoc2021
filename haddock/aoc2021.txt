@@ -8,6 +8,23 @@
 @version 0.1.0.0
 
 module Common
+
+-- | Chinese remainder theorem.
+--   
+--   <pre>
+--   crt (r1, q1) (r2, q2) == (r3, q3) ==&gt;
+--   </pre>
+--   
+--   r3 <a>mod</a> q1 == r1 &amp;&amp; q3 <a>mod</a> q1 == 0 &amp;&amp; r3
+--   <a>mod</a> q2 == r2 &amp;&amp; q3 <a>mod</a> q2 == 0
+crt :: Integral a => (a, a) -> (a, a) -> (a, a)
+
+-- | Extended GCD.
+--   
+--   <pre>
+--   gcd a b == (s, t, g) ==&gt; a * s + b * t == g
+--   </pre>
+egcd :: Integral a => a -> a -> (a, a, a)
 readEntire :: Reader a -> Text -> Either String a
 
 
@@ -34,3 +51,8 @@ day4b :: Text -> Either (ParseErrorBundle Text Void) (Maybe Int)
 module Day5
 day5a :: Text -> Either (ParseErrorBundle Text Void) Int
 day5b :: Text -> Either (ParseErrorBundle Text Void) Int
+
+
+module Day6
+day6a :: Text -> Either String Int
+day6b :: Text -> Either String Int

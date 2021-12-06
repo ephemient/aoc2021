@@ -1,26 +1,124 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Common</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Common.html#readEntire"><span class="hs-identifier">readEntire</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Common</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Common.html#crt"><span class="hs-identifier">crt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Common.html#egcd"><span class="hs-identifier">egcd</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Common.html#readEntire"><span class="hs-identifier">readEntire</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-2"></span><span>
 </span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Text</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Text</span></span><span class="hs-special">)</span><span>
 </span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Text</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">T</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">null</span></span><span class="hs-special">)</span><span>
 </span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Text.Read</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Reader</span></span><span class="hs-special">)</span><span>
 </span><span id="line-6"></span><span>
-</span><span id="line-7"></span><span id="local-6989586621679037751"><span class="annot"><a href="Common.html#readEntire"><span class="hs-identifier hs-type">readEntire</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reader</span></span><span> </span><span class="annot"><a href="#local-6989586621679037751"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="annot"><a href="#local-6989586621679037751"><span class="hs-identifier hs-type">a</span></a></span></span><span>
-</span><span id="line-8"></span><span id="readEntire"><span class="annot"><span class="annottext">readEntire :: Reader a -&gt; Text -&gt; Either String a
-</span><a href="Common.html#readEntire"><span class="hs-identifier hs-var hs-var">readEntire</span></a></span></span><span> </span><span id="local-6989586621679037750"><span class="annot"><span class="annottext">Reader a
-</span><a href="#local-6989586621679037750"><span class="hs-identifier hs-var">reader</span></a></span></span><span> </span><span id="local-6989586621679037749"><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679037749"><span class="hs-identifier hs-var">input</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-9"></span><span>    </span><span class="hs-special">(</span><span id="local-6989586621679037748"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679037748"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679037747"><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679037747"><span class="hs-identifier hs-var">t</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Reader a
-</span><a href="#local-6989586621679037750"><span class="hs-identifier hs-var">reader</span></a></span><span> </span><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679037749"><span class="hs-identifier hs-var">input</span></a></span><span>
-</span><span id="line-10"></span><span>    </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Text -&gt; Bool
+</span><span id="line-7"></span><span class="hs-comment">-- |Chinese remainder theorem.</span><span>
+</span><span id="line-8"></span><span class="hs-comment">--</span><span>
+</span><span id="line-9"></span><span class="hs-comment">-- prop&gt; crt (r1, q1) (r2, q2) == (r3, q3) ==&gt;</span><span>
+</span><span id="line-10"></span><span class="hs-comment">--           r3 `mod` q1 == r1 &amp;&amp; q3 `mod` q1 == 0 &amp;&amp;</span><span>
+</span><span id="line-11"></span><span class="hs-comment">--           r3 `mod` q2 == r2 &amp;&amp; q3 `mod` q2 == 0</span><span>
+</span><span id="line-12"></span><span id="local-6989586621679038480"><span class="annot"><a href="Common.html#crt"><span class="hs-identifier hs-type">crt</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Integral</span></span><span> </span><span class="annot"><a href="#local-6989586621679038480"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679038480"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="#local-6989586621679038480"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679038480"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="#local-6989586621679038480"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679038480"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="#local-6989586621679038480"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span></span><span>
+</span><span id="line-13"></span><span id="crt"><span class="annot"><span class="annottext">crt :: (a, a) -&gt; (a, a) -&gt; (a, a)
+</span><a href="Common.html#crt"><span class="hs-identifier hs-var hs-var">crt</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679038479"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038479"><span class="hs-identifier hs-var">r1</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679038478"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038478"><span class="hs-identifier hs-var">q1</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679038477"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038477"><span class="hs-identifier hs-var">r2</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679038476"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038476"><span class="hs-identifier hs-var">q2</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038475"><span class="hs-identifier hs-var">r3</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+forall a. Integral a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">`mod`</span></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038473"><span class="hs-identifier hs-var">q3</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038473"><span class="hs-identifier hs-var">q3</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-14"></span><span>    </span><span id="local-6989586621679038473"><span class="annot"><span class="annottext">q3 :: a
+</span><a href="#local-6989586621679038473"><span class="hs-identifier hs-var hs-var">q3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+forall a. Integral a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-identifier hs-var">lcm</span></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038478"><span class="hs-identifier hs-var">q1</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038476"><span class="hs-identifier hs-var">q2</span></a></span><span>
+</span><span id="line-15"></span><span>    </span><span class="hs-comment">-- r3 * q2 == r1 * q2 (mod q3)</span><span>
+</span><span id="line-16"></span><span>    </span><span class="hs-comment">-- r3 * q3 == r2 * q1 (mod q3)</span><span>
+</span><span id="line-17"></span><span>    </span><span class="hs-comment">-- r3 * (q1 + q2) = r1 * q2 + r2 * q1 (mod q3)</span><span>
+</span><span id="line-18"></span><span>    </span><span class="hs-special">(</span><span id="local-6989586621679038471"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038471"><span class="hs-identifier hs-var">t</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">a
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679038470"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038470"><span class="hs-identifier hs-var">g</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; (a, a, a)
+forall a. Integral a =&gt; a -&gt; a -&gt; (a, a, a)
+</span><a href="Common.html#egcd"><span class="hs-identifier hs-var">egcd</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038478"><span class="hs-identifier hs-var">q1</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038476"><span class="hs-identifier hs-var">q2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038473"><span class="hs-identifier hs-var">q3</span></a></span><span>
+</span><span id="line-19"></span><span>    </span><span class="hs-comment">-- t * (q1 + q2) == g (mod q3)</span><span>
+</span><span id="line-20"></span><span>    </span><span class="hs-comment">-- r3 = (r1 * q2 + r2 * q1) * t / g (mod q3)</span><span>
+</span><span id="line-21"></span><span>    </span><span class="hs-special">(</span><span id="local-6989586621679038475"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038475"><span class="hs-identifier hs-var">r3</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">a
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038479"><span class="hs-identifier hs-var">r1</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038476"><span class="hs-identifier hs-var">q2</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038477"><span class="hs-identifier hs-var">r2</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038478"><span class="hs-identifier hs-var">q1</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038471"><span class="hs-identifier hs-var">t</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; (a, a)
+forall a. Integral a =&gt; a -&gt; a -&gt; (a, a)
+</span><span class="hs-operator hs-var">`divMod`</span></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038470"><span class="hs-identifier hs-var">g</span></a></span><span>
+</span><span id="line-22"></span><span>
+</span><span id="line-23"></span><span class="hs-comment">-- |Extended GCD.</span><span>
+</span><span id="line-24"></span><span class="hs-comment">--</span><span>
+</span><span id="line-25"></span><span class="hs-comment">-- prop&gt; gcd a b == (s, t, g) ==&gt; a * s + b * t == g</span><span>
+</span><span id="line-26"></span><span id="local-6989586621679038493"><span class="annot"><a href="Common.html#egcd"><span class="hs-identifier hs-type">egcd</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Integral</span></span><span> </span><span class="annot"><a href="#local-6989586621679038493"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679038493"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679038493"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679038493"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="#local-6989586621679038493"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="#local-6989586621679038493"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span></span><span>
+</span><span id="line-27"></span><span id="egcd"><span class="annot"><span class="annottext">egcd :: a -&gt; a -&gt; (a, a, a)
+</span><a href="Common.html#egcd"><span class="hs-identifier hs-var hs-var">egcd</span></a></span></span><span> </span><span id="local-6989586621679038466"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038466"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="annot"><span class="annottext">a
+</span><span class="hs-number">0</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a
+</span><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">a
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038466"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-28"></span><span class="annot"><a href="Common.html#egcd"><span class="hs-identifier hs-var">egcd</span></a></span><span> </span><span id="local-6989586621679038465"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038465"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679038464"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038464"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038463"><span class="hs-identifier hs-var">t</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038462"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038461"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038463"><span class="hs-identifier hs-var">t</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038460"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-29"></span><span>    </span><span class="hs-special">(</span><span id="local-6989586621679038461"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038461"><span class="hs-identifier hs-var">q</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679038459"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038459"><span class="hs-identifier hs-var">r</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038465"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; (a, a)
+forall a. Integral a =&gt; a -&gt; a -&gt; (a, a)
+</span><span class="hs-operator hs-var">`quotRem`</span></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038464"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><span id="line-30"></span><span>    </span><span class="hs-special">(</span><span id="local-6989586621679038462"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038462"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679038463"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038463"><span class="hs-identifier hs-var">t</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679038460"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038460"><span class="hs-identifier hs-var">g</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; (a, a, a)
+forall a. Integral a =&gt; a -&gt; a -&gt; (a, a, a)
+</span><a href="Common.html#egcd"><span class="hs-identifier hs-var">egcd</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038464"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038459"><span class="hs-identifier hs-var">r</span></a></span><span>
+</span><span id="line-31"></span><span>
+</span><span id="line-32"></span><span id="local-6989586621679038457"><span class="annot"><a href="Common.html#readEntire"><span class="hs-identifier hs-type">readEntire</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reader</span></span><span> </span><span class="annot"><a href="#local-6989586621679038457"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="annot"><a href="#local-6989586621679038457"><span class="hs-identifier hs-type">a</span></a></span></span><span>
+</span><span id="line-33"></span><span id="readEntire"><span class="annot"><span class="annottext">readEntire :: Reader a -&gt; Text -&gt; Either String a
+</span><a href="Common.html#readEntire"><span class="hs-identifier hs-var hs-var">readEntire</span></a></span></span><span> </span><span id="local-6989586621679038456"><span class="annot"><span class="annottext">Reader a
+</span><a href="#local-6989586621679038456"><span class="hs-identifier hs-var">reader</span></a></span></span><span> </span><span id="local-6989586621679038455"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679038455"><span class="hs-identifier hs-var">input</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-34"></span><span>    </span><span class="hs-special">(</span><span id="local-6989586621679038454"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679038454"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679038453"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679038453"><span class="hs-identifier hs-var">t</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Reader a
+</span><a href="#local-6989586621679038456"><span class="hs-identifier hs-var">reader</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679038455"><span class="hs-identifier hs-var">input</span></a></span><span>
+</span><span id="line-35"></span><span>    </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Text -&gt; Bool
 </span><span class="hs-identifier hs-var">T.null</span></span><span> </span><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679037747"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">a -&gt; Either String a
+</span><a href="#local-6989586621679038453"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">a -&gt; Either String a
 forall a b. b -&gt; Either a b
 </span><span class="hs-identifier hs-var">Right</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679037748"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">String -&gt; Either String a
+</span><a href="#local-6989586621679038454"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">String -&gt; Either String a
 forall a b. a -&gt; Either a b
 </span><span class="hs-identifier hs-var">Left</span></span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;incomplete read&quot;</span></span><span>
-</span><span id="line-11"></span></pre></body></html>
+</span><span id="line-36"></span></pre></body></html>

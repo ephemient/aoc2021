@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">{-|
+Module:         Day6
+Description:    &lt;https://adventofcode.com/2021/day/6 Day 6: Lanternfish&gt;
+-}</span><span>
+</span><span id="line-5"></span><span class="hs-pragma">{-# LANGUAGE OverloadedStrings, TupleSections #-}</span><span>
+</span><span id="line-6"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Day6</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day6.html#day6a"><span class="hs-identifier">day6a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Day6.html#day6b"><span class="hs-identifier">day6b</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-7"></span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Common.html"><span class="hs-identifier">Common</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Common.html#readEntire"><span class="hs-identifier">readEntire</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Char</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">isSpace</span></span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.IntMap.Strict</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">IntMap</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">assocs</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">elems</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">fromListWith</span></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Text</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Text</span></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Text</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">T</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">dropAround</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">splitOn</span></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Text.Read</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">T</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">decimal</span></span><span class="hs-special">)</span><span>
+</span><span id="line-14"></span><span>
+</span><span id="line-15"></span><span id="local-6989586621679039081"><span class="annot"><a href="Day6.html#day6"><span class="hs-identifier hs-type">day6</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Integral</span></span><span> </span><span class="annot"><a href="#local-6989586621679039081"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="annot"><a href="#local-6989586621679039081"><span class="hs-identifier hs-type">a</span></a></span></span><span>
+</span><span id="line-16"></span><span id="day6"><span class="annot"><span class="annottext">day6 :: Int -&gt; Text -&gt; Either String a
+</span><a href="Day6.html#day6"><span class="hs-identifier hs-var hs-var">day6</span></a></span></span><span> </span><span id="local-6989586621679039069"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679039069"><span class="hs-identifier hs-var">steps</span></a></span></span><span> </span><span id="local-6989586621679039068"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679039068"><span class="hs-identifier hs-var">input</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-17"></span><span>    </span><span id="local-6989586621679039067"><span class="annot"><span class="annottext">[Int]
+</span><a href="#local-6989586621679039067"><span class="hs-identifier hs-var">nums</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">(Text -&gt; Either String Int) -&gt; [Text] -&gt; Either String [Int]
+forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
+(Traversable t, Monad m) =&gt;
+(a -&gt; m b) -&gt; t a -&gt; m (t b)
+</span><span class="hs-identifier hs-var">mapM</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Reader Int -&gt; Text -&gt; Either String Int
+forall a. Reader a -&gt; Text -&gt; Either String a
+</span><a href="Common.html#readEntire"><span class="hs-identifier hs-var">readEntire</span></a></span><span> </span><span class="annot"><span class="annottext">Reader Int
+forall a. Integral a =&gt; Reader a
+</span><span class="hs-identifier hs-var">T.decimal</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([Text] -&gt; Either String [Int]) -&gt; [Text] -&gt; Either String [Int]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; Text -&gt; [Text]
+</span><span class="hs-identifier hs-var">T.splitOn</span></span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;,&quot;</span></span><span> </span><span class="annot"><span class="annottext">(Text -&gt; [Text]) -&gt; Text -&gt; [Text]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Char -&gt; Bool) -&gt; Text -&gt; Text
+</span><span class="hs-identifier hs-var">T.dropAround</span></span><span> </span><span class="annot"><span class="annottext">Char -&gt; Bool
+</span><span class="hs-identifier hs-var">isSpace</span></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679039068"><span class="hs-identifier hs-var">input</span></a></span><span>
+</span><span id="line-18"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679039065"><span class="annot"><span class="annottext">state0 :: IntMap a
+</span><a href="#local-6989586621679039065"><span class="hs-identifier hs-var hs-var">state0</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(a -&gt; a -&gt; a) -&gt; [(Int, a)] -&gt; IntMap a
+forall a. (a -&gt; a -&gt; a) -&gt; [(Int, a)] -&gt; IntMap a
+</span><span class="hs-identifier hs-var">IntMap.fromListWith</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">(+)</span></span><span> </span><span class="annot"><span class="annottext">([(Int, a)] -&gt; IntMap a) -&gt; [(Int, a)] -&gt; IntMap a
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-special">,</span></span><span> </span><span class="annot"><span class="annottext">a
+</span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Int -&gt; (Int, a)) -&gt; [Int] -&gt; [(Int, a)]
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">[Int]
+</span><a href="#local-6989586621679039067"><span class="hs-identifier hs-var">nums</span></a></span><span>
+</span><span id="line-19"></span><span>        </span><span id="local-6989586621679039062"><span class="annot"><span class="annottext">step :: IntMap a -&gt; IntMap a
+</span><a href="#local-6989586621679039062"><span class="hs-identifier hs-var hs-var">step</span></a></span></span><span> </span><span id="local-6989586621679039061"><span class="annot"><span class="annottext">IntMap a
+</span><a href="#local-6989586621679039061"><span class="hs-identifier hs-var">state</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(a -&gt; a -&gt; a) -&gt; [(Int, a)] -&gt; IntMap a
+forall a. (a -&gt; a -&gt; a) -&gt; [(Int, a)] -&gt; IntMap a
+</span><span class="hs-identifier hs-var">IntMap.fromListWith</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">(+)</span></span><span> </span><span class="annot"><span class="annottext">([(Int, a)] -&gt; IntMap a) -&gt; [(Int, a)] -&gt; IntMap a
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-20"></span><span>            </span><span class="hs-special">(</span><span id="local-6989586621679039060"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679039060"><span class="hs-identifier hs-var">k</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679039059"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679039059"><span class="hs-identifier hs-var">v</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IntMap a -&gt; [(Int, a)]
+forall a. IntMap a -&gt; [(Int, a)]
+</span><span class="hs-identifier hs-var">IntMap.assocs</span></span><span> </span><span class="annot"><span class="annottext">IntMap a
+</span><a href="#local-6989586621679039061"><span class="hs-identifier hs-var">state</span></a></span><span>
+</span><span id="line-21"></span><span>            </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679039060"><span class="hs-identifier hs-var">k</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="hs-keyword">then</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">6</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679039059"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">8</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679039059"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-keyword">else</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679039060"><span class="hs-identifier hs-var">k</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679039059"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><span id="line-22"></span><span>    </span><span class="annot"><span class="annottext">a -&gt; Either String a
+forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
+</span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">(a -&gt; Either String a) -&gt; a -&gt; Either String a
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[a] -&gt; a
+forall (t :: * -&gt; *) a. (Foldable t, Num a) =&gt; t a -&gt; a
+</span><span class="hs-identifier hs-var">sum</span></span><span> </span><span class="annot"><span class="annottext">([a] -&gt; a) -&gt; [a] -&gt; a
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">IntMap a -&gt; [a]
+forall a. IntMap a -&gt; [a]
+</span><span class="hs-identifier hs-var">IntMap.elems</span></span><span> </span><span class="annot"><span class="annottext">(IntMap a -&gt; [a]) -&gt; IntMap a -&gt; [a]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(IntMap a -&gt; IntMap a) -&gt; IntMap a -&gt; [IntMap a]
+forall a. (a -&gt; a) -&gt; a -&gt; [a]
+</span><span class="hs-identifier hs-var">iterate</span></span><span> </span><span class="annot"><span class="annottext">IntMap a -&gt; IntMap a
+forall a. Num a =&gt; IntMap a -&gt; IntMap a
+</span><a href="#local-6989586621679039062"><span class="hs-identifier hs-var">step</span></a></span><span> </span><span class="annot"><span class="annottext">IntMap a
+</span><a href="#local-6989586621679039065"><span class="hs-identifier hs-var">state0</span></a></span><span> </span><span class="annot"><span class="annottext">[IntMap a] -&gt; Int -&gt; IntMap a
+forall a. [a] -&gt; Int -&gt; a
+</span><span class="hs-operator hs-var">!!</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679039069"><span class="hs-identifier hs-var">steps</span></a></span><span>
+</span><span id="line-23"></span><span>
+</span><span id="line-24"></span><span class="annot"><a href="Day6.html#day6a"><span class="hs-identifier hs-type">day6a</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
+</span><span id="line-25"></span><span id="day6a"><span class="annot"><span class="annottext">day6a :: Text -&gt; Either String Int
+</span><a href="Day6.html#day6a"><span class="hs-identifier hs-var hs-var">day6a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Text -&gt; Either String Int
+forall a. Integral a =&gt; Int -&gt; Text -&gt; Either String a
+</span><a href="Day6.html#day6"><span class="hs-identifier hs-var">day6</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">80</span></span><span>
+</span><span id="line-26"></span><span>
+</span><span id="line-27"></span><span class="annot"><a href="Day6.html#day6b"><span class="hs-identifier hs-type">day6b</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
+</span><span id="line-28"></span><span id="day6b"><span class="annot"><span class="annottext">day6b :: Text -&gt; Either String Int
+</span><a href="Day6.html#day6b"><span class="hs-identifier hs-var hs-var">day6b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Text -&gt; Either String Int
+forall a. Integral a =&gt; Int -&gt; Text -&gt; Either String a
+</span><a href="Day6.html#day6"><span class="hs-identifier hs-var">day6</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">256</span></span><span>
+</span><span id="line-29"></span></pre></body></html>
