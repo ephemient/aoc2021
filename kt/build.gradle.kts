@@ -18,6 +18,43 @@ dependencies {
     detektPlugins(libs.detekt.formatting)
 }
 
+val commonSources by tasks.registering {
+    outputs.dir(layout.buildDirectory.dir("generated/source/$name"))
+
+    doFirst {
+        delete(outputs.files.singleFile.listFiles())
+    }
+    doLast {
+        val d = 9
+        val base = LongArray(d * d).apply {
+            repeat(8) { this[(d + 1) * it + 1] = 1 }
+            this[d * 6] = 1
+            this[d * 8] = 1
+        }
+        fun LongArray.pow(n: Int): LongArray {
+            if (n == 1) return this
+            val double = LongArray(d * d) {
+                val i = it / d
+                val j = it % d
+                (0 until d).sumOf { k -> this[d * i + k] * this[d * k + j] }
+            }.pow(n / 2)
+            return if (n % 2 == 0) double else LongArray(d * d) {
+                val i = it / d
+                val j = it % d
+                (0 until d).sumOf { k -> double[d * i + k] * this[d * k + j] }
+            }
+        }
+        fun LongArray.rowSums() = LongArray(d) { j -> (0 until d).sumOf { i -> this[d * i + j] } }
+        File(outputs.files.singleFile, "Day6Constants.kt").bufferedWriter().use { out ->
+            out.write("package com.github.ephemient.aoc2021\n\n")
+            out.write("object Day6Constants {\n")
+            base.pow(80).rowSums().joinTo(out, prefix = "    internal val matrix80 = longArrayOf(", postfix = ")\n")
+            base.pow(256).rowSums().joinTo(out, prefix = "    internal val matrix256 = longArrayOf(", postfix = ")\n")
+            out.write("}\n")
+        }
+    }
+}
+
 val jvmResources by tasks.registering(Sync::class) {
     from(rootDir.parentFile)
     into(layout.buildDirectory.dir("generated/source/$name"))
@@ -28,10 +65,11 @@ val nonJvmSources by tasks.registering {
     inputs.files(fileTree(rootDir.parent).matching { include("day*.txt") })
     outputs.dir(layout.buildDirectory.dir("generated/source/$name"))
 
+    doFirst {
+        delete(outputs.files.singleFile.listFiles())
+    }
     doLast {
-        val outputDir = outputs.files.singleFile
-        delete(outputDir.listFiles())
-        File(outputDir, "Resources.kt").bufferedWriter().use { out ->
+        File(outputs.files.singleFile, "Resources.kt").bufferedWriter().use { out ->
             out.write("package com.github.ephemient.aoc2021\n\n")
             out.write("actual fun getInput(day: Int): List<String> = when (day) {\n")
             for (
@@ -93,7 +131,9 @@ kotlin {
     }
 
     sourceSets {
-        val commonMain by getting
+        val commonMain by getting {
+            kotlin.srcDir(commonSources)
+        }
         getByName("commonTest") {
             dependencies {
                 implementation(kotlin("test-common"))

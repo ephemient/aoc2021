@@ -7,18 +7,7 @@ class Day6(lines: List<String>) {
         }
     }
 
-    fun part1(): Long = solve(80)
+    fun part1(): Long = Day6Constants.matrix80.zip(initialState, Long::times).sum()
 
-    fun part2(): Long = solve(256)
-
-    private fun solve(times: Int): Long {
-        val state = initialState.copyOf()
-        repeat(times) {
-            val zero = state[0]
-            state.copyInto(state, 0, 1)
-            state[6] += zero
-            state[8] = zero
-        }
-        return state.sum()
-    }
+    fun part2(): Long = Day6Constants.matrix256.zip(initialState, Long::times).sum()
 }
