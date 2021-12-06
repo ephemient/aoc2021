@@ -6,6 +6,7 @@ import Day2 (day2a, day2b)
 import Day3 (day3a, day3b)
 import Day4 (day4a, day4b)
 import Day5 (day5a, day5b)
+import Day6 (day6a, day6b)
 
 import Control.Monad ((<=<), when)
 import Data.Maybe (mapMaybe)
@@ -42,3 +43,4 @@ main = do
     run 3 (print <=< rightOrFail) [day3a, day3b]
     run 4 (print <=< justOrFail <=< rightOrFail) [day4a, day4b]
     run 5 (print <=< rightOrFail) [day5a, day5b]
+    run 6 (print <=< either fail pure) [day6a, day6b]
