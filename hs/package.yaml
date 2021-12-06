@@ -28,7 +28,10 @@ library:
   - array
   - containers
   - megaparsec
+  - template-haskell
   - text
+  other-modules:
+  - Day6Meta
 
 executables:
   aoc2021-exe:
