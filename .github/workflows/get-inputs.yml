@@ -14,7 +14,16 @@ jobs:
       - uses: actions/checkout@v2
       - name: Get Day
         id: get-day
-        run: echo "::set-output name=day::$(seq 1 $(expr '(' $(date +%s) - $(TZ=UTC+5 date +%s --date=2021-12-01) ')' / 86400 + 1) | head -n25 | tail -n1)"
+        run: |
+          from datetime import datetime, timedelta, tzinfo
+          class TZ(tzinfo):
+              def utcoffset(self, dt):
+                  return timedelta(hours=-5) + self.dst(dt)
+              def dst(self, dt):
+                  return timedelta(0)
+          day = (datetime.now(TZ()) - datetime(2021, 12, 1, 0, 0, 0, 0, TZ())).days + 1
+          print("::set-output name=day::" + str(min(25, max(0, day))))
+        shell: python
       - uses: actions/cache@v2
         with:
           key: inputs-${{ steps.get-day.outputs.day }}

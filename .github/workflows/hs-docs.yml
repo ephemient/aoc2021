@@ -31,7 +31,9 @@ jobs:
           key: ${{ runner.os }}-haddock-${{ hashFiles('**/stack.*') }}-${{ hashFiles('**/package.yaml') }}
           restore-keys: ${{ runner.os }}-haddock-${{ hashFiles('**/stack.*') }}-
           path: ~/.stack
-      - run: stack haddock --no-haddock-deps
+      - run: stack haddock --only-dependencies
+        working-directory: hs
+      - run: stack haddock --only-locals --haddock-internal --haddock-arguments --ignore-all-exports
         working-directory: hs
       - run: rsync --archive --delete --verbose --whole-file hs/.stack-work/dist/*/*/doc/html/aoc2021/* gh-docs/haddock/
       - name: Rewrite links to Hackage
