@@ -50,20 +50,13 @@ day3b :: Text -> Either (ParseErrorBundle String Void) Int
 
 
 module Day4
-data BingoBoard
-BingoBoard :: ((Int, Int), (Int, Int)) -> IntMap IntSet -> IntSet -> BingoBoard
-[range] :: BingoBoard -> ((Int, Int), (Int, Int))
-[unmarked] :: BingoBoard -> IntMap IntSet
-[marked] :: BingoBoard -> IntSet
-parser :: (MonadParsec e s m, Token s ~ Char) => m ([Int], [BingoBoard])
-play :: Int -> BingoBoard -> Either Int BingoBoard
-isBingo :: BingoBoard -> Bool
-day4a :: Text -> Either (ParseErrorBundle Text Void) (Maybe Int)
-day4b :: Text -> Either (ParseErrorBundle Text Void) (Maybe Int)
+parser' :: (MonadParsec e s m, Token s ~ Char) => m ([Int], [[[Int]]])
+day4 :: Text -> Either (ParseErrorBundle Text Void) (Maybe (Int, Int))
 
 
 module Day5
-parser :: forall e s m a. (MonadParsec e s m, Token s ~ Char, IsString (Tokens s), Bits a, Num a, Ord a) => Int -> m [(a, a)]
+parser :: (Num a, Ord a, MonadParsec e s m, Token s ~ Char, IsString (Tokens s)) => m [((a, a), (a, a))]
+intersections :: (Enum a, Integral a, Ord a, Show a) => [((a, a), (a, a))] -> Set (a, a)
 day5a :: Text -> Either (ParseErrorBundle Text Void) Int
 day5b :: Text -> Either (ParseErrorBundle Text Void) Int
 
