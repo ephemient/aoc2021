@@ -36,12 +36,8 @@ def test_day3_part2_bench(benchmark):
     benchmark(day3.part2, data(3))
 
 
-def test_day4_part1_bench(benchmark):
-    benchmark(day4.part1, data(4))
-
-
-def test_day4_part2_bench(benchmark):
-    benchmark(day4.part2, data(4))
+def test_day4_solve_bench(benchmark):
+    benchmark(day4.solve, data(4))
 
 
 def test_day5_part1_bench(benchmark):
