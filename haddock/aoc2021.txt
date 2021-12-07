@@ -72,7 +72,7 @@ module Day6Meta
 newtype Matrix a e
 Matrix :: a (Int, Int) e -> Matrix a e
 flatten :: (IArray a e, Num e) => Matrix a e -> a Int e
-step :: Matrix UArray Int
+step :: Matrix Array Integer
 mkLUT :: QuasiQuoter
 instance (Data.Array.Base.IArray a e, GHC.Num.Num e) => GHC.Base.Semigroup (Day6Meta.Matrix a e)
 
@@ -81,3 +81,8 @@ module Day6
 day6 :: UArray Int Int -> Text -> Either String Int
 day6a :: Text -> Either String Int
 day6b :: Text -> Either String Int
+
+
+module Day7
+day7a :: Text -> Either String Int
+day7b :: Text -> Either String Int
