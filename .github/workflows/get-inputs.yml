@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
       - name: Get Day
         id: get-day
         run: |
@@ -29,9 +28,11 @@ jobs:
           key: inputs-${{ steps.get-day.outputs.day }}
           restore-keys: inputs-
           path: day*.txt
-      - run: ./get-inputs.main.kts
-        env:
-          SESSION: ${{ secrets.SESSION }}
+      - run: |
+          for day in $(seq 1 1 "${{ steps.get-day.outputs.day }}"); do
+            [[ -e "day$day.txt" ]] || curl -b "session=${{ secrets.SESSION }}" -o "day$day.txt" -f "https://adventofcode.com/2021/day/$day/input"
+          done
+        shell: bash --noprofile --norc -euxo pipefail {0}
       - uses: actions/upload-artifact@v2
         with:
           name: inputs
