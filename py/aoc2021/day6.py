@@ -39,7 +39,7 @@ def precompute(times):
     return tuple(map(sum, zip(*matrix)))
 
 
-def solve_(constants, lines):
+def solve(constants, lines):
     """
     >>> part1(["3,4,3,1,2"])
     5934
@@ -49,8 +49,8 @@ def solve_(constants, lines):
     return sum(constants[int(num)] for line in lines for num in line.strip().split(","))
 
 
-part1 = functools.partial(solve_, precompute(80))
-part2 = functools.partial(solve_, precompute(256))
+part1 = functools.partial(solve, precompute(80))
+part2 = functools.partial(solve, precompute(256))
 
 
 parts = (part1, part2)
