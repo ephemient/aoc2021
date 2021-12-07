@@ -64,13 +64,7 @@ class Day5(lines: List<String>) {
             }
         }.size
 
-        private infix fun IntRange.intersect(other: IntRange): IntRange = when {
-            this.isEmpty() || other.isEmpty() -> IntRange.EMPTY
-            first in other && last in other -> this
-            first in other -> first..other.last
-            last in other -> other.first..last
-            other.first in this -> other
-            else -> IntRange.EMPTY
-        }
+        private infix fun IntRange.intersect(other: IntRange): IntRange =
+            maxOf(first, other.first)..minOf(last, other.last)
     }
 }
