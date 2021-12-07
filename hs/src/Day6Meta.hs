@@ -5,7 +5,8 @@ Description:    Generates lookup tables for "Day6"
 {-# LANGUAGE TemplateHaskell, TypeApplications #-}
 module Day6Meta (mkLUT) where
 
-import Data.Array.Unboxed (IArray, UArray, (!), accumArray, bounds, elems, listArray, range)
+import Data.Array (Array)
+import Data.Array.IArray (IArray, (!), accumArray, bounds, elems, listArray, range)
 import Data.Semigroup (stimes)
 import Language.Haskell.TH.Syntax (lift)
 import Language.Haskell.TH.Quote (QuasiQuoter(..))
@@ -25,7 +26,7 @@ flatten (Matrix arr) = listArray (j0, j1)
     [sum [arr ! (i, j) | i <- range (i0, i1)] | j <- range (j0, j1)] where
     ((i0, j0), (i1, j1)) = bounds arr
 
-step :: Matrix UArray Int
+step :: Matrix Array Integer
 step = Matrix $ accumArray (const id) 0 ((0, 0), (8, 8)) $
     ((6, 0), 1) : ((8, 0), 1) : [((i, i + 1), 1) | i <- [0..7]]
 
