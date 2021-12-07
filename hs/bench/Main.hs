@@ -6,7 +6,7 @@ import qualified Data.Text.IO as TIO (readFile)
 import Day1 (day1a, day1b)
 import Day2 (day2a, day2b)
 import Day3 (day3a, day3b)
-import Day4 (day4a, day4b)
+import Day4 (day4)
 import Day5 (day5a, day5b)
 import Day6 (day6a, day6b)
 import Day7 (day7a, day7b)
@@ -29,10 +29,7 @@ main = defaultMain
       [ bench "part 1" $ nf day3a input
       , bench "part 2" $ nf day3b input
       ]
-  , env (getDayInput 4) $ \input -> bgroup "Day 4"
-      [ bench "part 1" $ nf day4a input
-      , bench "part 2" $ nf day4b input
-      ]
+  , env (getDayInput 4) $ \input -> bgroup "Day 4" [bench "both" $ nf day4 input]
   , env (getDayInput 5) $ \input -> bgroup "Day 5"
       [ bench "part 1" $ nf day5a input
       , bench "part 2" $ nf day5b input

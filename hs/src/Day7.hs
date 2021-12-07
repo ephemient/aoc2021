@@ -12,14 +12,12 @@ import Data.Text (Text)
 import qualified Data.Text as T (lines, splitOn)
 import qualified Data.Text.Read as T (decimal)
 
--- $> day7a <$> Data.Text.IO.readFile "day7.txt"
 day7a :: Text -> Either String Int
 day7a input = do
     nums <- mapM (readEntire T.decimal) $ T.splitOn "," =<< T.lines input
     let median = sort nums !! (length nums `div` 2)
     pure $ sum [abs $ num - median | num <- nums]
 
--- $> day7b <$> Data.Text.IO.readFile "day7.txt"
 day7b :: Text -> Either String Int
 day7b input = do
     nums <- mapM (readEntire T.decimal) $ T.splitOn "," =<< T.lines input
