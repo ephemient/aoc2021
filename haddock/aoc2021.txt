@@ -34,25 +34,50 @@ day1b :: Text -> Either String Int
 
 
 module Day2
+data Move a
+Horizontal :: a -> Move a
+Vertical :: a -> Move a
+move :: Integral a => Reader (Move a)
 day2a :: Text -> Either String Int
 day2b :: Text -> Either String Int
 
 
 module Day3
+common :: Ord a => [a] -> a
+uncommon :: Ord a => [a] -> a
 day3a :: Text -> Either (ParseErrorBundle String Void) Int
 day3b :: Text -> Either (ParseErrorBundle String Void) Int
 
 
 module Day4
+data BingoBoard
+BingoBoard :: ((Int, Int), (Int, Int)) -> IntMap IntSet -> IntSet -> BingoBoard
+[range] :: BingoBoard -> ((Int, Int), (Int, Int))
+[unmarked] :: BingoBoard -> IntMap IntSet
+[marked] :: BingoBoard -> IntSet
+parser :: (MonadParsec e s m, Token s ~ Char) => m ([Int], [BingoBoard])
+play :: Int -> BingoBoard -> Either Int BingoBoard
+isBingo :: BingoBoard -> Bool
 day4a :: Text -> Either (ParseErrorBundle Text Void) (Maybe Int)
 day4b :: Text -> Either (ParseErrorBundle Text Void) (Maybe Int)
 
 
 module Day5
+parser :: forall e s m a. (MonadParsec e s m, Token s ~ Char, IsString (Tokens s), Bits a, Num a, Ord a) => Int -> m [(a, a)]
 day5a :: Text -> Either (ParseErrorBundle Text Void) Int
 day5b :: Text -> Either (ParseErrorBundle Text Void) Int
 
 
+module Day6Meta
+newtype Matrix a e
+Matrix :: a (Int, Int) e -> Matrix a e
+flatten :: (IArray a e, Num e) => Matrix a e -> a Int e
+step :: Matrix UArray Int
+mkLUT :: QuasiQuoter
+instance (Data.Array.Base.IArray a e, GHC.Num.Num e) => GHC.Base.Semigroup (Day6Meta.Matrix a e)
+
+
 module Day6
+day6 :: UArray Int Int -> Text -> Either String Int
 day6a :: Text -> Either String Int
 day6b :: Text -> Either String Int

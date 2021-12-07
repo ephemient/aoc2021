@@ -1,0 +1,229 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">{-|
+Module:         Day6
+Description:    Generates lookup tables for &quot;Day6&quot;
+-}</span><span>
+</span><span id="line-5"></span><span class="hs-pragma">{-# LANGUAGE TemplateHaskell, TypeApplications #-}</span><span>
+</span><span id="line-6"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Day6Meta</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day6Meta.html#mkLUT"><span class="hs-identifier">mkLUT</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-7"></span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Array.Unboxed</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">IArray</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">UArray</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="hs-glyph">!</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">accumArray</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">bounds</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">elems</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">listArray</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">range</span></span><span class="hs-special">)</span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Semigroup</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">stimes</span></span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Haskell.TH.Syntax</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">lift</span></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Haskell.TH.Quote</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">QuasiQuoter</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span>
+</span><span id="line-13"></span><span class="hs-keyword">newtype</span><span> </span><span id="Matrix"><span class="annot"><a href="Day6Meta.html#Matrix"><span class="hs-identifier hs-var">Matrix</span></a></span></span><span> </span><span id="local-6989586621679061769"><span class="annot"><a href="#local-6989586621679061769"><span class="hs-identifier hs-type">a</span></a></span></span><span> </span><span id="local-6989586621679061768"><span class="annot"><a href="#local-6989586621679061768"><span class="hs-identifier hs-type">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Matrix"><span class="annot"><a href="Day6Meta.html#Matrix"><span class="hs-identifier hs-var">Matrix</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679061769"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="#local-6989586621679061768"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-14"></span><span>
+</span><span id="line-15"></span><span id="local-6989586621679061719"><span id="local-6989586621679061720"><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679061714"><span id="local-6989586621679061716"><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">IArray</span></span><span> </span><span class="annot"><a href="#local-6989586621679061720"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679061719"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Num</span></span><span> </span><span class="annot"><a href="#local-6989586621679061719"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Semigroup</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day6Meta.html#Matrix"><span class="hs-identifier hs-type">Matrix</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679061720"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679061719"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">)</span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-16"></span><span>    </span><span class="annot"><a href="Day6Meta.html#Matrix"><span class="hs-identifier hs-type">Matrix</span></a></span><span> </span><span id="local-6989586621679061712"><span class="annot"><span class="annottext">a (Int, Int) e
+</span><a href="#local-6989586621679061712"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679061711"><span class="annot"><span class="annottext">&lt;&gt; :: Matrix a e -&gt; Matrix a e -&gt; Matrix a e
+</span><span class="hs-operator hs-var hs-var hs-var hs-var">&lt;&gt;</span></span></span><span> </span><span class="annot"><a href="Day6Meta.html#Matrix"><span class="hs-identifier hs-type">Matrix</span></a></span><span> </span><span id="local-6989586621679061710"><span class="annot"><span class="annottext">a (Int, Int) e
+</span><a href="#local-6989586621679061710"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a (Int, Int) e -&gt; Matrix a e
+forall (a :: * -&gt; * -&gt; *) e. a (Int, Int) e -&gt; Matrix a e
+</span><a href="Day6Meta.html#Matrix"><span class="hs-identifier hs-var">Matrix</span></a></span><span> </span><span class="annot"><span class="annottext">(a (Int, Int) e -&gt; Matrix a e) -&gt; a (Int, Int) e -&gt; Matrix a e
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">((Int, Int), (Int, Int)) -&gt; [e] -&gt; a (Int, Int) e
+forall (a :: * -&gt; * -&gt; *) e i.
+(IArray a e, Ix i) =&gt;
+(i, i) -&gt; [e] -&gt; a i e
+</span><span class="hs-identifier hs-var">listArray</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061709"><span class="hs-identifier hs-var">i0</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061708"><span class="hs-identifier hs-var">j0</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061707"><span class="hs-identifier hs-var">i1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061706"><span class="hs-identifier hs-var">j1</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-17"></span><span>      </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">[e] -&gt; e
+forall (t :: * -&gt; *) a. (Foldable t, Num a) =&gt; t a -&gt; a
+</span><span class="hs-identifier hs-var">sum</span></span><span> </span><span class="annot"><span class="annottext">([e] -&gt; e) -&gt; [e] -&gt; e
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(e -&gt; e -&gt; e) -&gt; [e] -&gt; [e] -&gt; [e]
+forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
+</span><span class="hs-identifier hs-var">zipWith</span></span><span> </span><span class="annot"><span class="annottext">e -&gt; e -&gt; e
+forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">(*)</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">a (Int, Int) e
+</span><a href="#local-6989586621679061712"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">a (Int, Int) e -&gt; (Int, Int) -&gt; e
+forall (a :: * -&gt; * -&gt; *) e i.
+(IArray a e, Ix i) =&gt;
+a i e -&gt; i -&gt; e
+</span><span class="hs-glyph hs-var">!</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061702"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061701"><span class="hs-identifier hs-var">k0</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">|</span><span> </span><span id="local-6989586621679061701"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061701"><span class="hs-identifier hs-var">k0</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">(Int, Int) -&gt; [Int]
+forall a. Ix a =&gt; (a, a) -&gt; [a]
+</span><span class="hs-identifier hs-var">range</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061700"><span class="hs-identifier hs-var">k00</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061699"><span class="hs-identifier hs-var">k01</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">a (Int, Int) e
+</span><a href="#local-6989586621679061710"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">a (Int, Int) e -&gt; (Int, Int) -&gt; e
+forall (a :: * -&gt; * -&gt; *) e i.
+(IArray a e, Ix i) =&gt;
+a i e -&gt; i -&gt; e
+</span><span class="hs-glyph hs-var">!</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061698"><span class="hs-identifier hs-var">k1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061697"><span class="hs-identifier hs-var">j</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">|</span><span> </span><span id="local-6989586621679061698"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061698"><span class="hs-identifier hs-var">k1</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">(Int, Int) -&gt; [Int]
+forall a. Ix a =&gt; (a, a) -&gt; [a]
+</span><span class="hs-identifier hs-var">range</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061696"><span class="hs-identifier hs-var">k10</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061695"><span class="hs-identifier hs-var">k11</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><span id="line-18"></span><span>      </span><span class="hs-glyph">|</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679061702"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061702"><span class="hs-identifier hs-var">i</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679061697"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061697"><span class="hs-identifier hs-var">j</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">((Int, Int), (Int, Int)) -&gt; [(Int, Int)]
+forall a. Ix a =&gt; (a, a) -&gt; [a]
+</span><span class="hs-identifier hs-var">range</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061709"><span class="hs-identifier hs-var">i0</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061708"><span class="hs-identifier hs-var">j0</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061707"><span class="hs-identifier hs-var">i1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061706"><span class="hs-identifier hs-var">j1</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-19"></span><span>      </span><span class="hs-special">]</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-20"></span><span>        </span><span class="hs-special">(</span><span class="hs-special">(</span><span id="local-6989586621679061709"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061709"><span class="hs-identifier hs-var">i0</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679061700"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061700"><span class="hs-identifier hs-var">k00</span></a></span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679061707"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061707"><span class="hs-identifier hs-var">i1</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679061699"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061699"><span class="hs-identifier hs-var">k01</span></a></span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a (Int, Int) e -&gt; ((Int, Int), (Int, Int))
+forall (a :: * -&gt; * -&gt; *) e i.
+(IArray a e, Ix i) =&gt;
+a i e -&gt; (i, i)
+</span><span class="hs-identifier hs-var">bounds</span></span><span> </span><span class="annot"><span class="annottext">a (Int, Int) e
+</span><a href="#local-6989586621679061712"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-21"></span><span>        </span><span class="hs-special">(</span><span class="hs-special">(</span><span id="local-6989586621679061696"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061696"><span class="hs-identifier hs-var">k10</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679061708"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061708"><span class="hs-identifier hs-var">j0</span></a></span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679061695"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061695"><span class="hs-identifier hs-var">k11</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679061706"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061706"><span class="hs-identifier hs-var">j1</span></a></span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a (Int, Int) e -&gt; ((Int, Int), (Int, Int))
+forall (a :: * -&gt; * -&gt; *) e i.
+(IArray a e, Ix i) =&gt;
+a i e -&gt; (i, i)
+</span><span class="hs-identifier hs-var">bounds</span></span><span> </span><span class="annot"><span class="annottext">a (Int, Int) e
+</span><a href="#local-6989586621679061710"><span class="hs-identifier hs-var">y</span></a></span></span></span><span>
+</span><span id="line-22"></span><span>
+</span><span id="line-23"></span><span id="local-6989586621679061734"><span id="local-6989586621679061735"><span class="annot"><a href="Day6Meta.html#flatten"><span class="hs-identifier hs-type">flatten</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">IArray</span></span><span> </span><span class="annot"><a href="#local-6989586621679061735"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679061734"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Num</span></span><span> </span><span class="annot"><a href="#local-6989586621679061734"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Day6Meta.html#Matrix"><span class="hs-identifier hs-type">Matrix</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679061735"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679061734"><span class="hs-identifier hs-type">e</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679061735"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="annot"><a href="#local-6989586621679061734"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-24"></span><span id="flatten"><span class="annot"><span class="annottext">flatten :: Matrix a e -&gt; a Int e
+</span><a href="Day6Meta.html#flatten"><span class="hs-identifier hs-var hs-var">flatten</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day6Meta.html#Matrix"><span class="hs-identifier hs-type">Matrix</span></a></span><span> </span><span id="local-6989586621679061693"><span class="annot"><span class="annottext">a (Int, Int) e
+</span><a href="#local-6989586621679061693"><span class="hs-identifier hs-var">arr</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Int, Int) -&gt; [e] -&gt; a Int e
+forall (a :: * -&gt; * -&gt; *) e i.
+(IArray a e, Ix i) =&gt;
+(i, i) -&gt; [e] -&gt; a i e
+</span><span class="hs-identifier hs-var">listArray</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061692"><span class="hs-identifier hs-var">j0</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061691"><span class="hs-identifier hs-var">j1</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-25"></span><span>    </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[e] -&gt; e
+forall (t :: * -&gt; *) a. (Foldable t, Num a) =&gt; t a -&gt; a
+</span><span class="hs-identifier hs-var">sum</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">a (Int, Int) e
+</span><a href="#local-6989586621679061693"><span class="hs-identifier hs-var">arr</span></a></span><span> </span><span class="annot"><span class="annottext">a (Int, Int) e -&gt; (Int, Int) -&gt; e
+forall (a :: * -&gt; * -&gt; *) e i.
+(IArray a e, Ix i) =&gt;
+a i e -&gt; i -&gt; e
+</span><span class="hs-glyph hs-var">!</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061690"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061689"><span class="hs-identifier hs-var">j</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">|</span><span> </span><span id="local-6989586621679061690"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061690"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">(Int, Int) -&gt; [Int]
+forall a. Ix a =&gt; (a, a) -&gt; [a]
+</span><span class="hs-identifier hs-var">range</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061688"><span class="hs-identifier hs-var">i0</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061687"><span class="hs-identifier hs-var">i1</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">|</span><span> </span><span id="local-6989586621679061689"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061689"><span class="hs-identifier hs-var">j</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">(Int, Int) -&gt; [Int]
+forall a. Ix a =&gt; (a, a) -&gt; [a]
+</span><span class="hs-identifier hs-var">range</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061692"><span class="hs-identifier hs-var">j0</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061691"><span class="hs-identifier hs-var">j1</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-26"></span><span>    </span><span class="hs-special">(</span><span class="hs-special">(</span><span id="local-6989586621679061688"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061688"><span class="hs-identifier hs-var">i0</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679061692"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061692"><span class="hs-identifier hs-var">j0</span></a></span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679061687"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061687"><span class="hs-identifier hs-var">i1</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679061691"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061691"><span class="hs-identifier hs-var">j1</span></a></span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a (Int, Int) e -&gt; ((Int, Int), (Int, Int))
+forall (a :: * -&gt; * -&gt; *) e i.
+(IArray a e, Ix i) =&gt;
+a i e -&gt; (i, i)
+</span><span class="hs-identifier hs-var">bounds</span></span><span> </span><span class="annot"><span class="annottext">a (Int, Int) e
+</span><a href="#local-6989586621679061693"><span class="hs-identifier hs-var">arr</span></a></span><span>
+</span><span id="line-27"></span><span>
+</span><span id="line-28"></span><span class="annot"><a href="Day6Meta.html#step"><span class="hs-identifier hs-type">step</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Day6Meta.html#Matrix"><span class="hs-identifier hs-type">Matrix</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">UArray</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
+</span><span id="line-29"></span><span id="step"><span class="annot"><span class="annottext">step :: Matrix UArray Int
+</span><a href="Day6Meta.html#step"><span class="hs-identifier hs-var hs-var">step</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UArray (Int, Int) Int -&gt; Matrix UArray Int
+forall (a :: * -&gt; * -&gt; *) e. a (Int, Int) e -&gt; Matrix a e
+</span><a href="Day6Meta.html#Matrix"><span class="hs-identifier hs-var">Matrix</span></a></span><span> </span><span class="annot"><span class="annottext">(UArray (Int, Int) Int -&gt; Matrix UArray Int)
+-&gt; UArray (Int, Int) Int -&gt; Matrix UArray Int
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Int -&gt; Int -&gt; Int)
+-&gt; Int
+-&gt; ((Int, Int), (Int, Int))
+-&gt; [((Int, Int), Int)]
+-&gt; UArray (Int, Int) Int
+forall (a :: * -&gt; * -&gt; *) e i e'.
+(IArray a e, Ix i) =&gt;
+(e -&gt; e' -&gt; e) -&gt; e -&gt; (i, i) -&gt; [(i, e')] -&gt; a i e
+</span><span class="hs-identifier hs-var">accumArray</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Int -&gt; Int) -&gt; Int -&gt; Int -&gt; Int
+forall a b. a -&gt; b -&gt; a
+</span><span class="hs-identifier hs-var">const</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int
+forall a. a -&gt; a
+</span><span class="hs-identifier hs-var">id</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">8</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">8</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([((Int, Int), Int)] -&gt; UArray (Int, Int) Int)
+-&gt; [((Int, Int), Int)] -&gt; UArray (Int, Int) Int
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span>
+</span><span id="line-30"></span><span>    </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">6</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">((Int, Int), Int) -&gt; [((Int, Int), Int)] -&gt; [((Int, Int), Int)]
+forall a. a -&gt; [a] -&gt; [a]
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">8</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">((Int, Int), Int) -&gt; [((Int, Int), Int)] -&gt; [((Int, Int), Int)]
+forall a. a -&gt; [a] -&gt; [a]
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061683"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061683"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">|</span><span> </span><span id="local-6989586621679061683"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679061683"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span class="hs-glyph">..</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">7</span></span><span class="hs-special">]</span><span class="hs-special">]</span><span>
+</span><span id="line-31"></span><span>
+</span><span id="line-32"></span><span class="annot"><a href="Day6Meta.html#mkLUT"><span class="hs-identifier hs-type">mkLUT</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QuasiQuoter</span></span><span>
+</span><span id="line-33"></span><span id="mkLUT"><span class="annot"><span class="annottext">mkLUT :: QuasiQuoter
+</span><a href="Day6Meta.html#mkLUT"><span class="hs-identifier hs-var hs-var">mkLUT</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuasiQuoter :: (String -&gt; Q Exp)
+-&gt; (String -&gt; Q Pat)
+-&gt; (String -&gt; Q Type)
+-&gt; (String -&gt; Q [Dec])
+-&gt; QuasiQuoter
+</span><span class="hs-identifier hs-type">QuasiQuoter</span></span><span>
+</span><span id="line-34"></span><span>  </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">quoteExp :: String -&gt; Q Exp
+</span><span class="hs-identifier hs-var">quoteExp</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-glyph">\</span><span id="local-6989586621679061680"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679061680"><span class="hs-identifier hs-var">times</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><span id="line-35"></span><span>        </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679061679"><span class="annot"><span class="annottext">lut :: UArray Int Int
+</span><a href="#local-6989586621679061679"><span class="hs-identifier hs-var hs-var">lut</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Matrix UArray Int -&gt; UArray Int Int
+forall (a :: * -&gt; * -&gt; *) e.
+(IArray a e, Num e) =&gt;
+Matrix a e -&gt; a Int e
+</span><a href="Day6Meta.html#flatten"><span class="hs-identifier hs-var">flatten</span></a></span><span> </span><span class="annot"><span class="annottext">(Matrix UArray Int -&gt; UArray Int Int)
+-&gt; Matrix UArray Int -&gt; UArray Int Int
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Matrix UArray Int -&gt; Matrix UArray Int
+forall a b. (Semigroup a, Integral b) =&gt; b -&gt; a -&gt; a
+</span><span class="hs-identifier hs-var">stimes</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Int
+forall a. Read a =&gt; String -&gt; a
+</span><span class="hs-identifier hs-var">read</span></span><span> </span><span class="hs-glyph">@</span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679061680"><span class="hs-identifier hs-var">times</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Matrix UArray Int
+</span><a href="Day6Meta.html#step"><span class="hs-identifier hs-var">step</span></a></span><span>
+</span><span id="line-36"></span><span>        </span><span class="hs-keyword">in</span><span> </span><span class="hs-special">[|</span><span> </span><span class="hs-identifier">listArray</span><span> </span><span class="hs-special">$(</span><span class="hs-identifier">lift</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-identifier">bounds</span><span> </span><span class="hs-identifier">lut</span><span class="hs-special">)</span><span> </span><span class="hs-special">$(</span><span class="hs-identifier">lift</span><span> </span><span class="hs-operator">$</span><span> </span><span class="hs-identifier">elems</span><span> </span><span class="hs-identifier">lut</span><span class="hs-special">)</span><span> </span><span class="hs-special">|]</span><span>
+</span><span id="line-37"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">quotePat :: String -&gt; Q Pat
+</span><span class="hs-identifier hs-var">quotePat</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; Q Pat
+forall a. HasCallStack =&gt; String -&gt; a
+</span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;unsupported&quot;</span></span><span>
+</span><span id="line-38"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">quoteType :: String -&gt; Q Type
+</span><span class="hs-identifier hs-var">quoteType</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; Q Type
+forall a. HasCallStack =&gt; String -&gt; a
+</span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;unsupported&quot;</span></span><span>
+</span><span id="line-39"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">quoteDec :: String -&gt; Q [Dec]
+</span><span class="hs-identifier hs-var">quoteDec</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; Q [Dec]
+forall a. HasCallStack =&gt; String -&gt; a
+</span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;unsupported&quot;</span></span><span>
+</span><span id="line-40"></span><span>  </span><span class="hs-special">}</span><span>
+</span><span id="line-41"></span></pre></body></html>
