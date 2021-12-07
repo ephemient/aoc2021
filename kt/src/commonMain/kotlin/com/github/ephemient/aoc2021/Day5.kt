@@ -20,11 +20,8 @@ class Day5(lines: List<String>) {
     private data class Segment(val x0: Int, val y0: Int, val x1: Int, val y1: Int) {
         constructor(first: Point, second: Point) : this(first.x, first.y, second.x, second.y)
 
-        private val m: Int get() = (y1 - y0) / (x1 - x0)
-        private val a: Int get() = y0 - x0 * m
         private val xs: IntRange get() = x0..x1
-        private val ys: IntRange get() = if (y0 < y1) y0..y1 else y1..y0
-        private fun get(x: Int): Int = (y1 - y0) / (x1 - x0) * (x - x0) + y0
+        private val ys: IntProgression get() = if (y0 < y1) y0..y1 else y0 downTo y1
 
         @Suppress("ComplexMethod", "NestedBlockDepth")
         fun intersectTo(dest: MutableCollection<Point>, other: Segment) {
@@ -32,24 +29,24 @@ class Day5(lines: List<String>) {
                 if (other.x0 == other.x1) {
                     if (x0 == other.x0) for (y in ys intersect other.ys) dest.add(Point(x0, y))
                 } else if (x0 in other.xs) {
-                    val y = other.get(x0)
+                    val y = (other.y1 - other.y0) / (other.x1 - other.x0) * (x0 - other.x0) + other.y0
                     if (y in ys) dest.add(Point(x0, y))
                 }
             } else if (other.x0 == other.x1) {
                 if (other.x0 in xs) {
-                    val y = get(other.x0)
+                    val y = (y1 - y0) / (x1 - x0) * (other.x0 - x0) + y0
                     if (y in other.ys) dest.add(Point(other.x0, y))
                 }
-            } else if ((y1 - y0) / (x1 - x0) == (other.y1 - other.y0) / (other.x1 - other.x0)) {
-                if (a == other.a) {
-                    for (x in xs intersect other.xs) dest.add(Point(x, get(x)))
-                }
             } else {
-                val da = a - other.a
-                val dm = m - other.m
-                if (da % dm == 0) {
-                    val x = -da / dm
-                    if (x in xs && x in other.xs) dest.add(Point(x, get(x)))
+                val m0 = (y1 - y0) / (x1 - x0)
+                val m1 = (other.y1 - other.y0) / (other.x1 - other.x0)
+                val a0 = y0 - m0 * x0
+                val a1 = other.y0 - m1 * other.x0
+                if (m0 == m1) {
+                    if (a0 == a1) for (x in xs intersect other.xs) dest.add(Point(x, m0 * x + a0))
+                } else if ((a1 - a0) % (m1 - m0) == 0) {
+                    val x = -(a1 - a0) / (m1 - m0)
+                    if (x in xs && x in other.xs) dest.add(Point(x, m0 * x + a0))
                 }
             }
         }
@@ -66,5 +63,12 @@ class Day5(lines: List<String>) {
 
         private infix fun IntRange.intersect(other: IntRange): IntRange =
             maxOf(first, other.first)..minOf(last, other.last)
+
+        private infix fun IntProgression.intersect(other: IntProgression): IntProgression = when {
+            step != other.step -> IntRange.EMPTY
+            step == 0 -> maxOf(first, other.first)..minOf(last, other.last)
+            step >= 0 -> maxOf(first, other.first)..minOf(last, other.last) step step
+            else -> minOf(first, other.first) downTo maxOf(last, other.last) step step
+        }
     }
 }
