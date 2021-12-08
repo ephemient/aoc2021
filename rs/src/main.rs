@@ -36,13 +36,7 @@ fn main() -> io::Result<()> {
         println!("Day 4");
         println!(
             "{:?}",
-            day4::part1(DAY4)
-                .and_then(|x| Ok(x.ok_or(util::Error)?))
-                .map_err(util::to_ioerror)?
-        );
-        println!(
-            "{:?}",
-            day4::part2(DAY4)
+            day4::solve(DAY4)
                 .and_then(|x| Ok(x.ok_or(util::Error)?))
                 .map_err(util::to_ioerror)?
         );

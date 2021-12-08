@@ -13,8 +13,7 @@ fn aoc2021_bench(c: &mut Criterion) {
     c.bench_function("day 2 part 2", |b| b.iter(|| day2::part2(black_box(DAY2))));
     c.bench_function("day 3 part 1", |b| b.iter(|| day3::part1(black_box(DAY3))));
     c.bench_function("day 3 part 2", |b| b.iter(|| day3::part2(black_box(DAY3))));
-    c.bench_function("day 4 part 1", |b| b.iter(|| day4::part1(black_box(DAY4))));
-    c.bench_function("day 4 part 2", |b| b.iter(|| day4::part2(black_box(DAY4))));
+    c.bench_function("day 4 solve", |b| b.iter(|| day4::solve(black_box(DAY4))));
     c.bench_function("day 5 part 1", |b| b.iter(|| day5::part1(black_box(DAY5))));
     c.bench_function("day 5 part 2", |b| b.iter(|| day5::part2(black_box(DAY5))));
     c.bench_function("day 6 part 1", |b| b.iter(|| day6::part1(black_box(DAY6))));

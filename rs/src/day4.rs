@@ -1,11 +1,10 @@
 use super::util;
+use std::char;
+use std::cmp::max;
+use std::collections::HashMap;
 use std::error::Error;
-use std::iter;
 
-#[allow(clippy::type_complexity)]
-fn parse<'a, I, S>(
-    lines: I,
-) -> Result<(Vec<i32>, Vec<[[Option<i32>; 5]; 5]>), Box<dyn Error + Send + Sync>>
+pub fn solve<'a, I, S>(lines: I) -> Result<Option<(i32, i32)>, Box<dyn Error + Send + Sync>>
 where
     I: IntoIterator<Item = &'a S>,
     S: AsRef<str> + 'a,
@@ -17,102 +16,94 @@ where
         .as_ref()
         .split(',')
         .map(|draw| draw.parse())
-        .collect::<Result<_, _>>()?;
-    let boards = iter::from_fn(|| {
-        (|| {
-            match iter.next() {
-                Some(sep) => {
-                    if !sep.as_ref().is_empty() {
-                        return Err(Box::<dyn Error + Send + Sync>::from(util::Error));
-                    }
-                }
-                None => return Ok(None),
+        .collect::<Result<Vec<_>, _>>()?;
+    let mut draw_turns = HashMap::new();
+    for (i, draw) in draws.iter().enumerate() {
+        draw_turns.entry(draw).or_insert(i);
+    }
+
+    let mut min_score: Option<(usize, i32)> = None;
+    let mut max_score: Option<(usize, i32)> = None;
+
+    if let Some(line) = iter.next() {
+        if !line.as_ref().is_empty() {
+            return Err(util::Error.into());
+        }
+
+        while let Some(line) = iter.next() {
+            let row = line
+                .as_ref()
+                .split(char::is_whitespace)
+                .filter_map(|s| if s.is_empty() { None } else { Some(s.parse()) })
+                .collect::<Result<Vec<_>, _>>()?;
+            if row.is_empty() {
+                return Err(util::Error.into());
             }
-            let mut board = [[None; 5]; 5];
-            for row in board.iter_mut() {
-                for (i, word) in iter
-                    .next()
-                    .ok_or(util::Error)?
-                    .as_ref()
+            let width = row.len();
+            let mut board: Vec<Vec<i32>> = vec![row];
+            for line in &mut iter {
+                let line = line.as_ref();
+                if line.is_empty() {
+                    break;
+                }
+                let row = line
                     .split(char::is_whitespace)
-                    .filter(|word| !word.is_empty())
-                    .enumerate()
-                {
-                    *row.get_mut(i).ok_or(util::Error)? = Some(word.parse()?);
+                    .filter_map(|s| if s.is_empty() { None } else { Some(s.parse()) })
+                    .collect::<Result<Vec<_>, _>>()?;
+                if row.len() != width {
+                    return Err(util::Error.into());
+                }
+                board.push(row);
+            }
+            let turns: Vec<Vec<Option<usize>>> = board
+                .iter()
+                .map(|row| {
+                    row.iter()
+                        .map(|cell| draw_turns.get(cell).cloned())
+                        .collect()
+                })
+                .collect();
+            if let Some(turn) = turns
+                .iter()
+                .filter_map(|row| {
+                    row.iter()
+                        .cloned()
+                        .reduce(|x, y| x.zip(y).map(|(x, y)| max(x, y)))
+                        .flatten()
+                })
+                .chain((0..width).filter_map(|col| {
+                    turns
+                        .iter()
+                        .map(|row| row[col])
+                        .reduce(|x, y| x.zip(y).map(|(x, y)| max(x, y)))
+                        .flatten()
+                }))
+                .min()
+            {
+                let remaining: i32 = board
+                    .into_iter()
+                    .flat_map(|row| {
+                        row.into_iter().filter(|cell| {
+                            draw_turns
+                                .get(&cell)
+                                .map_or(false, |draw_turn| *draw_turn > turn)
+                        })
+                    })
+                    .sum();
+                if min_score.map_or(true, |(min_turn, _)| min_turn > turn) {
+                    min_score = Some((turn, draws[turn] * remaining));
+                }
+                if max_score.map_or(true, |(max_turn, _)| max_turn < turn) {
+                    max_score = Some((turn, draws[turn] * remaining));
                 }
             }
-            Ok(Some(board))
-        })()
-        .transpose()
-    })
-    .collect::<Result<_, _>>()?;
-
-    Ok((draws, boards))
-}
-
-fn mark(board: &mut [[Option<i32>; 5]; 5], draw: i32) {
-    for row in board.iter_mut() {
-        for item in row.iter_mut() {
-            if *item == Some(draw) {
-                *item = None
-            }
         }
     }
-}
 
-fn is_bingo(board: &[[Option<i32>; 5]; 5]) -> bool {
-    board
-        .iter()
-        .any(|row| row.iter().all(|item| item.is_none()))
-        || (0..5).any(|column| board.iter().all(|row| row[column].is_none()))
-}
-
-pub fn part1<'a, I, S>(lines: I) -> Result<Option<i32>, Box<dyn Error + Send + Sync>>
-where
-    I: IntoIterator<Item = &'a S>,
-    S: AsRef<str> + 'a,
-{
-    let (draws, mut boards) = parse(lines)?;
-    for draw in draws {
-        for board in boards.iter_mut() {
-            mark(board, draw);
-            if is_bingo(&*board) {
-                let total = board
-                    .iter()
-                    .map(|row| row.iter().filter_map(|item| *item).sum::<i32>())
-                    .sum::<i32>();
-                return Ok(Some(draw * total));
-            }
-        }
-    }
-    Ok(None)
-}
-
-pub fn part2<'a, I, S>(lines: I) -> Result<Option<i32>, Box<dyn Error + Send + Sync>>
-where
-    I: IntoIterator<Item = &'a S>,
-    S: AsRef<str> + 'a,
-{
-    let (draws, mut boards) = parse(lines)?;
-    let mut score = None;
-    for draw in draws {
-        for board in boards.iter_mut() {
-            mark(board, draw);
-        }
-        boards.retain(|board| {
-            if is_bingo(&*board) {
-                let total = board
-                    .iter()
-                    .map(|row| row.iter().filter_map(|item| *item).sum::<i32>())
-                    .sum::<i32>();
-                score = Some(draw * total);
-                false
-            } else {
-                true
-            }
-        });
-    }
-    Ok(score)
+    min_score.zip(max_score);
+    Ok(min_score
+        .zip(max_score)
+        .map(|((_, min), (_, max))| (min, max)))
 }
 
 #[cfg(test)]
@@ -143,14 +134,8 @@ mod tests {
     ];
 
     #[test]
-    fn part1_examples() -> Result<(), Box<dyn Error + Send + Sync>> {
-        assert_eq!(Some(4512), part1(EXAMPLE)?);
-        Ok(())
-    }
-
-    #[test]
-    fn part2_examples() -> Result<(), Box<dyn Error + Send + Sync>> {
-        assert_eq!(Some(1924), part2(EXAMPLE)?);
+    fn solve_examples() -> Result<(), Box<dyn Error + Send + Sync>> {
+        assert_eq!(Some((4512, 1924)), solve(EXAMPLE)?);
         Ok(())
     }
 }
