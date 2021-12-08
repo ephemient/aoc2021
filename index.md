@@ -11,20 +11,11 @@
 
 [Dokka](dokka/index.html)
 
-{% for suite in site.data.benchmarks %}
-<details>
-  <summary>{{ suite[0] }}</summary>
-  <pre></pre>
-  <script>
-    document.currentScript.previousElementSibling.innerText = JSON.stringify({{ suite[1] | jsonify }}, null, 4);
-  </script>
-</details>
-{% endfor %}
+[kotlinx.benchmark](jmh-visualizer/index.html)
 
 ## Python
 
 [pytest-benchmark](benchmark.svg)
-
 
 ## Rust
 
