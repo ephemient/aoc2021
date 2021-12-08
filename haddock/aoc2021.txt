@@ -79,3 +79,10 @@ day6b :: Text -> Either String Int
 module Day7
 day7a :: Text -> Either String Int
 day7b :: Text -> Either String Int
+
+
+module Day8
+day8a :: Text -> Int
+day8b :: Text -> Maybe Int
+forms :: Map String Int
+handle :: Text -> Maybe Int
