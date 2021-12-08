@@ -270,11 +270,6 @@ tasks.named<Test>("jvmTest") {
     useJUnitPlatform()
 }
 
-tasks.withType<org.gradle.jvm.tasks.Jar>().matching { it.name.endsWith("BenchmarkJar") }.configureEach {
-    // https://github.com/Kotlin/kotlinx-benchmark/issues/68
-    duplicatesStrategy = DuplicatesStrategy.WARN
-}
-
 val detektKotlinScripts by tasks.registering(Detekt::class) {
     group = VERIFICATION_GROUP
     description = "Run detekt analysis for Kotlin scripts"
