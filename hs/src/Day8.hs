@@ -7,10 +7,12 @@ module Day8 (day8a, day8b) where
 
 import Control.Arrow (first)
 import Control.Monad (guard)
+import Data.Bits ((.&.), (.|.), complement, popCount, setBit)
+import Data.Char (ord)
 import qualified Data.IntMap as IntMap ((!?), fromListWith)
-import Data.List ((\\), elemIndex, foldl', partition, sort)
+import Data.List (elemIndex, foldl', partition)
 import Data.Text (Text)
-import qualified Data.Text as T (breakOnEnd, length, lines, unpack, stripSuffix, words)
+import qualified Data.Text as T (breakOnEnd, foldl', length, lines, stripSuffix, words)
 
 day8a :: Text -> Int
 day8a input = length $ do
@@ -23,18 +25,20 @@ day8b input = sum <$> mapM handle (T.lines input)
 handle :: Text -> Maybe Int
 handle line
   | (Just lhs, rhs) <- first (T.stripSuffix " | ") $ T.breakOnEnd " | " line = do
-    let canon = sort . T.unpack
-        signals = canon <$> T.words lhs
-        outputs = canon <$> T.words rhs
-        counts = IntMap.fromListWith (<>) [(length s, [s]) | s <- signals]
+    let signals = bits <$> T.words lhs
+        outputs = bits <$> T.words rhs
+        counts = IntMap.fromListWith (<>) [(popCount s, [s]) | s <- signals]
     [one] <- counts IntMap.!? 2
     [seven] <- counts IntMap.!? 3
     [four] <- counts IntMap.!? 4
-    ([two], threeFive) <- partition ((== 3) . length . (\\ four)) <$> counts IntMap.!? 5
-    ([three], [five]) <- pure $ partition ((== 1) . length . (\\ two)) threeFive
-    ([six], zeroNine) <- partition (not . null . (\\) one) <$> counts IntMap.!? 6
-    ([zero], [nine]) <- pure $ partition ((== 2) . length . (\\ three)) zeroNine
+    ([two], threeFive) <- partition ((== 2) . popCountWithout (four .|. seven)) <$> counts IntMap.!? 5
+    ([three], [five]) <- pure $ partition ((== 1) . popCountWithout two) threeFive
+    ([six], zeroNine) <- partition ((/= 0) . (one .&.) . complement) <$> counts IntMap.!? 6
+    ([zero], [nine]) <- pure $ partition ((== 2) . popCountWithout three) zeroNine
     [eight] <- counts IntMap.!? 7
     let digits = [zero, one, two, three, four, five, six, seven, eight, nine]
     foldl' (\x y -> 10 * x + y) 0 <$> mapM (`elemIndex` digits) outputs
   | otherwise = Nothing
+  where
+    bits = T.foldl' (\acc c -> acc `setBit` (ord c .&. 31)) (0 :: Int)
+    popCountWithout antimask = popCount . (.&. complement antimask)
