@@ -284,7 +284,7 @@ val detektKotlinScripts by tasks.registering(Detekt::class) {
 tasks.withType<Detekt>().configureEach {
     config.from("detekt.yml")
     buildUponDefaultConfig = true
-    autoCorrect = !System.getenv("CI").isNullOrEmpty()
+    autoCorrect = System.getenv("CI").isNullOrEmpty()
     exclude { it.file.toPath().startsWith(buildDir.toPath()) }
 }
 tasks.register("detektAll") { dependsOn(tasks.withType<Detekt>()) }
