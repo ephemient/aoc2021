@@ -1,6 +1,6 @@
 {-|
 Module:         Day7
-Description:    <https://adventofcode.com/2721/day/7 Day 7: The Treachery of Whales>
+Description:    <https://adventofcode.com/2021/day/7 Day 7: The Treachery of Whales>
 -}
 {-# LANGUAGE OverloadedStrings #-}
 module Day7 (day7a, day7b) where
