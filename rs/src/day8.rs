@@ -1,4 +1,3 @@
-use std::collections::HashSet;
 use std::iter::Iterator;
 
 fn the<I>(mut iter: I) -> Option<<I as Iterator>::Item>
@@ -11,6 +10,11 @@ where
     } else {
         None
     }
+}
+
+fn bits(s: &str) -> u32 {
+    s.chars()
+        .fold(0, |acc, c| acc | 1u32.wrapping_shl(c.into()))
 }
 
 pub fn part1<'a, I, S>(lines: I) -> Option<usize>
@@ -39,43 +43,34 @@ where
     let mut total = 0;
     for line in lines {
         let mut iter = line.as_ref().split(" | ");
-        let signals: Vec<HashSet<_>> = iter
-            .next()?
-            .split(' ')
-            .map(|s| s.chars().collect())
-            .collect();
-        let one = the(signals.iter().filter(|s| s.len() == 2))?;
-        let seven = the(signals.iter().filter(|s| s.len() == 3))?;
-        let four = the(signals.iter().filter(|s| s.len() == 4))?;
-        let tmp = four.union(seven).cloned().collect();
+        let signals: Vec<_> = iter.next()?.split(' ').map(bits).collect();
+        let one = the(signals.iter().filter(|s| s.count_ones() == 2))?;
+        let seven = the(signals.iter().filter(|s| s.count_ones() == 3))?;
+        let four = the(signals.iter().filter(|s| s.count_ones() == 4))?;
         let two = the(signals
             .iter()
-            .filter(|s| s.len() == 5 && s.difference(&tmp).count() == 2))?;
+            .filter(|&s| s.count_ones() == 5 && (s & !(four | seven)).count_ones() == 2))?;
         let three = the(signals
             .iter()
-            .filter(|s| s.len() == 5 && s.difference(two).count() == 1))?;
+            .filter(|&s| s.count_ones() == 5 && (s & !two).count_ones() == 1))?;
         let five = the(signals
             .iter()
-            .filter(|s| s.len() == 5 && s.difference(two).count() == 2))?;
+            .filter(|&s| s.count_ones() == 5 && (s & !two).count_ones() == 2))?;
         let six = the(signals
             .iter()
-            .filter(|s| s.len() == 6 && !s.is_superset(one)))?;
+            .filter(|&s| s.count_ones() == 6 && one & !s != 0))?;
         let nine = the(signals
             .iter()
-            .filter(|s| s.len() == 6 && s.is_superset(three)))?;
-        let tmp = three.difference(one).cloned().collect();
+            .filter(|&s| s.count_ones() == 6 && !s & three == 0))?;
         let zero = the(signals
             .iter()
-            .filter(|s| s.len() == 6 && !s.is_superset(&tmp)))?;
-        let eight = signals.iter().find(|s| s.len() == 7)?;
+            .filter(|&s| s.count_ones() == 6 && !s & three & !one != 0))?;
+        let eight = signals.iter().find(|s| s.count_ones() == 7)?;
         let digits = [zero, one, two, three, four, five, six, seven, eight, nine];
         let mut output = 0;
         for s in the(iter)?.split(' ') {
-            let s: HashSet<_> = s.chars().collect();
-            output = 10 * output
-                + digits
-                    .iter()
-                    .position(|signal| s.len() == signal.len() && s.is_superset(signal))?;
+            let s = bits(s);
+            output = 10 * output + digits.iter().position(|signal| **signal == s)?;
         }
         total += output;
     }
