@@ -85,3 +85,8 @@ module Day8
 day8a :: Text -> Int
 day8b :: Text -> Maybe Int
 handle :: Text -> Maybe Int
+
+
+module Day9
+day9a :: Text -> Int
+day9b :: Text -> Int
