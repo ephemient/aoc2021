@@ -1,5 +1,3 @@
-use std::iter::Iterator;
-
 fn the<I>(mut iter: I) -> Option<<I as Iterator>::Item>
 where
     I: Iterator,
