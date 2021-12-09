@@ -20,17 +20,14 @@ class Day9(private val lines: List<String>) {
         lines.forEachIndexed { i, line ->
             line.forEachIndexed inner@{ j, c ->
                 if (visited[i][j] || !c.isDigit() || c.digitToInt() >= 9) return@inner
-                val basin = mutableSetOf<IntPair>()
+                val basin = mutableSetOf(i to j)
                 val queue = ArrayDeque(listOf(i to j))
                 while (true) {
                     val (i2, j2) = queue.removeFirstOrNull() ?: break
                     visited[i2][j2] = true
                     CardinalDirection.forEach(i2, j2) { i3, j3 ->
                         val d = lines.getOrNull(i3)?.getOrNull(j3) ?: return@forEach
-                        if (d.isDigit() && d.digitToInt() < 9) {
-                            val pair = i3 to j3
-                            basin.add(pair) && queue.add(pair)
-                        }
+                        if (d.isDigit() && d.digitToInt() < 9 && basin.add(i3 to j3)) queue.add(i3 to j3)
                     }
                 }
                 basins.add(basin.size)
