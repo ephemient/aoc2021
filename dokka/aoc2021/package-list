@@ -1,8 +1,16 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
 $dokka.location:com.github.ephemient.aoc2021////PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/index.html
+$dokka.location:com.github.ephemient.aoc2021//forEach/com.github.ephemient.aoc2021.CardinalDirection.Companion#kotlin.Int#kotlin.Int#kotlin.Function2[kotlin.Int,kotlin.Int,kotlin.Unit]/PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/for-each.html
 $dokka.location:com.github.ephemient.aoc2021//getInput/#kotlin.Int/PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/get-input.html
 $dokka.location:com.github.ephemient.aoc2021//main/#kotlin.Array[kotlin.String]/PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/main.html
+$dokka.location:com.github.ephemient.aoc2021//to/kotlin.Int#kotlin.Int/PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/to.html
+$dokka.location:com.github.ephemient.aoc2021/CardinalDirection.Companion///PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/-cardinal-direction/-companion/index.html
+$dokka.location:com.github.ephemient.aoc2021/CardinalDirection.EAST///PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/-cardinal-direction/-e-a-s-t/index.html
+$dokka.location:com.github.ephemient.aoc2021/CardinalDirection.NORTH///PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/-cardinal-direction/-n-o-r-t-h/index.html
+$dokka.location:com.github.ephemient.aoc2021/CardinalDirection.SOUTH///PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/-cardinal-direction/-s-o-u-t-h/index.html
+$dokka.location:com.github.ephemient.aoc2021/CardinalDirection.WEST///PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/-cardinal-direction/-w-e-s-t/index.html
+$dokka.location:com.github.ephemient.aoc2021/CardinalDirection///PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/-cardinal-direction/index.html
 $dokka.location:com.github.ephemient.aoc2021/Day1///PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/-day1/index.html
 $dokka.location:com.github.ephemient.aoc2021/Day1/Day1/#kotlin.collections.List[kotlin.String]/PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/-day1/-day1.html
 $dokka.location:com.github.ephemient.aoc2021/Day1/part1/#/PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/-day1/part1.html
@@ -35,9 +43,18 @@ $dokka.location:com.github.ephemient.aoc2021/Day7///PointingToDeclaration/aoc20
 $dokka.location:com.github.ephemient.aoc2021/Day7/Day7/#kotlin.collections.List[kotlin.String]/PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/-day7/-day7.html
 $dokka.location:com.github.ephemient.aoc2021/Day7/part1/#/PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/-day7/part1.html
 $dokka.location:com.github.ephemient.aoc2021/Day7/part2/#/PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/-day7/part2.html
+$dokka.location:com.github.ephemient.aoc2021/Day8.Companion///PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/-day8/-companion/index.html
 $dokka.location:com.github.ephemient.aoc2021/Day8///PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/-day8/index.html
 $dokka.location:com.github.ephemient.aoc2021/Day8/Day8/#kotlin.collections.List[kotlin.String]/PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/-day8/-day8.html
 $dokka.location:com.github.ephemient.aoc2021/Day8/part1/#/PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/-day8/part1.html
 $dokka.location:com.github.ephemient.aoc2021/Day8/part2/#/PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/-day8/part2.html
+$dokka.location:com.github.ephemient.aoc2021/Day9///PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/-day9/index.html
+$dokka.location:com.github.ephemient.aoc2021/Day9/Day9/#kotlin.collections.List[kotlin.String]/PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/-day9/-day9.html
+$dokka.location:com.github.ephemient.aoc2021/Day9/part1/#/PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/-day9/part1.html
+$dokka.location:com.github.ephemient.aoc2021/Day9/part2/#/PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/-day9/part2.html
+$dokka.location:com.github.ephemient.aoc2021/IntPair///PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/-int-pair/index.html
+$dokka.location:com.github.ephemient.aoc2021/IntPair/IntPair/#kotlin.Int#kotlin.Int/PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/-int-pair/-int-pair.html
+$dokka.location:com.github.ephemient.aoc2021/IntPair/first/#/PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/-int-pair/first.html
+$dokka.location:com.github.ephemient.aoc2021/IntPair/second/#/PointingToDeclaration/aoc2021/com.github.ephemient.aoc2021/-int-pair/second.html
 com.github.ephemient.aoc2021
 
