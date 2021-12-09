@@ -25,26 +25,26 @@ def part2(lines):
     1134
     """
     basins = []
-    visited = [[False for _ in line.strip()] for line in lines]
-    for i, line in enumerate(lines):
-        for j, c in enumerate(line.strip()):
-            if visited[i][j] or not ("0" <= c < "9"):
+    visited = [[not "0" <= c < "9" for c in line.strip()] for line in lines]
+    for i, row in enumerate(visited):
+        for j, v in enumerate(row):
+            if v:
                 continue
-            basin = {(i, j)}
+            visited[i][j] = True
+            basin = 0
             stack = [(i, j)]
             while stack:
                 i2, j2 = stack.pop()
-                visited[i2][j2] = True
+                basin += 1
                 for i3, j3 in ((i2 - 1, j2), (i2, j2 - 1), (i2, j2 + 1), (i2 + 1, j2)):
                     if (
-                        0 <= i3 < len(lines)
-                        and 0 <= j3 < len(lines[i3].strip())
-                        and "0" <= lines[i3][j3] < "9"
-                        and (i3, j3) not in basin
+                        0 <= i3 < len(visited)
+                        and 0 <= j3 < len(visited[i3])
+                        and not visited[i3][j3]
                     ):
-                        basin.add((i3, j3))
+                        visited[i3][j3] = True
                         stack.append((i3, j3))
-            basins.append(len(basin))
+            basins.append(basin)
     return prod(sorted(basins)[-3:])
 
 
