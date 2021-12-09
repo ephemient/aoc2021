@@ -9,6 +9,7 @@ import Day5 (day5a, day5b)
 import Day6 (day6a, day6b)
 import Day7 (day7a, day7b)
 import Day8 (day8a, day8b)
+import Day9 (day9a, day9b)
 
 import Control.Monad ((<=<), when)
 import Data.Maybe (mapMaybe)
@@ -23,11 +24,11 @@ getDayInput :: Int -> IO Text
 getDayInput i = getDataFileName ("day" ++ show i ++ ".txt") >>= TIO.readFile
 
 justOrFail :: (MonadFail m) => Maybe a -> m a
-justOrFail = maybe (fail "(⊥)") return
+justOrFail = maybe (fail "(⊥)") pure
 
 rightOrFail :: (ShowErrorComponent e, TraversableStream s, VisualStream s, MonadFail m) =>
     Either (ParseErrorBundle s e) a -> m a
-rightOrFail = either (fail . errorBundlePretty) return
+rightOrFail = either (fail . errorBundlePretty) pure
 
 run :: Int -> (a -> IO ()) -> [Text -> a] -> IO ()
 run day showIO funcs = do
@@ -48,3 +49,4 @@ main = do
     run 6 (print <=< either fail pure) [day6a, day6b]
     run 7 (print <=< either fail pure) [day7a, day7b]
     run 8 (print <=< justOrFail) [Just . day8a, day8b]
+    run 9 print [day9a, day9b]
