@@ -39,6 +39,7 @@ aoc2021 = "aoc2021.main:main"
 7 = "aoc2021.day7:parts"
 8 = "aoc2021.day8:parts"
 9 = "aoc2021.day9:parts"
+10 = "aoc2021.day10:parts"
 
 [tool.black]
 target_version = ["py310"]
