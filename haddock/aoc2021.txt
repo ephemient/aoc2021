@@ -33,6 +33,11 @@ day1a :: Text -> Either String Int
 day1b :: Text -> Either String Int
 
 
+module Day10
+day10a :: Text -> Int
+day10b :: Text -> Maybe Int
+
+
 module Day2
 data Move a
 Horizontal :: a -> Move a
