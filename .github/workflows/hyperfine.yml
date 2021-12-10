@@ -51,21 +51,64 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: gradle
-      - uses: actions/cache@v2
-        with:
-          key: ${{ runner.os }}-konan-hyperfine-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: ${{ runner.os }}-konan-hyperfine-
-          path: ~/.konan
-      - run: ./gradlew --no-daemon --info distZip linkReleaseExecutableLinuxX64
+      - run: ./gradlew --no-daemon --info distZip
         working-directory: kt
       - uses: actions/upload-artifact@v2
         with:
           name: aoc2021-kt
           path: kt/build/distributions/aoc2021.zip
+
+  kotlin-native:
+    needs: [ get-inputs ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: inputs
+      - uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+      - uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-konan-hyperfine-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: ${{ runner.os }}-konan-hyperfine-
+          path: ~/.konan
+      - run: ./gradlew --no-daemon --info linkReleaseExecutableLinuxX64
+        working-directory: kt
       - uses: actions/upload-artifact@v2
         with:
           name: aoc2021-kexe
           path: kt/build/bin/linuxX64/releaseExecutable/*
+
+  kotlin-graalvm:
+    needs: [ get-inputs ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: inputs
+      - uses: DeLaGuardo/setup-graalvm@5.0
+        with:
+          graalvm: '21.3.0'
+          java: 'java17'
+      - run: gu install native-image
+      - uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-graalvm-hyeprfine-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: ${{ runner.os }}-graalvm-hyperfine-
+          path: ~/.gradle
+      - run: ./gradlew --no-daemon --info nativeCompile
+        working-directory: kt
+      - uses: actions/upload-artifact@v2
+        with:
+          name: aoc2021-graalvm
+          path: kt/graalvm/build/native/nativeCompile/releaseExecutable/*
 
   python:
     needs: [ get-inputs ]
@@ -123,7 +166,7 @@ jobs:
           path: rs/target/release/aoc2021
 
   hyperfine:
-    needs: [ haskell, kotlin, python, rust ]
+    needs: [ haskell, kotlin, kotlin-native, kotlin-graalvm, python, rust ]
     runs-on: ubuntu-latest
 
     steps:
@@ -143,7 +186,7 @@ jobs:
           python-version: '3.10'
       - uses: actions/download-artifact@v2
       - run: unzip -d aoc2021-kt aoc2021-kt/aoc2021.zip
-      - run: chmod -v +x aoc2021-hs/aoc2021-exe aoc2021-kt/aoc2021/bin/aoc2021 aoc2021-kexe/aoc2021.kexe aoc2021-rs/aoc2021
+      - run: chmod -v +x aoc2021-hs/aoc2021-exe aoc2021-kt/aoc2021/bin/aoc2021 aoc2021-kexe/aoc2021.kexe aoc2021-graalvm/aoc2021 aoc2021-rs/aoc2021
       - name: Run pip install aoc2021-py/*.whl
         run: |
           python -m venv .
@@ -156,10 +199,12 @@ jobs:
             -n Haskell 'aoc2021_datadir=inputs aoc2021-hs/aoc2021-exe' \
             -n Kotlin/JVM 'aoc2021-kt/aoc2021/bin/aoc2021' \
             -n Kotlin/Native 'aoc2021-kexe/aoc2021.kexe' \
+            -n Kotlin/GraalVM 'aoc2021-graalvm/aoc2021' \
             -n Python 'PYTHON_HOME=aoc2021-py aoc2021-py/bin/aoc2021' \
             -n Rust 'aoc2021-rs/aoc2021' \
             --export-markdown hyperfine.md
-      - uses: EndBug/add-and-commit@v7
+      - if: ${{ github.ref == 'refs/heads/main' }}
+        uses: EndBug/add-and-commit@v7
         with:
           branch: gh-docs
           add: hyperfine.md
