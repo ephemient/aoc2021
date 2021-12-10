@@ -9,6 +9,7 @@ application {
 
 nativeBuild {
     imageName.set(rootProject.name)
+    buildArgs.add("-H:IncludeResources=day.*\\.txt")
 }
 
 dependencies {
