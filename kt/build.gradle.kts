@@ -103,8 +103,16 @@ kotlin {
     jvm {
         compilations.create("bench")
     }
-    // js(IR) // https://github.com/Kotlin/kotlinx-benchmark/issues/30
-    js {
+    js("jsIr", IR) {
+        binaries.executable()
+        nodejs {
+            testTask {
+                useMocha()
+            }
+        }
+        compilations.create("bench")
+    }
+    js("jsLegacy", LEGACY) {
         binaries.executable()
         nodejs {
             testTask {
@@ -167,9 +175,17 @@ kotlin {
                 dependsOn(getByName("common$compilation"))
                 parentCompilation?.also { dependsOn(getByName("common$it")) }
             }
-            getByName("js$compilation") {
+            val js = create("js$compilation") {
                 dependsOn(nonJvm)
                 parentCompilation?.also { dependsOn(getByName("nonJvm$it")) }
+            }
+            getByName("jsIr$compilation") {
+                dependsOn(js)
+                parentCompilation?.also { dependsOn(getByName("jsIr$it")) }
+            }
+            getByName("jsLegacy$compilation") {
+                dependsOn(js)
+                parentCompilation?.also { dependsOn(getByName("jsLegacy$it")) }
             }
             val native = create("native$compilation") {
                 dependsOn(nonJvm)
@@ -211,7 +227,8 @@ allOpen {
 benchmark {
     targets {
         register("jvmBench")
-        register("jsBench")
+        // register("jsIrBench") // https://github.com/Kotlin/kotlinx-benchmark/issues/30
+        // register("jsLegacyBench")
         // for (nativeTarget in nativeTargets) register("${nativeTarget}Bench") // https://github.com/Kotlin/kotlinx-benchmark/issues/67
     }
 
