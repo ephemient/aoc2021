@@ -23,7 +23,7 @@ day10a input = sum $ lefts $ points . T.unpack <$> T.lines input where
     score _ (']':_) = Left 57
     score _ ('}':_) = Left 1197
     score _ ('>':_) = Left 25137
-    score _ xs = Right xs
+    score _ xs = points xs
 
 day10b :: Text -> Maybe Int
 day10b input = median $ mapMaybe (foldM score 0 <=< points "") $ T.unpack <$> T.lines input where
