@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate build_const;
 
-use aoc2021::{day1, day10, day2, day3, day4, day5, day6, day7, day8, day9};
+use aoc2021::{day1, day10, day11, day2, day3, day4, day5, day6, day7, day8, day9};
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 build_const!("aoc2021");
@@ -29,6 +29,9 @@ fn aoc2021_bench(c: &mut Criterion) {
     });
     c.bench_function("day 10 part 2", |b| {
         b.iter(|| day10::part2(black_box(DAY10)))
+    });
+    c.bench_function("day 11 solve", |b| {
+        b.iter(|| day11::solve(black_box(DAY11)))
     });
 }
 
