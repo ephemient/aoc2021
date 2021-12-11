@@ -88,5 +88,5 @@ def test_day10_part2_bench(benchmark):
     benchmark(day10.part2, data(10))
 
 
-def test_day10_solve_bench(benchmark):
+def test_day11_solve_bench(benchmark):
     benchmark(day11.solve, data(11))
