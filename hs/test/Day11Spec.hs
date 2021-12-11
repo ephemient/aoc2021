@@ -7,7 +7,7 @@ import Day11 (day11)
 import Test.Hspec (Spec, describe, it, shouldBe)
 
 example :: Text
-example = T.unlines $
+example = T.unlines
   [ "5483143223"
   , "2745854711"
   , "5264556173"
