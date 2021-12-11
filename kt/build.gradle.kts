@@ -133,7 +133,7 @@ kotlin {
     targets.all {
         compilations.all {
             kotlinOptions {
-                freeCompilerArgs += listOf("-Xopt-in=kotlin.ExperimentalStdlibApi", "-Xopt-in=kotlin.RequiresOptIn")
+                freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
             }
         }
     }
