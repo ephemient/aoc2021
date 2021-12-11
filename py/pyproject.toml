@@ -40,9 +40,13 @@ aoc2021 = "aoc2021.main:main"
 8 = "aoc2021.day8:parts"
 9 = "aoc2021.day9:parts"
 10 = "aoc2021.day10:parts"
+11 = "aoc2021.day11:parts"
 
 [tool.black]
 target_version = ["py310"]
+
+[tool.isort]
+profile = "black"
 
 [tool.pytest.ini_options]
 addopts = '--doctest-modules --benchmark-disable --benchmark-sort=fullname'
