@@ -38,6 +38,11 @@ day10a :: Text -> Int
 day10b :: Text -> Maybe Int
 
 
+module Day11
+step :: (Num a, Ord a, Unbox a) => Int -> Vector a -> Maybe (Int, Vector a)
+day11 :: Text -> Maybe (Int, Int)
+
+
 module Day2
 data Move a
 Horizontal :: a -> Move a
