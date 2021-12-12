@@ -28,7 +28,7 @@ class Day12(lines: List<String>) {
                 when {
                     next == start -> null
                     next == end -> null.also { count++ }
-                    big -> state.or(1 shl next) to next
+                    big -> state to next
                     state.and(1 shl next) == 0 -> state.or(1 shl next) to next
                     state >= 0 -> state or Int.MIN_VALUE to next
                     else -> null
