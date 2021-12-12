@@ -45,7 +45,8 @@ day11 :: Text -> Maybe (Int, Int)
 
 module Day12
 parse :: Graph gr => Text -> Maybe (Int, Int, gr Text Bool)
-walk :: (Monad m, Traversable t) => (s -> a -> m (t (s, a))) -> s -> a -> m ()
+walk :: (Monad m, Traversable t) => (a -> m (t a)) -> a -> m ()
+day12 :: Bool -> Text -> Maybe Int
 day12a :: Text -> Maybe Int
 day12b :: Text -> Maybe Int
 
