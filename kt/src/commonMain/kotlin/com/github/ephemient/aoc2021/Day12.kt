@@ -21,25 +21,9 @@ class Day12(lines: List<String>) {
         this.edges = edges
     }
 
-    fun part1(): Int {
+    private fun solve(bonus: Boolean): Int {
         var count = 0
-        walk(0 to start) { (state, element) ->
-            edges[element]?.mapNotNull { (next, big) ->
-                when {
-                    next == start -> null
-                    next == end -> null.also { count++ }
-                    big -> state.or(1 shl next) to next
-                    state.and(1 shl next) == 0 -> state.or(1 shl next) to next
-                    else -> null
-                }
-            }.orEmpty()
-        }
-        return count
-    }
-
-    fun part2(): Int {
-        var count = 0
-        walk(0 to start) { (state, element) ->
+        walk((if (bonus) 0 else Int.MIN_VALUE) to start) { (state, element) ->
             edges[element]?.mapNotNull { (next, big) ->
                 when {
                     next == start -> null
@@ -53,6 +37,10 @@ class Day12(lines: List<String>) {
         }
         return count
     }
+
+    fun part1(): Int = solve(false)
+
+    fun part2(): Int = solve(true)
 
     companion object {
         private fun <T> walk(start: T, step: (T) -> Iterable<T>) {
