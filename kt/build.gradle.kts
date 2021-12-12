@@ -1,6 +1,8 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import org.gradle.api.plugins.ApplicationPlugin.APPLICATION_GROUP
 import org.gradle.language.base.plugins.LifecycleBasePlugin.VERIFICATION_GROUP
+import org.jetbrains.kotlin.gradle.plugin.KotlinJsCompilerType
+import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 import org.jetbrains.kotlin.gradle.plugin.KotlinTargetPreset
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
@@ -97,29 +99,20 @@ val nonJvmSources by tasks.registering {
     }
 }
 
+val jsTargets = mapOf("jsIr" to KotlinJsCompilerType.IR, "jsLegacy" to KotlinJsCompilerType.LEGACY)
 val nativeTargets = setOf("linuxX64", "linuxArm64", "mingwX86", "mingwX64", "macosX64", "macosArm64", "wasm32")
 
 kotlin {
-    jvm {
-        compilations.create("bench")
-    }
-    js("jsIr", IR) {
-        binaries.executable()
-        nodejs {
-            testTask {
-                useMocha()
+    jvm()
+    for ((jsTarget, compiler) in jsTargets) {
+        js(jsTarget, compiler) {
+            binaries.executable()
+            nodejs {
+                testTask {
+                    useMocha()
+                }
             }
         }
-        compilations.create("bench")
-    }
-    js("jsLegacy", LEGACY) {
-        binaries.executable()
-        nodejs {
-            testTask {
-                useMocha()
-            }
-        }
-        compilations.create("bench")
     }
     for (nativeTarget in nativeTargets) {
         @Suppress("UNCHECKED_CAST")
@@ -127,65 +120,37 @@ kotlin {
             binaries.executable {
                 entryPoint("com.github.ephemient.aoc2021.main")
             }
-            compilations.create("bench")
         }
     }
     targets.all {
+        if (platformType != KotlinPlatformType.common) compilations.create("bench")
         compilations.all {
-            kotlinOptions {
-                freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
-            }
+            kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
         }
     }
 
     sourceSets {
-        val commonMain by getting {
-            kotlin.srcDir(commonSources)
-        }
-        getByName("commonTest") {
-            dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
-            }
-        }
-        val commonBench by creating {
-            dependsOn(commonMain)
-            dependencies {
-                implementation(libs.kotlinx.benchmark.runtime)
-            }
-        }
-
-        val jvmMain by getting {
-            resources.srcDir(jvmResources)
-        }
-        getByName("jvmTest") {
-            dependencies {
-                implementation(kotlin("test-junit5"))
-                implementation(libs.junit.jupiter.api)
-                runtimeOnly(libs.junit.jupiter.engine)
-            }
-        }
-        getByName("jvmBench") {
-            dependsOn(commonBench)
-            dependsOn(jvmMain)
-        }
-
         for ((compilation, parentCompilation) in mapOf("Main" to null, "Test" to "Main", "Bench" to "Main")) {
-            val nonJvm = create("nonJvm$compilation") {
-                dependsOn(getByName("common$compilation"))
+            val common = findByName("common$compilation") ?: create("common$compilation") {
                 parentCompilation?.also { dependsOn(getByName("common$it")) }
+            }
+            getByName("jvm$compilation") {
+                dependsOn(common)
+                parentCompilation?.also { dependsOn(getByName("jvm$it")) }
+            }
+            val nonJvm = create("nonJvm$compilation") {
+                dependsOn(common)
+                parentCompilation?.also { dependsOn(getByName("nonJvm$it")) }
             }
             val js = create("js$compilation") {
                 dependsOn(nonJvm)
-                parentCompilation?.also { dependsOn(getByName("nonJvm$it")) }
+                parentCompilation?.also { dependsOn(getByName("js$it")) }
             }
-            getByName("jsIr$compilation") {
-                dependsOn(js)
-                parentCompilation?.also { dependsOn(getByName("jsIr$it")) }
-            }
-            getByName("jsLegacy$compilation") {
-                dependsOn(js)
-                parentCompilation?.also { dependsOn(getByName("jsLegacy$it")) }
+            for (jsTarget in jsTargets.keys) {
+                getByName("$jsTarget$compilation") {
+                    dependsOn(js)
+                    parentCompilation?.also { dependsOn(getByName("$jsTarget$it")) }
+                }
             }
             val native = create("native$compilation") {
                 dependsOn(nonJvm)
@@ -205,6 +170,32 @@ kotlin {
                     dependsOn(parents[nativeTarget.takeWhile { it.isLowerCase() }] ?: native)
                     parentCompilation?.also { dependsOn(getByName("$nativeTarget$it")) }
                 }
+            }
+        }
+
+        getByName("commonMain") {
+            kotlin.srcDir(commonSources)
+        }
+        getByName("commonTest") {
+            dependencies {
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
+            }
+        }
+        getByName("commonBench") {
+            dependencies {
+                implementation(libs.kotlinx.benchmark.runtime)
+            }
+        }
+
+        getByName("jvmMain") {
+            resources.srcDir(jvmResources)
+        }
+        getByName("jvmTest") {
+            dependencies {
+                implementation(kotlin("test-junit5"))
+                implementation(libs.junit.jupiter.api)
+                runtimeOnly(libs.junit.jupiter.engine)
             }
         }
 

@@ -1,12 +1,12 @@
 package com.github.ephemient.aoc2021
 
 class Day10(private val lines: List<String>) {
-    fun part1(): Int = lines.sumBy { line ->
+    fun part1(): Int = lines.sumOf { line ->
         val expected = mutableListOf<Char>()
         for (char in line) {
             pairs[char]?.also { expected += it }
                 ?: expected.removeLastOrNull()?.takeIf { it == char }
-                ?: return@sumBy part1Points.getValue(char)
+                ?: return@sumOf part1Points.getValue(char)
         }
         0
     }
