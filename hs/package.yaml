@@ -29,6 +29,7 @@ library:
   - containers
   - fgl
   - megaparsec
+  - mtl
   - template-haskell
   - text
   - vector
