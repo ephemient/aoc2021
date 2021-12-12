@@ -43,6 +43,13 @@ step :: (Num a, Ord a, Unbox a) => Int -> Vector a -> Maybe (Int, Vector a)
 day11 :: Text -> Maybe (Int, Int)
 
 
+module Day12
+parse :: Graph gr => Text -> Maybe (Int, Int, gr Text Bool)
+walk :: (Monad m, Traversable t) => (s -> a -> m (t (s, a))) -> s -> a -> m ()
+day12a :: Text -> Maybe Int
+day12b :: Text -> Maybe Int
+
+
 module Day2
 data Move a
 Horizontal :: a -> Move a
