@@ -30,6 +30,7 @@ library:
   - fgl
   - megaparsec
   - mtl
+  - split
   - template-haskell
   - text
   - vector
