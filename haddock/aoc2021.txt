@@ -51,6 +51,15 @@ day12a :: Text -> Maybe Int
 day12b :: Text -> Maybe Int
 
 
+module Day13
+parsePair :: (Num a, MonadParsec e s m, Token s ~ Char) => m (a, a)
+parseFold :: (Num a, Ord a, MonadParsec e s m, Token s ~ Char, IsString (Tokens s)) => m ((a, a) -> (a, a))
+foldX :: (Num a, Ord a) => a -> (a, a) -> (a, a)
+foldY :: (Num a, Ord a) => a -> (a, a) -> (a, a)
+day13a :: Text -> Either (ParseErrorBundle Text Void) Int
+day13b :: Text -> Either (ParseErrorBundle Text Void) [String]
+
+
 module Day2
 data Move a
 Horizontal :: a -> Move a
