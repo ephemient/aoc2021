@@ -41,7 +41,7 @@ jobs:
         working-directory: rs
       - run: cargo clippy -- --deny warnings
         working-directory: rs
-      - run: cargo build --all-features --all-targets --release
+      - run: cargo test
         working-directory: rs
-      - run: cargo test --release
+      - run: cargo build --all-features --all-targets --release
         working-directory: rs
