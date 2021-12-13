@@ -26,11 +26,11 @@ SAMPLE_INPUT = [
 
 
 def foldX(foldX, x, y):
-    return (x, y) if x < foldX else (2 * foldX - x, y)
+    return (foldX - abs(x - foldX), y)
 
 
 def foldY(foldY, x, y):
-    return (x, y) if y < foldY else (x, 2 * foldY - y)
+    return (x, foldY - abs(y - foldY))
 
 
 def parse(lines):

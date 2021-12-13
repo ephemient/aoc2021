@@ -34,25 +34,13 @@ where
             let fold_x: i32 = fold_x.parse()?;
             points = points
                 .drain()
-                .map(|(x, y)| {
-                    if x < fold_x {
-                        (x, y)
-                    } else {
-                        (2 * fold_x - x, y)
-                    }
-                })
+                .map(|(x, y)| (fold_x - i32::abs(x - fold_x), y))
                 .collect();
         } else if let Some(fold_y) = line.strip_prefix("fold along y=") {
             let fold_y: i32 = fold_y.parse()?;
             points = points
                 .drain()
-                .map(|(x, y)| {
-                    if y < fold_y {
-                        (x, y)
-                    } else {
-                        (x, 2 * fold_y - y)
-                    }
-                })
+                .map(|(x, y)| (x, fold_y - i32::abs(y - fold_y)))
                 .collect();
         } else {
             return Err(util::Error.into());

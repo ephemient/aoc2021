@@ -25,8 +25,8 @@ parseFold :: (Num a, Ord a, MonadParsec e s m, Token s ~ Char, IsString (Tokens 
 parseFold = chunk "fold along " *> (single 'x' $> foldX <|> single 'y' $> foldY) <*> (single '=' *> decimal)
 
 foldX, foldY :: (Num a, Ord a) => a -> (a, a) -> (a, a)
-foldX x' (x, y) = (if x < x' then x else 2 * x' - x, y)
-foldY y' (x, y) = (x, if y < y' then y else 2 * y' - y)
+foldX x' (x, y) = (x' - abs (x - x'), y)
+foldY y' (x, y) = (x, y' - abs (y - y'))
 
 day13a :: Text -> Either (ParseErrorBundle Text Void) Int
 day13a input = do

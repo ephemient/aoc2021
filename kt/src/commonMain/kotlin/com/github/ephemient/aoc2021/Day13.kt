@@ -1,5 +1,7 @@
 package com.github.ephemient.aoc2021
 
+import kotlin.math.abs
+
 class Day13(lines: List<String>) {
     private val points: Set<IntPair>
     private val folds: List<Fold>
@@ -42,13 +44,11 @@ class Day13(lines: List<String>) {
         operator fun invoke(point: IntPair): IntPair
 
         class X(private val x: Int) : Fold {
-            override fun invoke(point: IntPair): IntPair =
-                if (point.first < x) point else 2 * x - point.first to point.second
+            override fun invoke(point: IntPair): IntPair = point.copy(first = x - abs(point.first - x))
         }
 
         class Y(private val y: Int) : Fold {
-            override fun invoke(point: IntPair): IntPair =
-                if (point.second < y) point else point.first to 2 * y - point.second
+            override fun invoke(point: IntPair): IntPair = point.copy(second = y - abs(point.second - y))
         }
     }
 }
