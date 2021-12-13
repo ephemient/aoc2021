@@ -14,13 +14,11 @@ class Day13(lines: List<String>) {
         }
         folds = buildList {
             for (line in iterator) {
-                add(
-                    when {
-                        line.startsWith("fold along x=") -> Fold.X(line.substring(13).toInt())
-                        line.startsWith("fold along y=") -> Fold.Y(line.substring(13).toInt())
-                        else -> throw IllegalStateException("bad input: $line")
-                    }
-                )
+                when {
+                    line.startsWith("fold along x=") -> add(Fold.X(line.substring(13).toInt()))
+                    line.startsWith("fold along y=") -> add(Fold.Y(line.substring(13).toInt()))
+                    else -> throw IllegalStateException("bad input: $line")
+                }
             }
         }
     }
