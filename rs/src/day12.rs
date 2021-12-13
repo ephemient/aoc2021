@@ -1,4 +1,4 @@
-pub fn solve<'a, I, S>(lines: I, bonus: bool) -> Option<usize>
+fn solve<'a, I, S>(lines: I, bonus: bool) -> Option<usize>
 where
     I: IntoIterator<Item = &'a S>,
     S: AsRef<str> + 'a,
