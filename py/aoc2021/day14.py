@@ -34,8 +34,7 @@ def solve(lines, times):
             for dst in rules[src]:
                 newstate[dst] += n
         state = newstate
-    counts = Counter()
-    counts.update(lines[0][0] + lines[0][-1])
+    counts = Counter(lines[0][0] + lines[0].rstrip()[-1])
     for pair, n in state.items():
         for c in pair:
             counts[c] += n
