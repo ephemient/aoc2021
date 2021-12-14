@@ -1,14 +1,24 @@
 package com.github.ephemient.aoc2021
 
 class Day14(lines: List<String>) {
-    private val initial = lines.first()
+    private val n: Int
+    private val x: LongArray
+    private val m: IntArray
     init {
-        check(lines[1].isEmpty() && initial.length >= 2)
-    }
-    private val rules = lines.drop(2).associate { line ->
-        val (lhs, rhs) = line.split(" -> ", limit = 2)
-        check(lhs.length == 2 && rhs.length == 1)
-        lhs to listOf("${lhs.first()}$rhs", "$rhs${lhs.last()}")
+        check(lines.size > 1 && lines[0].length > 1 && lines[1].isEmpty())
+        val chars = StringBuilder()
+        for (char in lines[0]) if (char !in chars) chars.append(char)
+        for (line in lines.drop(2)) {
+            check(line.length == 7 && line.regionMatches(2, " -> ", 0, 4))
+            if (line[0] !in chars) chars.append(line[0])
+            if (line[1] !in chars) chars.append(line[1])
+            if (line.last() !in chars) chars.append(line.last())
+        }
+        n = chars.length
+        x = LongArray(n * n)
+        for (i in 0 until lines[0].lastIndex) x[chars.indexOf(lines[0][i]) * n + chars.indexOf(lines[0][i + 1])]++
+        m = IntArray(n * n) { -1 }
+        for (line in lines.drop(2)) m[chars.indexOf(line[0]) * n + chars.indexOf(line[1])] = chars.indexOf(line.last())
     }
 
     fun part1(): Long = score(10)
@@ -16,26 +26,20 @@ class Day14(lines: List<String>) {
     fun part2(): Long = score(40)
 
     private fun score(steps: Int): Long {
-        var state = initial.zip(initial.drop(1)) { a, b -> "$a$b" }
-            .groupingBy { it }.eachCount().mapValues { it.value.toLong() }
+        var x = x
         repeat(steps) {
-            state = buildMap {
-                for ((src, n) in state) {
-                    for (dst in rules.getValue(src)) {
-                        put(dst, getOrElse(dst) { 0 } + n)
-                    }
-                }
+            val y = LongArray(n * n)
+            x.forEachIndexed { i, j ->
+                val z = m[i]
+                check(z >= 0)
+                y[i / n * n + z] += j
+                y[z * n + i % n] += j
             }
+            x = y
         }
-        val counts = buildMap<Char, Long> {
-            put(initial.first(), 1)
-            put(initial.last(), getOrElse(initial.last()) { 0 } + 1)
-            for ((pair, n) in state) {
-                for (c in pair) {
-                    put(c, getOrElse(c) { 0 } + n)
-                }
-            }
-        }
-        return (counts.values.maxOrNull()!! - counts.values.minOrNull()!!) / 2
+        val counts = LongArray(n)
+        counts[0] = 1
+        x.forEachIndexed { i, j -> counts[i % n] += j }
+        return counts.maxOf { it } - counts.minOf { it }
     }
 }
