@@ -13,8 +13,8 @@ Description:    &lt;https://adventofcode.com/2021/day/10 Day 10: Syntax Scoring&
 </span><span id="line-13"></span><span>
 </span><span id="line-14"></span><span class="annot"><a href="Day10.html#day10a"><span class="hs-identifier hs-type">day10a</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
 </span><span id="line-15"></span><span id="day10a"><span class="annot"><span class="annottext">day10a :: Text -&gt; Int
-</span><a href="Day10.html#day10a"><span class="hs-identifier hs-var hs-var">day10a</span></a></span></span><span> </span><span id="local-6989586621679074262"><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679074262"><span class="hs-identifier hs-var">input</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Int] -&gt; Int
+</span><a href="Day10.html#day10a"><span class="hs-identifier hs-var hs-var">day10a</span></a></span></span><span> </span><span id="local-6989586621679075062"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679075062"><span class="hs-identifier hs-var">input</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Int] -&gt; Int
 forall (t :: * -&gt; *) a. (Foldable t, Num a) =&gt; t a -&gt; a
 </span><span class="hs-identifier hs-var">sum</span></span><span> </span><span class="annot"><span class="annottext">([Int] -&gt; Int) -&gt; [Int] -&gt; Int
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -24,7 +24,7 @@ forall a b. [Either a b] -&gt; [a]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Either Int [Char]
 forall a. Num a =&gt; [Char] -&gt; Either a [Char]
-</span><a href="#local-6989586621679074260"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="annot"><span class="annottext">([Char] -&gt; Either Int [Char])
+</span><a href="#local-6989586621679075060"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="annot"><span class="annottext">([Char] -&gt; Either Int [Char])
 -&gt; (Text -&gt; [Char]) -&gt; Text -&gt; Either Int [Char]
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; [Char]
@@ -32,100 +32,100 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; [Text]
 </span><span class="hs-identifier hs-var">T.lines</span></span><span> </span><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679074262"><span class="hs-identifier hs-var">input</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-16"></span><span>    </span><span id="local-6989586621679074260"><span class="annot"><span class="annottext">points :: [Char] -&gt; Either a [Char]
-</span><a href="#local-6989586621679074260"><span class="hs-identifier hs-var hs-var">points</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
-</span><span class="hs-char">'('</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679074257"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074257"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Either a [Char]
-</span><a href="#local-6989586621679074260"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074257"><span class="hs-identifier hs-var">xs</span></a></span><span> </span><span class="annot"><span class="annottext">Either a [Char] -&gt; ([Char] -&gt; Either a [Char]) -&gt; Either a [Char]
+</span><a href="#local-6989586621679075062"><span class="hs-identifier hs-var">input</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-16"></span><span>    </span><span id="local-6989586621679075060"><span class="annot"><span class="annottext">points :: [Char] -&gt; Either a [Char]
+</span><a href="#local-6989586621679075060"><span class="hs-identifier hs-var hs-var">points</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'('</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679075057"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075057"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Either a [Char]
+</span><a href="#local-6989586621679075060"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075057"><span class="hs-identifier hs-var">xs</span></a></span><span> </span><span class="annot"><span class="annottext">Either a [Char] -&gt; ([Char] -&gt; Either a [Char]) -&gt; Either a [Char]
 forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
 </span><span class="hs-operator hs-var">&gt;&gt;=</span></span><span> </span><span class="annot"><span class="annottext">Char -&gt; [Char] -&gt; Either a [Char]
-</span><a href="#local-6989586621679074256"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679075056"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">')'</span></span><span>
-</span><span id="line-17"></span><span>    </span><span class="annot"><a href="#local-6989586621679074260"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
-</span><span class="hs-char">'['</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679074255"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074255"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Either a [Char]
-</span><a href="#local-6989586621679074260"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074255"><span class="hs-identifier hs-var">xs</span></a></span><span> </span><span class="annot"><span class="annottext">Either a [Char] -&gt; ([Char] -&gt; Either a [Char]) -&gt; Either a [Char]
+</span><span id="line-17"></span><span>    </span><span class="annot"><a href="#local-6989586621679075060"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'['</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679075055"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075055"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Either a [Char]
+</span><a href="#local-6989586621679075060"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075055"><span class="hs-identifier hs-var">xs</span></a></span><span> </span><span class="annot"><span class="annottext">Either a [Char] -&gt; ([Char] -&gt; Either a [Char]) -&gt; Either a [Char]
 forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
 </span><span class="hs-operator hs-var">&gt;&gt;=</span></span><span> </span><span class="annot"><span class="annottext">Char -&gt; [Char] -&gt; Either a [Char]
-</span><a href="#local-6989586621679074256"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679075056"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">']'</span></span><span>
-</span><span id="line-18"></span><span>    </span><span class="annot"><a href="#local-6989586621679074260"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
-</span><span class="hs-char">'{'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679074254"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074254"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Either a [Char]
-</span><a href="#local-6989586621679074260"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074254"><span class="hs-identifier hs-var">xs</span></a></span><span> </span><span class="annot"><span class="annottext">Either a [Char] -&gt; ([Char] -&gt; Either a [Char]) -&gt; Either a [Char]
+</span><span id="line-18"></span><span>    </span><span class="annot"><a href="#local-6989586621679075060"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'{'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679075054"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075054"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Either a [Char]
+</span><a href="#local-6989586621679075060"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075054"><span class="hs-identifier hs-var">xs</span></a></span><span> </span><span class="annot"><span class="annottext">Either a [Char] -&gt; ([Char] -&gt; Either a [Char]) -&gt; Either a [Char]
 forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
 </span><span class="hs-operator hs-var">&gt;&gt;=</span></span><span> </span><span class="annot"><span class="annottext">Char -&gt; [Char] -&gt; Either a [Char]
-</span><a href="#local-6989586621679074256"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679075056"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'}'</span></span><span>
-</span><span id="line-19"></span><span>    </span><span class="annot"><a href="#local-6989586621679074260"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
-</span><span class="hs-char">'&lt;'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679074253"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074253"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Either a [Char]
-</span><a href="#local-6989586621679074260"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074253"><span class="hs-identifier hs-var">xs</span></a></span><span> </span><span class="annot"><span class="annottext">Either a [Char] -&gt; ([Char] -&gt; Either a [Char]) -&gt; Either a [Char]
+</span><span id="line-19"></span><span>    </span><span class="annot"><a href="#local-6989586621679075060"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'&lt;'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679075053"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075053"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Either a [Char]
+</span><a href="#local-6989586621679075060"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075053"><span class="hs-identifier hs-var">xs</span></a></span><span> </span><span class="annot"><span class="annottext">Either a [Char] -&gt; ([Char] -&gt; Either a [Char]) -&gt; Either a [Char]
 forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
 </span><span class="hs-operator hs-var">&gt;&gt;=</span></span><span> </span><span class="annot"><span class="annottext">Char -&gt; [Char] -&gt; Either a [Char]
-</span><a href="#local-6989586621679074256"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679075056"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'&gt;'</span></span><span>
-</span><span id="line-20"></span><span>    </span><span class="annot"><a href="#local-6989586621679074260"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span id="local-6989586621679074252"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074252"><span class="hs-identifier hs-var">xs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Either a [Char]
+</span><span id="line-20"></span><span>    </span><span class="annot"><a href="#local-6989586621679075060"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span id="local-6989586621679075052"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075052"><span class="hs-identifier hs-var">xs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Either a [Char]
 forall a b. b -&gt; Either a b
 </span><span class="hs-identifier hs-var">Right</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074252"><span class="hs-identifier hs-var">xs</span></a></span><span>
-</span><span id="line-21"></span><span>    </span><span id="local-6989586621679074256"><span class="annot"><span class="annottext">score :: Char -&gt; [Char] -&gt; Either a [Char]
-</span><a href="#local-6989586621679074256"><span class="hs-identifier hs-var hs-var">score</span></a></span></span><span> </span><span id="local-6989586621679074251"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679074251"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679074250"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679074250"><span class="hs-identifier hs-var">x</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679074249"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074249"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679074251"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Char -&gt; Char -&gt; Bool
+</span><a href="#local-6989586621679075052"><span class="hs-identifier hs-var">xs</span></a></span><span>
+</span><span id="line-21"></span><span>    </span><span id="local-6989586621679075056"><span class="annot"><span class="annottext">score :: Char -&gt; [Char] -&gt; Either a [Char]
+</span><a href="#local-6989586621679075056"><span class="hs-identifier hs-var hs-var">score</span></a></span></span><span> </span><span id="local-6989586621679075051"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679075051"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679075050"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679075050"><span class="hs-identifier hs-var">x</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679075049"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075049"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679075051"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Char -&gt; Char -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679074250"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Either a [Char]
-</span><a href="#local-6989586621679074260"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074249"><span class="hs-identifier hs-var">xs</span></a></span><span>
-</span><span id="line-22"></span><span>    </span><span class="annot"><a href="#local-6989586621679074256"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679075050"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Either a [Char]
+</span><a href="#local-6989586621679075060"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075049"><span class="hs-identifier hs-var">xs</span></a></span><span>
+</span><span id="line-22"></span><span>    </span><span class="annot"><a href="#local-6989586621679075056"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">')'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; Either a [Char]
 forall a b. a -&gt; Either a b
 </span><span class="hs-identifier hs-var">Left</span></span><span> </span><span class="annot"><span class="annottext">a
 </span><span class="hs-number">3</span></span><span>
-</span><span id="line-23"></span><span>    </span><span class="annot"><a href="#local-6989586621679074256"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span class="annot"><span class="annottext">Char
+</span><span id="line-23"></span><span>    </span><span class="annot"><a href="#local-6989586621679075056"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">']'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; Either a [Char]
 forall a b. a -&gt; Either a b
 </span><span class="hs-identifier hs-var">Left</span></span><span> </span><span class="annot"><span class="annottext">a
 </span><span class="hs-number">57</span></span><span>
-</span><span id="line-24"></span><span>    </span><span class="annot"><a href="#local-6989586621679074256"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span class="annot"><span class="annottext">Char
+</span><span id="line-24"></span><span>    </span><span class="annot"><a href="#local-6989586621679075056"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'}'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; Either a [Char]
 forall a b. a -&gt; Either a b
 </span><span class="hs-identifier hs-var">Left</span></span><span> </span><span class="annot"><span class="annottext">a
 </span><span class="hs-number">1197</span></span><span>
-</span><span id="line-25"></span><span>    </span><span class="annot"><a href="#local-6989586621679074256"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span class="annot"><span class="annottext">Char
+</span><span id="line-25"></span><span>    </span><span class="annot"><a href="#local-6989586621679075056"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'&gt;'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; Either a [Char]
 forall a b. a -&gt; Either a b
 </span><span class="hs-identifier hs-var">Left</span></span><span> </span><span class="annot"><span class="annottext">a
 </span><span class="hs-number">25137</span></span><span>
-</span><span id="line-26"></span><span>    </span><span class="annot"><a href="#local-6989586621679074256"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span class="annot"><span class="annottext">Char
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679074248"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074248"><span class="hs-identifier hs-var">xs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Either a [Char]
-</span><a href="#local-6989586621679074260"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074248"><span class="hs-identifier hs-var">xs</span></a></span><span>
+</span><span id="line-26"></span><span>    </span><span class="annot"><a href="#local-6989586621679075056"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679075048"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075048"><span class="hs-identifier hs-var">xs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Either a [Char]
+</span><a href="#local-6989586621679075060"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075048"><span class="hs-identifier hs-var">xs</span></a></span><span>
 </span><span id="line-27"></span><span>
 </span><span id="line-28"></span><span class="annot"><a href="Day10.html#day10b"><span class="hs-identifier hs-type">day10b</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
 </span><span id="line-29"></span><span id="day10b"><span class="annot"><span class="annottext">day10b :: Text -&gt; Maybe Int
-</span><a href="Day10.html#day10b"><span class="hs-identifier hs-var hs-var">day10b</span></a></span></span><span> </span><span id="local-6989586621679074247"><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679074247"><span class="hs-identifier hs-var">input</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Int] -&gt; Maybe Int
+</span><a href="Day10.html#day10b"><span class="hs-identifier hs-var hs-var">day10b</span></a></span></span><span> </span><span id="local-6989586621679075047"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679075047"><span class="hs-identifier hs-var">input</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Int] -&gt; Maybe Int
 forall a. Ord a =&gt; [a] -&gt; Maybe a
-</span><a href="#local-6989586621679074246"><span class="hs-identifier hs-var">median</span></a></span><span> </span><span class="annot"><span class="annottext">([Int] -&gt; Maybe Int) -&gt; [Int] -&gt; Maybe Int
+</span><a href="#local-6989586621679075046"><span class="hs-identifier hs-var">median</span></a></span><span> </span><span class="annot"><span class="annottext">([Int] -&gt; Maybe Int) -&gt; [Int] -&gt; Maybe Int
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">([Char] -&gt; Maybe Int) -&gt; [[Char]] -&gt; [Int]
 forall a b. (a -&gt; Maybe b) -&gt; [a] -&gt; [b]
@@ -135,14 +135,14 @@ forall (t :: * -&gt; *) (m :: * -&gt; *) b a.
 (b -&gt; a -&gt; m b) -&gt; b -&gt; t a -&gt; m b
 </span><span class="hs-identifier hs-var">foldM</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Char -&gt; Maybe Int
 forall a. Num a =&gt; a -&gt; Char -&gt; Maybe a
-</span><a href="#local-6989586621679074245"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679075045"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">([Char] -&gt; Maybe Int)
 -&gt; ([Char] -&gt; Maybe [Char]) -&gt; [Char] -&gt; Maybe Int
 forall (m :: * -&gt; *) b c a.
 Monad m =&gt;
 (b -&gt; m c) -&gt; (a -&gt; m b) -&gt; a -&gt; m c
 </span><span class="hs-operator hs-var">&lt;=&lt;</span></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; Maybe [Char]
-</span><a href="#local-6989586621679074244"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075044"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-string">&quot;&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([[Char]] -&gt; [Int]) -&gt; [[Char]] -&gt; [Int]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; [Char]
@@ -150,73 +150,73 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; [Text]
 </span><span class="hs-identifier hs-var">T.lines</span></span><span> </span><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679074247"><span class="hs-identifier hs-var">input</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-30"></span><span>    </span><span id="local-6989586621679074244"><span class="annot"><span class="annottext">points :: [Char] -&gt; [Char] -&gt; Maybe [Char]
-</span><a href="#local-6989586621679074244"><span class="hs-identifier hs-var hs-var">points</span></a></span></span><span> </span><span id="local-6989586621679074243"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074243"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
-</span><span class="hs-char">'('</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679074242"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074242"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; Maybe [Char]
-</span><a href="#local-6989586621679074244"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679075047"><span class="hs-identifier hs-var">input</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-30"></span><span>    </span><span id="local-6989586621679075044"><span class="annot"><span class="annottext">points :: [Char] -&gt; [Char] -&gt; Maybe [Char]
+</span><a href="#local-6989586621679075044"><span class="hs-identifier hs-var hs-var">points</span></a></span></span><span> </span><span id="local-6989586621679075043"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075043"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'('</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679075042"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075042"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; Maybe [Char]
+</span><a href="#local-6989586621679075044"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">')'</span></span><span class="annot"><span class="annottext">Char -&gt; [Char] -&gt; [Char]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074243"><span class="hs-identifier hs-var">cs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074242"><span class="hs-identifier hs-var">xs</span></a></span><span>
-</span><span id="line-31"></span><span>    </span><span class="annot"><a href="#local-6989586621679074244"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span id="local-6989586621679074241"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074241"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
-</span><span class="hs-char">'['</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679074240"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074240"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; Maybe [Char]
-</span><a href="#local-6989586621679074244"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679075043"><span class="hs-identifier hs-var">cs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075042"><span class="hs-identifier hs-var">xs</span></a></span><span>
+</span><span id="line-31"></span><span>    </span><span class="annot"><a href="#local-6989586621679075044"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span id="local-6989586621679075041"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075041"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'['</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679075040"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075040"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; Maybe [Char]
+</span><a href="#local-6989586621679075044"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">']'</span></span><span class="annot"><span class="annottext">Char -&gt; [Char] -&gt; [Char]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074241"><span class="hs-identifier hs-var">cs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074240"><span class="hs-identifier hs-var">xs</span></a></span><span>
-</span><span id="line-32"></span><span>    </span><span class="annot"><a href="#local-6989586621679074244"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span id="local-6989586621679074239"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074239"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
-</span><span class="hs-char">'{'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679074238"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074238"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; Maybe [Char]
-</span><a href="#local-6989586621679074244"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679075041"><span class="hs-identifier hs-var">cs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075040"><span class="hs-identifier hs-var">xs</span></a></span><span>
+</span><span id="line-32"></span><span>    </span><span class="annot"><a href="#local-6989586621679075044"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span id="local-6989586621679075039"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075039"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'{'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679075038"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075038"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; Maybe [Char]
+</span><a href="#local-6989586621679075044"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'}'</span></span><span class="annot"><span class="annottext">Char -&gt; [Char] -&gt; [Char]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074239"><span class="hs-identifier hs-var">cs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074238"><span class="hs-identifier hs-var">xs</span></a></span><span>
-</span><span id="line-33"></span><span>    </span><span class="annot"><a href="#local-6989586621679074244"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span id="local-6989586621679074237"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074237"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
-</span><span class="hs-char">'&lt;'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679074236"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074236"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; Maybe [Char]
-</span><a href="#local-6989586621679074244"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679075039"><span class="hs-identifier hs-var">cs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075038"><span class="hs-identifier hs-var">xs</span></a></span><span>
+</span><span id="line-33"></span><span>    </span><span class="annot"><a href="#local-6989586621679075044"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span id="local-6989586621679075037"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075037"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'&lt;'</span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679075036"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075036"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; Maybe [Char]
+</span><a href="#local-6989586621679075044"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'&gt;'</span></span><span class="annot"><span class="annottext">Char -&gt; [Char] -&gt; [Char]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074237"><span class="hs-identifier hs-var">cs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074236"><span class="hs-identifier hs-var">xs</span></a></span><span>
-</span><span id="line-34"></span><span>    </span><span class="annot"><a href="#local-6989586621679074244"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679074235"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679074235"><span class="hs-identifier hs-var">c</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679074234"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074234"><span class="hs-identifier hs-var">cs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679074233"><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679074233"><span class="hs-identifier hs-var">x</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679074232"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074232"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679074235"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Char -&gt; Char -&gt; Bool
+</span><a href="#local-6989586621679075037"><span class="hs-identifier hs-var">cs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075036"><span class="hs-identifier hs-var">xs</span></a></span><span>
+</span><span id="line-34"></span><span>    </span><span class="annot"><a href="#local-6989586621679075044"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679075035"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679075035"><span class="hs-identifier hs-var">c</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679075034"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075034"><span class="hs-identifier hs-var">cs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679075033"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679075033"><span class="hs-identifier hs-var">x</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679075032"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075032"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679075035"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Char -&gt; Char -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679074233"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; Maybe [Char]
-</span><a href="#local-6989586621679074244"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074234"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074232"><span class="hs-identifier hs-var">xs</span></a></span><span>
-</span><span id="line-35"></span><span>    </span><span class="annot"><a href="#local-6989586621679074244"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span id="local-6989586621679074231"><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074231"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Maybe [Char]
+</span><a href="#local-6989586621679075033"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; Maybe [Char]
+</span><a href="#local-6989586621679075044"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075034"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075032"><span class="hs-identifier hs-var">xs</span></a></span><span>
+</span><span id="line-35"></span><span>    </span><span class="annot"><a href="#local-6989586621679075044"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span id="local-6989586621679075031"><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075031"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Maybe [Char]
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679074231"><span class="hs-identifier hs-var">cs</span></a></span><span>
-</span><span id="line-36"></span><span>    </span><span class="annot"><a href="#local-6989586621679074244"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679075031"><span class="hs-identifier hs-var">cs</span></a></span><span>
+</span><span id="line-36"></span><span>    </span><span class="annot"><a href="#local-6989586621679075044"><span class="hs-identifier hs-var">points</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe [Char]
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-37"></span><span>    </span><span id="local-6989586621679074245"><span class="annot"><span class="annottext">score :: a -&gt; Char -&gt; Maybe a
-</span><a href="#local-6989586621679074245"><span class="hs-identifier hs-var hs-var">score</span></a></span></span><span> </span><span id="local-6989586621679074230"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679074230"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="annottext">Char
+</span><span id="line-37"></span><span>    </span><span id="local-6989586621679075045"><span class="annot"><span class="annottext">score :: a -&gt; Char -&gt; Maybe a
+</span><a href="#local-6989586621679075045"><span class="hs-identifier hs-var hs-var">score</span></a></span></span><span> </span><span id="local-6989586621679075030"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679075030"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">')'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; Maybe a
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">(a -&gt; Maybe a) -&gt; a -&gt; Maybe a
@@ -225,12 +225,12 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-number">5</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679074230"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+</span><a href="#local-6989586621679075030"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">a
 </span><span class="hs-number">1</span></span><span>
-</span><span id="line-38"></span><span>    </span><span class="annot"><a href="#local-6989586621679074245"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span id="local-6989586621679074227"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679074227"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="annottext">Char
+</span><span id="line-38"></span><span>    </span><span class="annot"><a href="#local-6989586621679075045"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span id="local-6989586621679075027"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679075027"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">']'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; Maybe a
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">(a -&gt; Maybe a) -&gt; a -&gt; Maybe a
@@ -239,12 +239,12 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-number">5</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679074227"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+</span><a href="#local-6989586621679075027"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">a
 </span><span class="hs-number">2</span></span><span>
-</span><span id="line-39"></span><span>    </span><span class="annot"><a href="#local-6989586621679074245"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span id="local-6989586621679074226"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679074226"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="annottext">Char
+</span><span id="line-39"></span><span>    </span><span class="annot"><a href="#local-6989586621679075045"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span id="local-6989586621679075026"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679075026"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'}'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; Maybe a
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">(a -&gt; Maybe a) -&gt; a -&gt; Maybe a
@@ -253,12 +253,12 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-number">5</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679074226"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+</span><a href="#local-6989586621679075026"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">a
 </span><span class="hs-number">3</span></span><span>
-</span><span id="line-40"></span><span>    </span><span class="annot"><a href="#local-6989586621679074245"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span id="local-6989586621679074225"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679074225"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="annottext">Char
+</span><span id="line-40"></span><span>    </span><span class="annot"><a href="#local-6989586621679075045"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span id="local-6989586621679075025"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679075025"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'&gt;'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; Maybe a
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">(a -&gt; Maybe a) -&gt; a -&gt; Maybe a
@@ -267,33 +267,33 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-number">5</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679074225"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+</span><a href="#local-6989586621679075025"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">a
 </span><span class="hs-number">4</span></span><span>
-</span><span id="line-41"></span><span>    </span><span class="annot"><a href="#local-6989586621679074245"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><span id="line-41"></span><span>    </span><span class="annot"><a href="#local-6989586621679075045"><span class="hs-identifier hs-var">score</span></a></span><span> </span><span class="annot"><span class="annottext">a
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe a
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-42"></span><span>    </span><span id="local-6989586621679074246"><span class="annot"><span class="annottext">median :: [a] -&gt; Maybe a
-</span><a href="#local-6989586621679074246"><span class="hs-identifier hs-var hs-var">median</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe a
+</span><span id="line-42"></span><span>    </span><span id="local-6989586621679075046"><span class="annot"><span class="annottext">median :: [a] -&gt; Maybe a
+</span><a href="#local-6989586621679075046"><span class="hs-identifier hs-var hs-var">median</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe a
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-43"></span><span>    </span><span class="annot"><a href="#local-6989586621679074246"><span class="hs-identifier hs-var">median</span></a></span><span> </span><span id="local-6989586621679074224"><span class="annot"><span class="annottext">[a]
-</span><a href="#local-6989586621679074224"><span class="hs-identifier hs-var">xs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; Maybe a
+</span><span id="line-43"></span><span>    </span><span class="annot"><a href="#local-6989586621679075046"><span class="hs-identifier hs-var">median</span></a></span><span> </span><span id="local-6989586621679075024"><span class="annot"><span class="annottext">[a]
+</span><a href="#local-6989586621679075024"><span class="hs-identifier hs-var">xs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; Maybe a
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">(a -&gt; Maybe a) -&gt; a -&gt; Maybe a
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[a] -&gt; [a]
 forall a. Ord a =&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">sort</span></span><span> </span><span class="annot"><span class="annottext">[a]
-</span><a href="#local-6989586621679074224"><span class="hs-identifier hs-var">xs</span></a></span><span> </span><span class="annot"><span class="annottext">[a] -&gt; Int -&gt; a
+</span><a href="#local-6989586621679075024"><span class="hs-identifier hs-var">xs</span></a></span><span> </span><span class="annot"><span class="annottext">[a] -&gt; Int -&gt; a
 forall a. [a] -&gt; Int -&gt; a
 </span><span class="hs-operator hs-var">!!</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[a] -&gt; Int
 forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Int
 </span><span class="hs-identifier hs-var">length</span></span><span> </span><span class="annot"><span class="annottext">[a]
-</span><a href="#local-6989586621679074224"><span class="hs-identifier hs-var">xs</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679075024"><span class="hs-identifier hs-var">xs</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Integral a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">`div`</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">2</span></span><span class="hs-special">)</span><span>

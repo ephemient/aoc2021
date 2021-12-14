@@ -60,6 +60,12 @@ day13a :: Text -> Either (ParseErrorBundle Text Void) Int
 day13b :: Text -> Either (ParseErrorBundle Text Void) [String]
 
 
+module Day14
+day14 :: Text -> Maybe [Int]
+day14a :: Text -> Maybe Int
+day14b :: Text -> Maybe Int
+
+
 module Day2
 data Move a
 Horizontal :: a -> Move a
