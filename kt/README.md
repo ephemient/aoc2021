@@ -6,10 +6,10 @@ This project builds with [Gradle](https://gradle.org/).
 Run the test suite:
 
 ```sh
-./gradlew allTest
+./gradlew allTests
 ```
 
-Run [kotlinx.benchmark](https://github.com/Kotlin/kotlinx-benchmark) benchmarks:
+Run [kotlinx.benchmark](https://github.com/Kotlin/kotlinx-benchmark) ([JMH](https://openjdk.java.net/projects/code-tools/jmh/)) benchmarks:
 
 ```sh
 ./gradlew benchmark
@@ -19,7 +19,7 @@ Print solutions for the inputs provided in local data files:
 
 ```sh
 ./gradlew jvmRun
-./gradlew jsRun
+./gradlew jsIrRun
 ./gradlew run{Debug,Release}Executable{Linux{X64,Arm64},MingwX86,Macos{X64,Arm64}}
 ```
 
