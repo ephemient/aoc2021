@@ -15,6 +15,7 @@ import Day11 (day11)
 import Day12 (day12a, day12b)
 import Day13 (day13a, day13b)
 import Day14 (day14a, day14b)
+import Day15 (day15a, day15b)
 
 import Control.Monad ((<=<), when)
 import Data.Maybe (mapMaybe)
@@ -60,3 +61,4 @@ main = do
     run 12 (print <=< justOrFail) [day12a, day12b]
     run 13 (mapM_ putStrLn <=< rightOrFail) [fmap ((:[]) . show) . day13a, day13b]
     run 14 (print <=< justOrFail) [day14a, day14b]
+    run 15 (print <=< justOrFail) [day15a, day15b]

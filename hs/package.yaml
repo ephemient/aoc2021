@@ -28,6 +28,7 @@ library:
   - array
   - containers
   - fgl
+  - heap
   - megaparsec
   - mtl
   - split
