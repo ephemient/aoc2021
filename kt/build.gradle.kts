@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinJsCompilerType
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 import org.jetbrains.kotlin.gradle.plugin.KotlinTargetPreset
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrTarget
 
 plugins {
     kotlin("multiplatform") version libs.versions.kotlin.get()
@@ -123,7 +124,7 @@ kotlin {
         }
     }
     targets.all {
-        if (platformType != KotlinPlatformType.common) compilations.create("bench")
+        if (platformType != KotlinPlatformType.common && this !is KotlinJsIrTarget) compilations.create("bench")
         compilations.all {
             kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
         }
@@ -147,6 +148,7 @@ kotlin {
                 parentCompilation?.also { dependsOn(getByName("js$it")) }
             }
             for (jsTarget in jsTargets.keys) {
+                if (compilation == "Bench" && targets.getByName(jsTarget) is KotlinJsIrTarget) continue
                 getByName("$jsTarget$compilation") {
                     dependsOn(js)
                     parentCompilation?.also { dependsOn(getByName("$jsTarget$it")) }
