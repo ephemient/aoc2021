@@ -117,4 +117,12 @@ fun main(args: Array<String>) {
         println(day14.part2())
         println()
     }
+
+    if (days?.contains(15) != false) {
+        val day15 = Day15(getInput(15))
+        println("Day 15")
+        println(day15.part1())
+        println(day15.part2())
+        println()
+    }
 }
