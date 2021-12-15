@@ -66,6 +66,12 @@ day14a :: Text -> Maybe Int
 day14b :: Text -> Maybe Int
 
 
+module Day15
+day15 :: Int -> Vector Int -> Maybe Int
+day15a :: Text -> Maybe Int
+day15b :: Text -> Maybe Int
+
+
 module Day2
 data Move a
 Horizontal :: a -> Move a
