@@ -3,6 +3,7 @@ package com.github.ephemient.aoc2021
 expect fun getInput(day: Int): List<String>
 
 @Suppress("ComplexMethod", "LongMethod")
+@ExperimentalStdlibApi
 fun main(args: Array<String>) {
     val days = args.mapNotNull { it.toIntOrNull() }.takeIf { it.isNotEmpty() }
 
@@ -123,6 +124,14 @@ fun main(args: Array<String>) {
         println("Day 15")
         println(day15.part1())
         println(day15.part2())
+        println()
+    }
+
+    if (days?.contains(16) != false) {
+        val day16 = Day16(getInput(16))
+        println("Day 16")
+        println(day16.part1())
+        println(day16.part2())
         println()
     }
 }
