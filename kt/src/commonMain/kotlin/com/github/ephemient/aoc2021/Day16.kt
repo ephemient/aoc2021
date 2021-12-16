@@ -1,9 +1,9 @@
 package com.github.ephemient.aoc2021
 
+@ExperimentalStdlibApi
 class Day16(lines: List<String>) {
     private val packet = parsePacket(lines.single().iterator().hexBitsIterator())
 
-    @ExperimentalStdlibApi
     fun part1(): Int = DeepRecursiveFunction<Packet, Int> { packet ->
         when (packet) {
             is Packet.Literal -> packet.version
@@ -11,7 +11,6 @@ class Day16(lines: List<String>) {
         }
     }(packet)
 
-    @ExperimentalStdlibApi
     fun part2(): Long = DeepRecursiveFunction<Packet, Long> { packet ->
         when (packet) {
             is Packet.Literal -> packet.value
@@ -37,23 +36,24 @@ class Day16(lines: List<String>) {
     }
 
     companion object {
-        private fun parsePacket(iterator: BooleanIterator): Packet {
+        private val parsePacket = DeepRecursiveFunction<BooleanIterator, Packet> { iterator ->
             val version = iterator.nextInt(3)
             val type = iterator.nextInt(3)
-            return if (type == 4) {
+            if (type == 4) {
                 var value = 0L
-                var continuation: Boolean
                 do {
-                    continuation = iterator.nextBoolean()
+                    val continuation = iterator.nextBoolean()
                     value = 16 * value + iterator.nextInt(4)
                 } while (continuation)
                 Packet.Literal(version, value)
             } else {
                 val children = if (iterator.nextBoolean()) {
-                    List(iterator.nextInt(11)) { parsePacket(iterator) }
+                    List(iterator.nextInt(11)) { callRecursive(iterator) }
                 } else {
                     val childIterator = iterator.take(iterator.nextInt(15))
-                    generateSequence { childIterator }.takeWhile { it.hasNext() }.map { parsePacket(it) }.toList()
+                    buildList {
+                        while (childIterator.hasNext()) add(callRecursive(childIterator))
+                    }
                 }
                 Packet.Operator(version, type, children)
             }
