@@ -103,12 +103,12 @@ jobs:
           key: ${{ runner.os }}-graalvm-hyeprfine-${{ hashFiles('**/*.gradle*') }}
           restore-keys: ${{ runner.os }}-graalvm-hyperfine-
           path: ~/.gradle
-      - run: ./gradlew --no-daemon --info graalvm:nativeBuild
+      - run: ./gradlew --no-daemon --info graalvm:nativeCompile
         working-directory: kt
       - uses: actions/upload-artifact@v2
         with:
           name: aoc2021-graalvm
-          path: kt/graalvm/build/native/nativeBuild/*
+          path: kt/graalvm/build/native/nativeCompile/*
 
   python:
     needs: [ get-inputs ]
