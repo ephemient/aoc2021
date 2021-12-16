@@ -1,6 +1,5 @@
 use std::iter;
 
-#[derive(Debug)]
 enum Packet {
     Literal {
         version: u32,
@@ -87,28 +86,40 @@ fn sum_versions(packet: &Packet) -> u32 {
 fn eval(packet: &Packet) -> Option<u64> {
     match packet {
         Packet::Literal { value, .. } => Some(*value),
-        Packet::Operator { tag, children, .. } => match *tag {
-            0 => Some(children.iter().filter_map(eval).sum()),
-            1 => Some(children.iter().filter_map(eval).product()),
-            2 => children.iter().filter_map(eval).min(),
-            3 => children.iter().filter_map(eval).max(),
-            5 => Some(if eval(children.get(0)?)? > eval(children.get(1)?)? {
-                1
-            } else {
-                0
-            }),
-            6 => Some(if eval(children.get(0)?)? < eval(children.get(1)?)? {
-                1
-            } else {
-                0
-            }),
-            7 => Some(if eval(children.get(0)?)? == eval(children.get(1)?)? {
-                1
-            } else {
-                0
-            }),
-            _ => None,
-        },
+        Packet::Operator {
+            tag: 0, children, ..
+        } => Some(children.iter().filter_map(eval).sum()),
+        Packet::Operator {
+            tag: 1, children, ..
+        } => Some(children.iter().filter_map(eval).product()),
+        Packet::Operator {
+            tag: 2, children, ..
+        } => children.iter().filter_map(eval).min(),
+        Packet::Operator {
+            tag: 3, children, ..
+        } => children.iter().filter_map(eval).max(),
+        Packet::Operator {
+            tag: 5, children, ..
+        } => Some(if eval(children.get(0)?)? > eval(children.get(1)?)? {
+            1
+        } else {
+            0
+        }),
+        Packet::Operator {
+            tag: 6, children, ..
+        } => Some(if eval(children.get(0)?)? < eval(children.get(1)?)? {
+            1
+        } else {
+            0
+        }),
+        Packet::Operator {
+            tag: 7, children, ..
+        } => Some(if eval(children.get(0)?)? == eval(children.get(1)?)? {
+            1
+        } else {
+            0
+        }),
+        _ => None,
     }
 }
 

@@ -14,7 +14,7 @@ class Day16(lines: List<String>) {
     @ExperimentalStdlibApi
     fun part2(): Long = DeepRecursiveFunction<Packet, Long> { packet ->
         when (packet) {
-            is Packet.Literal -> packet.value.toLong()
+            is Packet.Literal -> packet.value
             is Packet.Operator -> when (packet.type) {
                 0 -> packet.children.sumOf { callRecursive(it) }
                 1 -> packet.children.fold(1L) { acc, child -> acc * callRecursive(child) }
