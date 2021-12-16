@@ -72,6 +72,20 @@ day15a :: Text -> Maybe Int
 day15b :: Text -> Maybe Int
 
 
+module Day16
+data Packet a
+Literal :: Int -> a -> Packet a
+[version] :: Packet a -> Int
+[value] :: Packet a -> a
+Operator :: Int -> Int -> [Packet a] -> Packet a
+[version] :: Packet a -> Int
+[tag] :: Packet a -> Int
+[packets] :: Packet a -> [Packet a]
+parser :: (Num a, MonadParsec e s m, Token s ~ Char) => m (Packet a)
+day16a :: Text -> Either (ParseErrorBundle Text Void) Int
+day16b :: Text -> Either (ParseErrorBundle Text Void) (Maybe Int)
+
+
 module Day2
 data Move a
 Horizontal :: a -> Move a

@@ -14,11 +14,11 @@ Description:    &lt;https://adventofcode.com/2021/day/6 Day 6: Lanternfish&gt;
 </span><span id="line-14"></span><span>
 </span><span id="line-15"></span><span class="annot"><a href="Day6.html#day6"><span class="hs-identifier hs-type">day6</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UArray</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
 </span><span id="line-16"></span><span id="day6"><span class="annot"><span class="annottext">day6 :: UArray Int Int -&gt; Text -&gt; Either String Int
-</span><a href="Day6.html#day6"><span class="hs-identifier hs-var hs-var">day6</span></a></span></span><span> </span><span id="local-6989586621679077904"><span class="annot"><span class="annottext">UArray Int Int
-</span><a href="#local-6989586621679077904"><span class="hs-identifier hs-var">lut</span></a></span></span><span> </span><span id="local-6989586621679077903"><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679077903"><span class="hs-identifier hs-var">input</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-17"></span><span>    </span><span id="local-6989586621679077902"><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679077902"><span class="hs-identifier hs-var">nums</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">(Text -&gt; Either String Int) -&gt; [Text] -&gt; Either String [Int]
+</span><a href="Day6.html#day6"><span class="hs-identifier hs-var hs-var">day6</span></a></span></span><span> </span><span id="local-6989586621679079906"><span class="annot"><span class="annottext">UArray Int Int
+</span><a href="#local-6989586621679079906"><span class="hs-identifier hs-var">lut</span></a></span></span><span> </span><span id="local-6989586621679079905"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679079905"><span class="hs-identifier hs-var">input</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-17"></span><span>    </span><span id="local-6989586621679079904"><span class="annot"><span class="annottext">[Int]
+</span><a href="#local-6989586621679079904"><span class="hs-identifier hs-var">nums</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">(Text -&gt; Either String Int) -&gt; [Text] -&gt; Either String [Int]
 forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
 (Traversable t, Monad m) =&gt;
 (a -&gt; m b) -&gt; t a -&gt; m (t b)
@@ -34,7 +34,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall (m :: * -&gt; *) a b. Monad m =&gt; (a -&gt; m b) -&gt; m a -&gt; m b
 </span><span class="hs-operator hs-var">=&lt;&lt;</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; [Text]
 </span><span class="hs-identifier hs-var">T.lines</span></span><span> </span><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679077903"><span class="hs-identifier hs-var">input</span></a></span><span>
+</span><a href="#local-6989586621679079905"><span class="hs-identifier hs-var">input</span></a></span><span>
 </span><span id="line-18"></span><span>    </span><span class="annot"><span class="annottext">Int -&gt; Either String Int
 forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
 </span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">(Int -&gt; Either String Int) -&gt; Int -&gt; Either String Int
@@ -42,14 +42,14 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Int] -&gt; Int
 forall (t :: * -&gt; *) a. (Foldable t, Num a) =&gt; t a -&gt; a
 </span><span class="hs-identifier hs-var">sum</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UArray Int Int
-</span><a href="#local-6989586621679077904"><span class="hs-identifier hs-var">lut</span></a></span><span> </span><span class="annot"><span class="annottext">UArray Int Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679079906"><span class="hs-identifier hs-var">lut</span></a></span><span> </span><span class="annot"><span class="annottext">UArray Int Int -&gt; Int -&gt; Int
 forall (a :: * -&gt; * -&gt; *) e i.
 (IArray a e, Ix i) =&gt;
 a i e -&gt; i -&gt; e
 </span><span class="hs-glyph hs-var">!</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679077898"><span class="hs-identifier hs-var">num</span></a></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="local-6989586621679077898"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679077898"><span class="hs-identifier hs-var">num</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679077902"><span class="hs-identifier hs-var">nums</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679079900"><span class="hs-identifier hs-var">num</span></a></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="local-6989586621679079900"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679079900"><span class="hs-identifier hs-var">num</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">[Int]
+</span><a href="#local-6989586621679079904"><span class="hs-identifier hs-var">nums</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-19"></span><span>
 </span><span id="line-20"></span><span class="annot"><a href="Day6.html#day6a"><span class="hs-identifier hs-type">day6a</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
 </span><span id="line-21"></span><span id="day6a"><span class="annot"><span class="annottext">day6a :: Text -&gt; Either String Int
