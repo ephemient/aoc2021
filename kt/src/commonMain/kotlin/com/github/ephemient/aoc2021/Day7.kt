@@ -3,6 +3,7 @@ package com.github.ephemient.aoc2021
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
+/** Day 7: The Treachery of Whales */
 class Day7(lines: List<String>) {
     private val nums = lines.flatMap { line -> line.splitToSequence(',').map { it.toInt() } }
 

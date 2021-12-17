@@ -1,5 +1,6 @@
 package com.github.ephemient.aoc2021
 
+/** Day 4: Giant Squid */
 class Day4(lines: List<String>) {
     private val boards = buildList {
         val iterator = lines.iterator()

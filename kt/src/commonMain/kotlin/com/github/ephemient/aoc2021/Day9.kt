@@ -1,5 +1,6 @@
 package com.github.ephemient.aoc2021
 
+/** Day 9: Smoke Basin */
 class Day9(private val lines: List<String>) {
     fun part1(): Int = lines.withIndex().sumOf { (i, line) ->
         line.withIndex().sumOf { (j, c) ->

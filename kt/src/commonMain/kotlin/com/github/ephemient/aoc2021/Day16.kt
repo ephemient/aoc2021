@@ -1,5 +1,6 @@
 package com.github.ephemient.aoc2021
 
+/** Day 16: Packet Decoder */
 @ExperimentalStdlibApi
 class Day16(lines: List<String>) {
     private val packet = parsePacket(lines.single().iterator().hexBitsIterator())

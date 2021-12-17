@@ -1,5 +1,6 @@
 package com.github.ephemient.aoc2021
 
+/** Day 14: Extended Polymerization */
 class Day14(lines: List<String>) {
     private val n: Int
     private val x: LongArray

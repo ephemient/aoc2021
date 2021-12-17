@@ -1,5 +1,6 @@
 package com.github.ephemient.aoc2021
 
+/** Day 11: Dumbo Octopus */
 class Day11(lines: List<String>) {
     private val flashes = buildList {
         val width = lines.first().length

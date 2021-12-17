@@ -1,5 +1,6 @@
 package com.github.ephemient.aoc2021
 
+/** Day 5: Hydrothermal Venture */
 class Day5(lines: List<String>) {
     private val segments = lines.map { line ->
         val (first, second) = line.split(" -> ", limit = 2).map { word ->

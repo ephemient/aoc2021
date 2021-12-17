@@ -1,5 +1,6 @@
 package com.github.ephemient.aoc2021
 
+/** Day 12: Passage Pathing */
 class Day12(lines: List<String>) {
     private val start: Int
     private val end: Int

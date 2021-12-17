@@ -1,5 +1,6 @@
 package com.github.ephemient.aoc2021
 
+/** Day 6: Lanternfish */
 class Day6(lines: List<String>) {
     private val nums = lines.flatMap { line -> line.splitToSequence(',').map { it.toInt() } }
 

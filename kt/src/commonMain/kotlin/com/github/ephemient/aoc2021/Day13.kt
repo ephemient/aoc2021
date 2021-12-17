@@ -2,6 +2,7 @@ package com.github.ephemient.aoc2021
 
 import kotlin.math.abs
 
+/** Day 13: Transparent Origami */
 class Day13(lines: List<String>) {
     private val points: Set<IntPair>
     private val folds: List<Fold>

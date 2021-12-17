@@ -1,5 +1,6 @@
 package com.github.ephemient.aoc2021
 
+/** Day 8: Seven Segment Search */
 class Day8(private val lines: List<String>) {
     fun part1(): Int = lines.sumOf {
         it.substringAfter(" | ")

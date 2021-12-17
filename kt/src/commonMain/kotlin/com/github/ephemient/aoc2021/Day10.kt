@@ -1,5 +1,6 @@
 package com.github.ephemient.aoc2021
 
+/** Day 10: Syntax Scoring */
 class Day10(private val lines: List<String>) {
     fun part1(): Int = lines.sumOf { line ->
         val expected = mutableListOf<Char>()
