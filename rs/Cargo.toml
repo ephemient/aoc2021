@@ -23,6 +23,7 @@ build_const = "0.2"
 [dependencies]
 build_const = "0.2"
 itertools = "0.10"
+lazy_static = "1"
 regex = "1"
 
 [dev-dependencies]

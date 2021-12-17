@@ -27,6 +27,7 @@ dependencies = [
  "build_const",
  "criterion",
  "itertools",
+ "lazy_static",
  "pretty_assertions",
  "regex",
 ]
