@@ -65,4 +65,4 @@ main = do
     run 14 (print <=< justOrFail) [day14a, day14b]
     run 15 (print <=< justOrFail) [day15a, day15b]
     run 16 (print <=< justOrFail <=< rightOrFail) [fmap Just . day16a, day16b]
-    run 17 (print <=< justOrFail <=< rightOrFail) [day17]
+    run 17 (print <=< rightOrFail) [day17]

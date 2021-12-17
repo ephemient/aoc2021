@@ -1,10 +1,11 @@
 use super::util;
 use regex::Regex;
-use std::cmp::{max, min};
+use std::cmp::max;
+use std::collections::{HashMap, HashSet};
 use std::error::Error;
 use std::iter;
 
-pub fn solve<'a, I, S>(lines: I) -> Result<Option<(i32, i32)>, Box<dyn Error + Send + Sync>>
+pub fn solve<'a, I, S>(lines: I) -> Result<(i32, usize), Box<dyn Error + Send + Sync>>
 where
     I: IntoIterator<Item = &'a S>,
     S: AsRef<str> + 'a,
@@ -21,32 +22,50 @@ where
     let y0: i32 = cap.get(3).ok_or(util::Error)?.as_str().parse()?;
     let y1: i32 = cap.get(4).ok_or(util::Error)?.as_str().parse()?;
     drop(cap);
-    let (mut max_dy, mut count) = (None, 0);
-    for dx in 0..=x1 {
-        for dy in min(y0, 0)..=max(y0.abs(), y1.abs()) {
-            if (1..=dx)
-                .rev()
-                .chain(iter::repeat(0))
-                .scan(0, |x, dx| {
-                    *x += dx;
-                    Some(*x).filter(|x| *x <= x1)
-                })
-                .zip(
-                    iter::successors(Some(dy), |dy| Some(dy - 1)).scan(0, |y, dy| {
-                        *y += dy;
-                        Some(*y).filter(|y| dy > 0 || *y >= y0)
-                    }),
-                )
-                .any(|(x, y)| (x0..=x1).contains(&x) && (y0..=y1).contains(&y))
-            {
-                if max_dy < Some(dy) {
-                    max_dy = Some(dy);
-                }
-                count += 1;
+    let mut max_t = 0;
+    let mut dy_hits = HashMap::<usize, Vec<i32>>::new();
+    for dy in y0..=-y0 {
+        for (t, y) in iter::once(0)
+            .chain(
+                iter::successors(Some(dy), |dy| Some(dy - 1)).scan(0, |y, dy| {
+                    *y += dy;
+                    Some(*y).filter(|y| *y >= y0)
+                }),
+            )
+            .enumerate()
+        {
+            if (y0..=y1).contains(&y) {
+                max_t = max(max_t, t);
+                dy_hits
+                    .entry(t)
+                    .and_modify(|s| s.push(dy))
+                    .or_insert_with(|| vec![dy]);
             }
         }
     }
-    Ok(max_dy.map(|dy: i32| (dy * (dy + 1) / 2, count)))
+    let mut max_dy = 0;
+    let mut count = 0;
+    for dx in ((2.0 * x0 as f64 + 0.25).sqrt() - 0.5).ceil() as i32..=x1 {
+        let mut all_dys = HashSet::new();
+        for (t, x) in iter::once(0)
+            .chain((dx - max_t as i32..=dx).rev().scan(0, |x, dx| {
+                *x += max(dx, 0);
+                Some(*x).filter(|x| *x <= x1)
+            }))
+            .enumerate()
+        {
+            if (x0..=x1).contains(&x) {
+                if let Some(dys) = dy_hits.get(&t) {
+                    for dy in dys {
+                        all_dys.insert(dy);
+                    }
+                }
+            }
+        }
+        count += all_dys.len();
+        max_dy = all_dys.into_iter().fold(max_dy, |x, y| max(x, *y));
+    }
+    Ok((max_dy * (max_dy + 1) / 2, count))
 }
 
 #[cfg(test)]
@@ -58,7 +77,7 @@ mod tests {
 
     #[test]
     fn solve_examples() -> Result<(), Box<dyn Error + Send + Sync>> {
-        assert_eq!(Some((45, 112)), solve(EXAMPLE)?);
+        assert_eq!((45, 112), solve(EXAMPLE)?);
         Ok(())
     }
 }

@@ -166,9 +166,7 @@ fn main() -> io::Result<()> {
 
     if args.is_empty() || args.contains("17") {
         println!("Day 17");
-        let (part1, part2) = day17::solve(DAY17)
-            .and_then(|x| Ok(x.ok_or(util::Error)?))
-            .map_err(util::to_ioerror)?;
+        let (part1, part2) = day17::solve(DAY17).map_err(util::to_ioerror)?;
         println!("{:?}", part1);
         println!("{:?}", part2);
         println!();

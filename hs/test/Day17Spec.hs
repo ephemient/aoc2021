@@ -13,4 +13,4 @@ spec :: Spec
 spec = do
     describe "both" $ do
         it "examples" $ do
-            day17 example `shouldBe` Right (Just (45, 112))
+            day17 example `shouldBe` Right (45, 112)

@@ -1,6 +1,8 @@
 package com.github.ephemient.aoc2021
 
-import kotlin.math.abs
+import kotlin.math.ceil
+import kotlin.math.roundToInt
+import kotlin.math.sqrt
 
 /** Day 17: Trick Shot */
 class Day17(lines: List<String>) {
@@ -10,28 +12,27 @@ class Day17(lines: List<String>) {
         val (xRange, yRange) = PATTERN.matchEntire(lines.single())!!.destructured.let { (x0, x1, y0, y1) ->
             (x0.toInt()..x1.toInt()) to (y0.toInt()..y1.toInt())
         }
-        var maxDy = 0
-        var count = 0
-        for (dx in 0..xRange.last) {
-            for (dy in yRange.first.coerceAtMost(0)..maxOf(abs(yRange.first), abs(yRange.last))) {
-                var x = 0
-                var y = 0
-                var effectiveDx = dx
-                var effectiveDy = dy
-                while (x <= xRange.last && (effectiveDy > 0 || y >= yRange.first)) {
-                    if (x in xRange && y in yRange) {
-                        maxDy = maxOf(maxDy, dy)
-                        count++
-                        break
-                    }
-                    if (effectiveDx > 0) {
-                        x += effectiveDx
-                        effectiveDx--
-                    }
-                    y += effectiveDy
-                    effectiveDy--
+        var maxT = 0
+        val dyHits = mutableMapOf<Int, MutableList<Int>>()
+        for (dy in yRange.first..-yRange.first) {
+            for ((t, y) in generateSequence(dy) { it - 1 }.runningFold(0, Int::plus).withIndex()) {
+                if (y < yRange.first) break
+                if (y in yRange) {
+                    maxT = maxOf(maxT, t)
+                    dyHits.getOrPut(t) { mutableListOf() }.add(dy)
                 }
             }
+        }
+        var maxDy = 0
+        var count = 0
+        for (dx in ceil(sqrt(2.0 * xRange.first + 0.25) - 0.5).roundToInt()..xRange.last) {
+            val dys = mutableSetOf<Int>()
+            for ((t, x) in generateSequence(dx) { (it - 1).coerceAtLeast(0) }.runningFold(0, Int::plus).withIndex()) {
+                if (t > maxT || x > xRange.last) break
+                if (x in xRange) dyHits[t]?.let { dys.addAll(it) }
+            }
+            maxDy = dys.fold(maxDy, ::maxOf)
+            count += dys.size
         }
         part1 = maxDy * (maxDy + 1) / 2
         part2 = count
