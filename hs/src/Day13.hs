@@ -7,7 +7,6 @@ module Day13 (day13a, day13b) where
 
 import Control.Arrow ((&&&), (***))
 import Data.Array.Unboxed (UArray, accumArray, elems)
-import Data.Functor (($>))
 import Data.List.Split (chunksOf)
 import Data.Semigroup (Max(..), Min(..))
 import qualified Data.Set as Set (fromList, size)
@@ -22,7 +21,7 @@ parsePair :: (Num a, MonadParsec e s m, Token s ~ Char) => m (a, a)
 parsePair = flip (,) <$> decimal <* single ',' <*> decimal
 
 parseFold :: (Num a, Ord a, MonadParsec e s m, Token s ~ Char, IsString (Tokens s)) => m ((a, a) -> (a, a))
-parseFold = chunk "fold along " *> (single 'x' $> foldX <|> single 'y' $> foldY) <*> (single '=' *> decimal)
+parseFold = chunk "fold along " *> (foldX <$ single 'x' <|> foldY <$ single 'y') <*> (single '=' *> decimal)
 
 foldX, foldY :: (Num a, Ord a) => a -> (a, a) -> (a, a)
 foldX x' (y, x) = (y, x' - abs (x - x'))

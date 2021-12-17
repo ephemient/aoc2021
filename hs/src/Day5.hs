@@ -7,7 +7,6 @@ module Day5 (day5a, day5b) where
 
 import Control.Monad (guard)
 import Data.Function (on)
-import Data.Functor (($>))
 import Data.List (tails)
 import Data.Set (Set)
 import qualified Data.Set as Set (fromList, size)
@@ -39,10 +38,10 @@ intersections segments = Set.fromList $ do
             [(x00, y) | y <- [max y00 y10..min y01 y11]]
       | x00 == x01 -> guard (x10 <= x00 && x00 <= x11) *>
             let y = (y11 - y10) `div` (x11 - x10) * (x00 - x10) + y10
-            in guard (y00 <= y && y <= y01) $> (x00, y)
+            in (x00, y) <$ guard (y00 <= y && y <= y01)
       | x10 == x11 -> guard (x00 <= x10 && x10 <= x01) *>
             let y = (y01 - y00) `div` (x01 - x00) * (x10 - x00) + y00
-            in guard (y10 <= y && y <= y11) $> (x10, y)
+            in (x10, y) <$ guard (y10 <= y && y <= y11)
       | m0 == m1 -> guard (a0 == a1) *>
             [(x, m0 * x + a0) | x <- [max x00 x10..min x01 x11]]
       | (x, 0) <- (a0 - a1) `divMod` (m1 - m0)

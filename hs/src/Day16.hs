@@ -8,7 +8,6 @@ module Day16 (day16a, day16b) where
 import Control.Monad.State (MonadState, evalStateT, gets, put, state)
 import Data.Bits (testBit)
 import Data.Char (digitToInt)
-import Data.Functor (($>))
 import Data.List (foldl')
 import Data.Text (Text)
 import Data.Void (Void)
@@ -37,7 +36,7 @@ parser = evalStateT packet [] where
     bit = getHead >>= maybe nextBit pure where
         nextBit = do
             n <- digitToInt <$> hexDigitChar
-            put (testBit n <$> [2, 1, 0]) $> testBit n 3
+            testBit n 3 <$ put (testBit n <$> [2, 1, 0])
     bits :: (Num a, MonadState [Bool] m, MonadParsec e s m, Token s ~ Char) => Int -> m a
     bits n = foldl' f 0 <$> count n bit where f acc b = 2 * acc + if b then 1 else 0
     literal :: (Num a, MonadState [Bool] m, MonadParsec e s m, Token s ~ Char) => m a

@@ -8,7 +8,6 @@ module Day15 (day15a, day15b) where
 import Control.Monad (foldM, guard)
 import Control.Monad.ST (ST, runST)
 import Data.Char (digitToInt, isDigit)
-import Data.Functor (($>))
 import Data.Heap (MinPrioHeap)
 import qualified Data.Heap as Heap (insert, singleton, view)
 import Data.List.NonEmpty (NonEmpty((:|)), nonEmpty)
@@ -30,7 +29,7 @@ day15 width risks = runST $ do
       | x < 0 || x >= width || y < 0 || y * width + x >= V.length risks = pure heap
       | otherwise = do
         best <- MV.read bests i
-        if risk < best then MV.write bests i risk $> Heap.insert (risk, i) heap else pure heap
+        if risk < best then Heap.insert (risk, i) heap <$ MV.write bests i risk else pure heap
       where
         i = y * width + x
         risk = c + risks V.! i

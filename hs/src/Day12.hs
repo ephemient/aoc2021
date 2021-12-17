@@ -10,7 +10,6 @@ import Control.Monad.Writer (execWriter, tell)
 import Data.Bits (finiteBitSize, setBit, testBit)
 import Data.Char (isUpper)
 import Data.Containers.ListUtils (nubOrd)
-import Data.Functor (($>))
 import Data.Graph.Inductive (Graph, Gr, lsuc, mkGraph, nodes)
 import qualified Data.Map as Map ((!), (!?), fromList, toList)
 import Data.Monoid (Sum(..))
@@ -43,7 +42,7 @@ day12 bonus input = do
     (start, end, g) <- parse @Gr input
     when (any (>= bonusBit) $ nodes g) $ error "input too large"
     let step (state, i)
-          | i == end = tell (Sum 1) $> mempty
+          | i == end = mempty <$ tell (Sum 1)
           | otherwise = pure $ do
                 (j, big) <- lsuc g i
                 guard $ j /= start

@@ -6,7 +6,6 @@ Description:    <https://adventofcode.com/2021/day/4 Day 4: Giant Squid>
 module Day4 (day4) where
 
 import Control.Arrow ((&&&))
-import Data.Functor (($>))
 import qualified Data.IntMap as IntMap ((!?), fromListWith)
 import Data.List (transpose)
 import Data.List.NonEmpty (nonEmpty)
@@ -18,11 +17,11 @@ import Text.Megaparsec (MonadParsec, ParseErrorBundle, Token, count, eof, parse,
 import Text.Megaparsec.Char (char, hspace, hspace1, newline)
 import Text.Megaparsec.Char.Lexer (decimal)
 
-parser' :: (MonadParsec e s m, Token s ~ Char) => m ([Int], [[[Int]]])
-parser' = do
+parser :: (MonadParsec e s m, Token s ~ Char) => m ([Int], [[[Int]]])
+parser = do
     draws <- decimal `sepBy` char ',' <* skipSome newline
     boards <- board `sepEndBy` newline
-    eof $> (draws, boards)
+    (draws, boards) <$ eof
   where
     board = do
         first <- hspace *> decimal `sepBy1` hspace1 <* newline
@@ -33,7 +32,7 @@ parser' = do
 
 day4 :: Text -> Either (ParseErrorBundle Text Void) (Maybe (Int, Int))
 day4 input = do
-    (draws, boards) <- parse parser' "" input
+    (draws, boards) <- parse parser "" input
     let drawTurns = IntMap.fromListWith const $ zip draws [0 :: Int ..]
         scoreBoard board = do
             let turns = fmap (drawTurns IntMap.!?) <$> board
