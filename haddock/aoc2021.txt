@@ -86,6 +86,11 @@ day16a :: Text -> Either (ParseErrorBundle Text Void) Int
 day16b :: Text -> Either (ParseErrorBundle Text Void) (Maybe Int)
 
 
+module Day17
+parser :: (MonadParsec e s m, IsString (Tokens s), Token s ~ Char, Num a, Ord a) => m ((a, a), (a, a))
+day17 :: Text -> Either (ParseErrorBundle Text Void) (Maybe (Int, Int))
+
+
 module Day2
 data Move a
 Horizontal :: a -> Move a
@@ -103,7 +108,7 @@ day3b :: Text -> Either (ParseErrorBundle String Void) Int
 
 
 module Day4
-parser' :: (MonadParsec e s m, Token s ~ Char) => m ([Int], [[[Int]]])
+parser :: (MonadParsec e s m, Token s ~ Char) => m ([Int], [[[Int]]])
 day4 :: Text -> Either (ParseErrorBundle Text Void) (Maybe (Int, Int))
 
 
