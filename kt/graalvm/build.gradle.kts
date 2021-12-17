@@ -7,7 +7,7 @@ application {
     mainClass.set("com.github.ephemient.aoc2021.MainKt")
 }
 
-nativeBuild {
+graalvmNative.binaries.named("main") {
     imageName.set(rootProject.name)
     buildArgs.add("-H:IncludeResources=day.*\\.txt")
 }
