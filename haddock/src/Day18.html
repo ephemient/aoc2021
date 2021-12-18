@@ -1,6 +1,6 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span id="%24con2tag_BStzYyj4GkyFu7zmLwXcOR"></span><span class="hs-comment">{-|
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span id="%24con2tag_38ntmxdoT4I26J2bTnuugy"></span><span class="hs-comment">{-|
 Module:         Day18
-Description:    &lt;https://adventofcode.com/2021/day/18 Day 18: Snailfish&gt;
+Description:    &lt;https://adventofcode.com/2021/day/18 Day 18: Snailfishfish&gt;
 -}</span><span>
 </span><span id="line-5"></span><span class="hs-pragma">{-# LANGUAGE LambdaCase, ScopedTypeVariables, TypeFamilies #-}</span><span>
 </span><span id="line-6"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Day18</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day18.html#day18a"><span class="hs-identifier">day18a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Day18.html#day18b"><span class="hs-identifier">day18b</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
@@ -15,29 +15,30 @@ Description:    &lt;https://adventofcode.com/2021/day/18 Day 18: Snailfish&gt;
 </span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Text.Megaparsec.Char</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">newline</span></span><span class="hs-special">)</span><span>
 </span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Text.Megaparsec.Char.Lexer</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">decimal</span></span><span class="hs-special">)</span><span>
 </span><span id="line-17"></span><span>
-</span><span id="line-18"></span><span class="hs-keyword">data</span><span> </span><span id="Snail"><span class="annot"><a href="Day18.html#Snail"><span class="hs-identifier hs-var">Snail</span></a></span></span><span> </span><span id="local-6989586621679081532"><span class="annot"><a href="#local-6989586621679081532"><span class="hs-identifier hs-type">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Snail"><span class="annot"><a href="Day18.html#Snail"><span class="hs-identifier hs-var">Snail</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day18.html#Snail"><span class="hs-identifier hs-type">Snail</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081532"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="#local-6989586621679081532"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day18.html#Snail"><span class="hs-identifier hs-type">Snail</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081532"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="#local-6989586621679081532"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-19"></span><span class="hs-keyword">data</span><span> </span><span id="SnailToken"><span class="annot"><a href="Day18.html#SnailToken"><span class="hs-identifier hs-var">SnailToken</span></a></span></span><span> </span><span id="local-6989586621679081491"><span class="annot"><a href="#local-6989586621679081491"><span class="hs-identifier hs-type">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Open"><span class="annot"><a href="Day18.html#Open"><span class="hs-identifier hs-var">Open</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Close"><span class="annot"><a href="Day18.html#Close"><span class="hs-identifier hs-var">Close</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Value"><span class="annot"><a href="Day18.html#Value"><span class="hs-identifier hs-var">Value</span></a></span></span><span> </span><span class="annot"><a href="#local-6989586621679081491"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679081419"><span id="local-6989586621679081421"><span class="annot"><span class="annottext">SnailToken a -&gt; SnailToken a -&gt; Bool
-(SnailToken a -&gt; SnailToken a -&gt; Bool)
--&gt; (SnailToken a -&gt; SnailToken a -&gt; Bool) -&gt; Eq (SnailToken a)
-forall a. Eq a =&gt; SnailToken a -&gt; SnailToken a -&gt; Bool
+</span><span id="line-18"></span><span class="hs-keyword">data</span><span> </span><span id="Snailfish"><span class="annot"><a href="Day18.html#Snailfish"><span class="hs-identifier hs-var">Snailfish</span></a></span></span><span> </span><span id="local-6989586621679081532"><span class="annot"><a href="#local-6989586621679081532"><span class="hs-identifier hs-type">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Snailfish"><span class="annot"><a href="Day18.html#Snailfish"><span class="hs-identifier hs-var">Snailfish</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day18.html#Snailfish"><span class="hs-identifier hs-type">Snailfish</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081532"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="#local-6989586621679081532"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day18.html#Snailfish"><span class="hs-identifier hs-type">Snailfish</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081532"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="#local-6989586621679081532"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-19"></span><span class="hs-keyword">data</span><span> </span><span id="SnailfishToken"><span class="annot"><a href="Day18.html#SnailfishToken"><span class="hs-identifier hs-var">SnailfishToken</span></a></span></span><span> </span><span id="local-6989586621679081491"><span class="annot"><a href="#local-6989586621679081491"><span class="hs-identifier hs-type">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Open"><span class="annot"><a href="Day18.html#Open"><span class="hs-identifier hs-var">Open</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Close"><span class="annot"><a href="Day18.html#Close"><span class="hs-identifier hs-var">Close</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Value"><span class="annot"><a href="Day18.html#Value"><span class="hs-identifier hs-var">Value</span></a></span></span><span> </span><span class="annot"><a href="#local-6989586621679081491"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679081419"><span id="local-6989586621679081421"><span class="annot"><span class="annottext">SnailfishToken a -&gt; SnailfishToken a -&gt; Bool
+(SnailfishToken a -&gt; SnailfishToken a -&gt; Bool)
+-&gt; (SnailfishToken a -&gt; SnailfishToken a -&gt; Bool)
+-&gt; Eq (SnailfishToken a)
+forall a. Eq a =&gt; SnailfishToken a -&gt; SnailfishToken a -&gt; Bool
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
-/= :: SnailToken a -&gt; SnailToken a -&gt; Bool
-$c/= :: forall a. Eq a =&gt; SnailToken a -&gt; SnailToken a -&gt; Bool
-== :: SnailToken a -&gt; SnailToken a -&gt; Bool
-$c== :: forall a. Eq a =&gt; SnailToken a -&gt; SnailToken a -&gt; Bool
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679081403"><span id="local-6989586621679081405"><span id="local-6989586621679081407"><span id="local-6989586621679081409"><span id="local-6989586621679081411"><span id="local-6989586621679081413"><span id="local-6989586621679081415"><span class="annot"><span class="annottext">Eq (SnailToken a)
-Eq (SnailToken a)
--&gt; (SnailToken a -&gt; SnailToken a -&gt; Ordering)
--&gt; (SnailToken a -&gt; SnailToken a -&gt; Bool)
--&gt; (SnailToken a -&gt; SnailToken a -&gt; Bool)
--&gt; (SnailToken a -&gt; SnailToken a -&gt; Bool)
--&gt; (SnailToken a -&gt; SnailToken a -&gt; Bool)
--&gt; (SnailToken a -&gt; SnailToken a -&gt; SnailToken a)
--&gt; (SnailToken a -&gt; SnailToken a -&gt; SnailToken a)
--&gt; Ord (SnailToken a)
-SnailToken a -&gt; SnailToken a -&gt; Bool
-SnailToken a -&gt; SnailToken a -&gt; Ordering
-SnailToken a -&gt; SnailToken a -&gt; SnailToken a
+/= :: SnailfishToken a -&gt; SnailfishToken a -&gt; Bool
+$c/= :: forall a. Eq a =&gt; SnailfishToken a -&gt; SnailfishToken a -&gt; Bool
+== :: SnailfishToken a -&gt; SnailfishToken a -&gt; Bool
+$c== :: forall a. Eq a =&gt; SnailfishToken a -&gt; SnailfishToken a -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679081403"><span id="local-6989586621679081405"><span id="local-6989586621679081407"><span id="local-6989586621679081409"><span id="local-6989586621679081411"><span id="local-6989586621679081413"><span id="local-6989586621679081415"><span class="annot"><span class="annottext">Eq (SnailfishToken a)
+Eq (SnailfishToken a)
+-&gt; (SnailfishToken a -&gt; SnailfishToken a -&gt; Ordering)
+-&gt; (SnailfishToken a -&gt; SnailfishToken a -&gt; Bool)
+-&gt; (SnailfishToken a -&gt; SnailfishToken a -&gt; Bool)
+-&gt; (SnailfishToken a -&gt; SnailfishToken a -&gt; Bool)
+-&gt; (SnailfishToken a -&gt; SnailfishToken a -&gt; Bool)
+-&gt; (SnailfishToken a -&gt; SnailfishToken a -&gt; SnailfishToken a)
+-&gt; (SnailfishToken a -&gt; SnailfishToken a -&gt; SnailfishToken a)
+-&gt; Ord (SnailfishToken a)
+SnailfishToken a -&gt; SnailfishToken a -&gt; Bool
+SnailfishToken a -&gt; SnailfishToken a -&gt; Ordering
+SnailfishToken a -&gt; SnailfishToken a -&gt; SnailfishToken a
 forall a.
 Eq a
 -&gt; (a -&gt; a -&gt; Ordering)
@@ -48,30 +49,36 @@ Eq a
 -&gt; (a -&gt; a -&gt; a)
 -&gt; (a -&gt; a -&gt; a)
 -&gt; Ord a
-forall a. Ord a =&gt; Eq (SnailToken a)
-forall a. Ord a =&gt; SnailToken a -&gt; SnailToken a -&gt; Bool
-forall a. Ord a =&gt; SnailToken a -&gt; SnailToken a -&gt; Ordering
-forall a. Ord a =&gt; SnailToken a -&gt; SnailToken a -&gt; SnailToken a
-min :: SnailToken a -&gt; SnailToken a -&gt; SnailToken a
-$cmin :: forall a. Ord a =&gt; SnailToken a -&gt; SnailToken a -&gt; SnailToken a
-max :: SnailToken a -&gt; SnailToken a -&gt; SnailToken a
-$cmax :: forall a. Ord a =&gt; SnailToken a -&gt; SnailToken a -&gt; SnailToken a
-&gt;= :: SnailToken a -&gt; SnailToken a -&gt; Bool
-$c&gt;= :: forall a. Ord a =&gt; SnailToken a -&gt; SnailToken a -&gt; Bool
-&gt; :: SnailToken a -&gt; SnailToken a -&gt; Bool
-$c&gt; :: forall a. Ord a =&gt; SnailToken a -&gt; SnailToken a -&gt; Bool
-&lt;= :: SnailToken a -&gt; SnailToken a -&gt; Bool
-$c&lt;= :: forall a. Ord a =&gt; SnailToken a -&gt; SnailToken a -&gt; Bool
-&lt; :: SnailToken a -&gt; SnailToken a -&gt; Bool
-$c&lt; :: forall a. Ord a =&gt; SnailToken a -&gt; SnailToken a -&gt; Bool
-compare :: SnailToken a -&gt; SnailToken a -&gt; Ordering
-$ccompare :: forall a. Ord a =&gt; SnailToken a -&gt; SnailToken a -&gt; Ordering
-$cp1Ord :: forall a. Ord a =&gt; Eq (SnailToken a)
+forall a. Ord a =&gt; Eq (SnailfishToken a)
+forall a. Ord a =&gt; SnailfishToken a -&gt; SnailfishToken a -&gt; Bool
+forall a. Ord a =&gt; SnailfishToken a -&gt; SnailfishToken a -&gt; Ordering
+forall a.
+Ord a =&gt;
+SnailfishToken a -&gt; SnailfishToken a -&gt; SnailfishToken a
+min :: SnailfishToken a -&gt; SnailfishToken a -&gt; SnailfishToken a
+$cmin :: forall a.
+Ord a =&gt;
+SnailfishToken a -&gt; SnailfishToken a -&gt; SnailfishToken a
+max :: SnailfishToken a -&gt; SnailfishToken a -&gt; SnailfishToken a
+$cmax :: forall a.
+Ord a =&gt;
+SnailfishToken a -&gt; SnailfishToken a -&gt; SnailfishToken a
+&gt;= :: SnailfishToken a -&gt; SnailfishToken a -&gt; Bool
+$c&gt;= :: forall a. Ord a =&gt; SnailfishToken a -&gt; SnailfishToken a -&gt; Bool
+&gt; :: SnailfishToken a -&gt; SnailfishToken a -&gt; Bool
+$c&gt; :: forall a. Ord a =&gt; SnailfishToken a -&gt; SnailfishToken a -&gt; Bool
+&lt;= :: SnailfishToken a -&gt; SnailfishToken a -&gt; Bool
+$c&lt;= :: forall a. Ord a =&gt; SnailfishToken a -&gt; SnailfishToken a -&gt; Bool
+&lt; :: SnailfishToken a -&gt; SnailfishToken a -&gt; Bool
+$c&lt; :: forall a. Ord a =&gt; SnailfishToken a -&gt; SnailfishToken a -&gt; Bool
+compare :: SnailfishToken a -&gt; SnailfishToken a -&gt; Ordering
+$ccompare :: forall a. Ord a =&gt; SnailfishToken a -&gt; SnailfishToken a -&gt; Ordering
+$cp1Ord :: forall a. Ord a =&gt; Eq (SnailfishToken a)
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></span></span></span></span></span></span></span></span><span class="hs-special">)</span><span>
 </span><span id="line-20"></span><span>
-</span><span id="line-21"></span><span id="local-6989586621679081507"><span id="local-6989586621679081508"><span id="local-6989586621679081509"><span id="local-6989586621679081510"><span class="annot"><a href="Day18.html#parser"><span class="hs-identifier hs-type">parser</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">MonadParsec</span></span><span> </span><span class="annot"><a href="#local-6989586621679081510"><span class="hs-identifier hs-type">e</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081509"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081508"><span class="hs-identifier hs-type">m</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Token</span></span><span> </span><span class="annot"><a href="#local-6989586621679081509"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><span class="hs-glyph hs-type">~</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Char</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Num</span></span><span> </span><span class="annot"><a href="#local-6989586621679081507"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679081508"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day18.html#Snail"><span class="hs-identifier hs-type">Snail</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081507"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span></span></span></span></span><span>
-</span><span id="line-22"></span><span id="parser"><span class="annot"><span class="annottext">parser :: m (Snail a)
-</span><a href="Day18.html#parser"><span class="hs-identifier hs-var hs-var">parser</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">m Char -&gt; m Char -&gt; m (Snail a) -&gt; m (Snail a)
+</span><span id="line-21"></span><span id="local-6989586621679081507"><span id="local-6989586621679081508"><span id="local-6989586621679081509"><span id="local-6989586621679081510"><span class="annot"><a href="Day18.html#parser"><span class="hs-identifier hs-type">parser</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">MonadParsec</span></span><span> </span><span class="annot"><a href="#local-6989586621679081510"><span class="hs-identifier hs-type">e</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081509"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081508"><span class="hs-identifier hs-type">m</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Token</span></span><span> </span><span class="annot"><a href="#local-6989586621679081509"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><span class="hs-glyph hs-type">~</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Char</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Num</span></span><span> </span><span class="annot"><a href="#local-6989586621679081507"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679081508"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day18.html#Snailfish"><span class="hs-identifier hs-type">Snailfish</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081507"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span></span></span></span></span><span>
+</span><span id="line-22"></span><span id="parser"><span class="annot"><span class="annottext">parser :: m (Snailfish a)
+</span><a href="Day18.html#parser"><span class="hs-identifier hs-var hs-var">parser</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">m Char -&gt; m Char -&gt; m (Snailfish a) -&gt; m (Snailfish a)
 forall (m :: * -&gt; *) open close a.
 Applicative m =&gt;
 m open -&gt; m close -&gt; m a -&gt; m a
@@ -87,16 +94,19 @@ MonadParsec e s m =&gt;
 Token s -&gt; m (Token s)
 </span><span class="hs-identifier hs-var">single</span></span><span> </span><span class="annot"><span class="annottext">Char
 Token s
-</span><span class="hs-char">']'</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(m (Snail a) -&gt; m (Snail a)) -&gt; m (Snail a) -&gt; m (Snail a)
+</span><span class="hs-char">']'</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(m (Snailfish a) -&gt; m (Snailfish a))
+-&gt; m (Snailfish a) -&gt; m (Snailfish a)
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Either (Snail a) a -&gt; Either (Snail a) a -&gt; Snail a
-forall a. Either (Snail a) a -&gt; Either (Snail a) a -&gt; Snail a
-</span><a href="Day18.html#Snail"><span class="hs-identifier hs-var">Snail</span></a></span><span> </span><span class="annot"><span class="annottext">(Either (Snail a) a -&gt; Either (Snail a) a -&gt; Snail a)
--&gt; m (Either (Snail a) a) -&gt; m (Either (Snail a) a -&gt; Snail a)
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Either (Snailfish a) a -&gt; Either (Snailfish a) a -&gt; Snailfish a
+forall a.
+Either (Snailfish a) a -&gt; Either (Snailfish a) a -&gt; Snailfish a
+</span><a href="Day18.html#Snailfish"><span class="hs-identifier hs-var">Snailfish</span></a></span><span> </span><span class="annot"><span class="annottext">(Either (Snailfish a) a -&gt; Either (Snailfish a) a -&gt; Snailfish a)
+-&gt; m (Either (Snailfish a) a)
+-&gt; m (Either (Snailfish a) a -&gt; Snailfish a)
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
-</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">m (Either (Snail a) a)
-</span><a href="#local-6989586621679081399"><span class="hs-identifier hs-var">parser'</span></a></span><span> </span><span class="annot"><span class="annottext">m (Either (Snail a) a -&gt; Snail a)
--&gt; m Char -&gt; m (Either (Snail a) a -&gt; Snail a)
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">m (Either (Snailfish a) a)
+</span><a href="#local-6989586621679081399"><span class="hs-identifier hs-var">parser'</span></a></span><span> </span><span class="annot"><span class="annottext">m (Either (Snailfish a) a -&gt; Snailfish a)
+-&gt; m Char -&gt; m (Either (Snailfish a) a -&gt; Snailfish a)
 forall (f :: * -&gt; *) a b. Applicative f =&gt; f a -&gt; f b -&gt; f a
 </span><span class="hs-operator hs-var">&lt;*</span></span><span> </span><span class="annot"><span class="annottext">Token s -&gt; m (Token s)
 forall e s (m :: * -&gt; *).
@@ -104,15 +114,15 @@ MonadParsec e s m =&gt;
 Token s -&gt; m (Token s)
 </span><span class="hs-identifier hs-var">single</span></span><span> </span><span class="annot"><span class="annottext">Char
 Token s
-</span><span class="hs-char">','</span></span><span> </span><span class="annot"><span class="annottext">m (Either (Snail a) a -&gt; Snail a)
--&gt; m (Either (Snail a) a) -&gt; m (Snail a)
+</span><span class="hs-char">','</span></span><span> </span><span class="annot"><span class="annottext">m (Either (Snailfish a) a -&gt; Snailfish a)
+-&gt; m (Either (Snailfish a) a) -&gt; m (Snailfish a)
 forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
-</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">m (Either (Snail a) a)
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">m (Either (Snailfish a) a)
 </span><a href="#local-6989586621679081399"><span class="hs-identifier hs-var">parser'</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-23"></span><span>    </span><span id="local-6989586621679081399"><span class="annot"><span class="annottext">parser' :: m (Either (Snail a) a)
-</span><a href="#local-6989586621679081399"><span class="hs-identifier hs-var hs-var">parser'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; Either (Snail a) a
+</span><span id="line-23"></span><span>    </span><span id="local-6989586621679081399"><span class="annot"><span class="annottext">parser' :: m (Either (Snailfish a) a)
+</span><a href="#local-6989586621679081399"><span class="hs-identifier hs-var hs-var">parser'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; Either (Snailfish a) a
 forall a b. b -&gt; Either a b
-</span><span class="hs-identifier hs-var">Right</span></span><span> </span><span class="annot"><span class="annottext">(a -&gt; Either (Snail a) a) -&gt; m a -&gt; m (Either (Snail a) a)
+</span><span class="hs-identifier hs-var">Right</span></span><span> </span><span class="annot"><span class="annottext">(a -&gt; Either (Snailfish a) a) -&gt; m a -&gt; m (Either (Snailfish a) a)
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">m a -&gt; m a
 forall e s (m :: * -&gt; *) a. MonadParsec e s m =&gt; m a -&gt; m a
@@ -120,133 +130,155 @@ forall e s (m :: * -&gt; *) a. MonadParsec e s m =&gt; m a -&gt; m a
 forall e s (m :: * -&gt; *) a.
 (MonadParsec e s m, Token s ~ Char, Num a) =&gt;
 m a
-</span><span class="hs-identifier hs-var">decimal</span></span><span> </span><span class="annot"><span class="annottext">m (Either (Snail a) a)
--&gt; m (Either (Snail a) a) -&gt; m (Either (Snail a) a)
+</span><span class="hs-identifier hs-var">decimal</span></span><span> </span><span class="annot"><span class="annottext">m (Either (Snailfish a) a)
+-&gt; m (Either (Snailfish a) a) -&gt; m (Either (Snailfish a) a)
 forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
-</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">Snail a -&gt; Either (Snail a) a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">Snailfish a -&gt; Either (Snailfish a) a
 forall a b. a -&gt; Either a b
-</span><span class="hs-identifier hs-var">Left</span></span><span> </span><span class="annot"><span class="annottext">(Snail a -&gt; Either (Snail a) a)
--&gt; m (Snail a) -&gt; m (Either (Snail a) a)
+</span><span class="hs-identifier hs-var">Left</span></span><span> </span><span class="annot"><span class="annottext">(Snailfish a -&gt; Either (Snailfish a) a)
+-&gt; m (Snailfish a) -&gt; m (Either (Snailfish a) a)
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
-</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">m (Snail a)
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">m (Snailfish a)
 forall e s (m :: * -&gt; *) a.
 (MonadParsec e s m, Token s ~ Char, Num a) =&gt;
-m (Snail a)
+m (Snailfish a)
 </span><a href="Day18.html#parser"><span class="hs-identifier hs-var">parser</span></a></span><span>
 </span><span id="line-24"></span><span>
-</span><span id="line-25"></span><span class="annot"><a href="Day18.html#snailReduce"><span class="hs-identifier hs-type">snailReduce</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-keyword">forall</span><span> </span><span id="local-6989586621679081475"><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span></span><span class="hs-operator">.</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Integral</span></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Ord</span></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Day18.html#Snail"><span class="hs-identifier hs-type">Snail</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Day18.html#Snail"><span class="hs-identifier hs-type">Snail</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span>
-</span><span id="line-26"></span><span id="snailReduce"><span class="annot"><span class="annottext">snailReduce :: Snail a -&gt; Snail a
-</span><a href="Day18.html#snailReduce"><span class="hs-identifier hs-var hs-var">snailReduce</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe (Snail a) -&gt; Snail a
+</span><span id="line-25"></span><span class="annot"><a href="Day18.html#snailfishReduce"><span class="hs-identifier hs-type">snailfishReduce</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-keyword">forall</span><span> </span><span id="local-6989586621679081475"><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span></span><span class="hs-operator">.</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Integral</span></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Ord</span></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Day18.html#Snailfish"><span class="hs-identifier hs-type">Snailfish</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Day18.html#Snailfish"><span class="hs-identifier hs-type">Snailfish</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span>
+</span><span id="line-26"></span><span id="snailfishReduce"><span class="annot"><span class="annottext">snailfishReduce :: Snailfish a -&gt; Snailfish a
+</span><a href="Day18.html#snailfishReduce"><span class="hs-identifier hs-var hs-var">snailfishReduce</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe (Snailfish a) -&gt; Snailfish a
 forall a. HasCallStack =&gt; Maybe a -&gt; a
-</span><span class="hs-identifier hs-var">fromJust</span></span><span> </span><span class="annot"><span class="annottext">(Maybe (Snail a) -&gt; Snail a)
--&gt; (Snail a -&gt; Maybe (Snail a)) -&gt; Snail a -&gt; Snail a
+</span><span class="hs-identifier hs-var">fromJust</span></span><span> </span><span class="annot"><span class="annottext">(Maybe (Snailfish a) -&gt; Snailfish a)
+-&gt; (Snailfish a -&gt; Maybe (Snailfish a))
+-&gt; Snailfish a
+-&gt; Snailfish a
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Parsec Void [SnailToken a] (Snail a)
--&gt; [SnailToken a] -&gt; Maybe (Snail a)
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Parsec Void [SnailfishToken a] (Snailfish a)
+-&gt; [SnailfishToken a] -&gt; Maybe (Snailfish a)
 forall e s a. (Ord e, Stream s) =&gt; Parsec e s a -&gt; s -&gt; Maybe a
-</span><span class="hs-identifier hs-var">parseMaybe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Parsec Void [SnailToken a] (Snail a)
-</span><a href="#local-6989586621679081395"><span class="hs-identifier hs-var">tokenParser</span></a></span><span> </span><span class="annot"><span class="annottext">Parsec Void [SnailToken a] (Snail a)
--&gt; ParsecT Void [SnailToken a] Identity ()
--&gt; Parsec Void [SnailToken a] (Snail a)
+</span><span class="hs-identifier hs-var">parseMaybe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Parsec Void [SnailfishToken a] (Snailfish a)
+</span><a href="#local-6989586621679081395"><span class="hs-identifier hs-var">tokenParser</span></a></span><span> </span><span class="annot"><span class="annottext">Parsec Void [SnailfishToken a] (Snailfish a)
+-&gt; ParsecT Void [SnailfishToken a] Identity ()
+-&gt; Parsec Void [SnailfishToken a] (Snailfish a)
 forall (f :: * -&gt; *) a b. Applicative f =&gt; f a -&gt; f b -&gt; f a
-</span><span class="hs-operator hs-var">&lt;*</span></span><span> </span><span class="annot"><span class="annottext">ParsecT Void [SnailToken a] Identity ()
+</span><span class="hs-operator hs-var">&lt;*</span></span><span> </span><span class="annot"><span class="annottext">ParsecT Void [SnailfishToken a] Identity ()
 forall e s (m :: * -&gt; *). MonadParsec e s m =&gt; m ()
-</span><span class="hs-identifier hs-var">eof</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([SnailToken a] -&gt; Maybe (Snail a))
--&gt; (Snail a -&gt; [SnailToken a]) -&gt; Snail a -&gt; Maybe (Snail a)
+</span><span class="hs-identifier hs-var">eof</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([SnailfishToken a] -&gt; Maybe (Snailfish a))
+-&gt; (Snailfish a -&gt; [SnailfishToken a])
+-&gt; Snailfish a
+-&gt; Maybe (Snailfish a)
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; [SnailToken a] -&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Int
+-&gt; [SnailfishToken a] -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 </span><a href="#local-6989586621679081394"><span class="hs-identifier hs-var">explode</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><span class="hs-number">0</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">([SnailToken a] -&gt; [SnailToken a])
--&gt; (Snail a -&gt; [SnailToken a]) -&gt; Snail a -&gt; [SnailToken a]
+</span><span class="hs-number">0</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">([SnailfishToken a] -&gt; [SnailfishToken a])
+-&gt; (Snailfish a -&gt; [SnailfishToken a])
+-&gt; Snailfish a
+-&gt; [SnailfishToken a]
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Snail a -&gt; [SnailToken a]
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Snailfish a -&gt; [SnailfishToken a]
 </span><a href="#local-6989586621679081393"><span class="hs-identifier hs-var">flatten</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-27"></span><span>    </span><span class="annot"><a href="#local-6989586621679081395"><span class="hs-identifier hs-type">tokenParser</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parsec</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Void</span></span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#SnailToken"><span class="hs-identifier hs-type">SnailToken</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day18.html#Snail"><span class="hs-identifier hs-type">Snail</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-28"></span><span>    </span><span id="local-6989586621679081395"><span class="annot"><span class="annottext">tokenParser :: Parsec Void [SnailToken a] (Snail a)
-</span><a href="#local-6989586621679081395"><span class="hs-identifier hs-var hs-var">tokenParser</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ParsecT Void [SnailToken a] Identity (SnailToken a)
--&gt; ParsecT Void [SnailToken a] Identity (SnailToken a)
--&gt; Parsec Void [SnailToken a] (Snail a)
--&gt; Parsec Void [SnailToken a] (Snail a)
+</span><span id="line-27"></span><span>    </span><span class="annot"><a href="#local-6989586621679081395"><span class="hs-identifier hs-type">tokenParser</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Parsec</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Void</span></span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#SnailfishToken"><span class="hs-identifier hs-type">SnailfishToken</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day18.html#Snailfish"><span class="hs-identifier hs-type">Snailfish</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-28"></span><span>    </span><span id="local-6989586621679081395"><span class="annot"><span class="annottext">tokenParser :: Parsec Void [SnailfishToken a] (Snailfish a)
+</span><a href="#local-6989586621679081395"><span class="hs-identifier hs-var hs-var">tokenParser</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ParsecT Void [SnailfishToken a] Identity (SnailfishToken a)
+-&gt; ParsecT Void [SnailfishToken a] Identity (SnailfishToken a)
+-&gt; Parsec Void [SnailfishToken a] (Snailfish a)
+-&gt; Parsec Void [SnailfishToken a] (Snailfish a)
 forall (m :: * -&gt; *) open close a.
 Applicative m =&gt;
 m open -&gt; m close -&gt; m a -&gt; m a
-</span><span class="hs-identifier hs-var">between</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Token [SnailToken a]
--&gt; ParsecT Void [SnailToken a] Identity (Token [SnailToken a])
-forall e s (m :: * -&gt; *).
-MonadParsec e s m =&gt;
-Token s -&gt; m (Token s)
-</span><span class="hs-identifier hs-var">single</span></span><span> </span><span class="annot"><span class="annottext">Token [SnailToken a]
-forall a. SnailToken a
-</span><a href="Day18.html#Open"><span class="hs-identifier hs-var">Open</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Token [SnailToken a]
--&gt; ParsecT Void [SnailToken a] Identity (Token [SnailToken a])
-forall e s (m :: * -&gt; *).
-MonadParsec e s m =&gt;
-Token s -&gt; m (Token s)
-</span><span class="hs-identifier hs-var">single</span></span><span> </span><span class="annot"><span class="annottext">Token [SnailToken a]
-forall a. SnailToken a
-</span><a href="Day18.html#Close"><span class="hs-identifier hs-var">Close</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Parsec Void [SnailToken a] (Snail a)
- -&gt; Parsec Void [SnailToken a] (Snail a))
--&gt; Parsec Void [SnailToken a] (Snail a)
--&gt; Parsec Void [SnailToken a] (Snail a)
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Either (Snail a) a -&gt; Either (Snail a) a -&gt; Snail a
-forall a. Either (Snail a) a -&gt; Either (Snail a) a -&gt; Snail a
-</span><a href="Day18.html#Snail"><span class="hs-identifier hs-var">Snail</span></a></span><span> </span><span class="annot"><span class="annottext">(Either (Snail a) a -&gt; Either (Snail a) a -&gt; Snail a)
--&gt; ParsecT Void [SnailToken a] Identity (Either (Snail a) a)
+</span><span class="hs-identifier hs-var">between</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Token [SnailfishToken a]
 -&gt; ParsecT
-     Void [SnailToken a] Identity (Either (Snail a) a -&gt; Snail a)
+     Void [SnailfishToken a] Identity (Token [SnailfishToken a])
+forall e s (m :: * -&gt; *).
+MonadParsec e s m =&gt;
+Token s -&gt; m (Token s)
+</span><span class="hs-identifier hs-var">single</span></span><span> </span><span class="annot"><span class="annottext">Token [SnailfishToken a]
+forall a. SnailfishToken a
+</span><a href="Day18.html#Open"><span class="hs-identifier hs-var">Open</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Token [SnailfishToken a]
+-&gt; ParsecT
+     Void [SnailfishToken a] Identity (Token [SnailfishToken a])
+forall e s (m :: * -&gt; *).
+MonadParsec e s m =&gt;
+Token s -&gt; m (Token s)
+</span><span class="hs-identifier hs-var">single</span></span><span> </span><span class="annot"><span class="annottext">Token [SnailfishToken a]
+forall a. SnailfishToken a
+</span><a href="Day18.html#Close"><span class="hs-identifier hs-var">Close</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Parsec Void [SnailfishToken a] (Snailfish a)
+ -&gt; Parsec Void [SnailfishToken a] (Snailfish a))
+-&gt; Parsec Void [SnailfishToken a] (Snailfish a)
+-&gt; Parsec Void [SnailfishToken a] (Snailfish a)
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Either (Snailfish a) a -&gt; Either (Snailfish a) a -&gt; Snailfish a
+forall a.
+Either (Snailfish a) a -&gt; Either (Snailfish a) a -&gt; Snailfish a
+</span><a href="Day18.html#Snailfish"><span class="hs-identifier hs-var">Snailfish</span></a></span><span> </span><span class="annot"><span class="annottext">(Either (Snailfish a) a -&gt; Either (Snailfish a) a -&gt; Snailfish a)
+-&gt; ParsecT
+     Void [SnailfishToken a] Identity (Either (Snailfish a) a)
+-&gt; ParsecT
+     Void
+     [SnailfishToken a]
+     Identity
+     (Either (Snailfish a) a -&gt; Snailfish a)
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
-</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">ParsecT Void [SnailToken a] Identity (Either (Snail a) a)
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">ParsecT Void [SnailfishToken a] Identity (Either (Snailfish a) a)
 </span><a href="#local-6989586621679081392"><span class="hs-identifier hs-var">tokenParser'</span></a></span><span> </span><span class="annot"><span class="annottext">ParsecT
-  Void [SnailToken a] Identity (Either (Snail a) a -&gt; Snail a)
--&gt; ParsecT Void [SnailToken a] Identity (Either (Snail a) a)
--&gt; Parsec Void [SnailToken a] (Snail a)
+  Void
+  [SnailfishToken a]
+  Identity
+  (Either (Snailfish a) a -&gt; Snailfish a)
+-&gt; ParsecT
+     Void [SnailfishToken a] Identity (Either (Snailfish a) a)
+-&gt; Parsec Void [SnailfishToken a] (Snailfish a)
 forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
-</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">ParsecT Void [SnailToken a] Identity (Either (Snail a) a)
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="annot"><span class="annottext">ParsecT Void [SnailfishToken a] Identity (Either (Snailfish a) a)
 </span><a href="#local-6989586621679081392"><span class="hs-identifier hs-var">tokenParser'</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-29"></span><span>        </span><span id="local-6989586621679081392"><span class="annot"><span class="annottext">tokenParser' :: ParsecT Void [SnailToken a] Identity (Either (Snail a) a)
-</span><a href="#local-6989586621679081392"><span class="hs-identifier hs-var hs-var">tokenParser'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; Either (Snail a) a
+</span><span id="line-29"></span><span>        </span><span id="local-6989586621679081392"><span class="annot"><span class="annottext">tokenParser' :: ParsecT Void [SnailfishToken a] Identity (Either (Snailfish a) a)
+</span><a href="#local-6989586621679081392"><span class="hs-identifier hs-var hs-var">tokenParser'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; Either (Snailfish a) a
 forall a b. b -&gt; Either a b
-</span><span class="hs-identifier hs-var">Right</span></span><span> </span><span class="annot"><span class="annottext">(a -&gt; Either (Snail a) a)
--&gt; ParsecT Void [SnailToken a] Identity a
--&gt; ParsecT Void [SnailToken a] Identity (Either (Snail a) a)
+</span><span class="hs-identifier hs-var">Right</span></span><span> </span><span class="annot"><span class="annottext">(a -&gt; Either (Snailfish a) a)
+-&gt; ParsecT Void [SnailfishToken a] Identity a
+-&gt; ParsecT
+     Void [SnailfishToken a] Identity (Either (Snailfish a) a)
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
-</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">ParsecT Void [SnailToken a] Identity a
--&gt; ParsecT Void [SnailToken a] Identity a
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">ParsecT Void [SnailfishToken a] Identity a
+-&gt; ParsecT Void [SnailfishToken a] Identity a
 forall e s (m :: * -&gt; *) a. MonadParsec e s m =&gt; m a -&gt; m a
-</span><span class="hs-identifier hs-var">try</span></span><span> </span><span class="annot"><span class="annottext">ParsecT Void [SnailToken a] Identity a
-</span><a href="#local-6989586621679081391"><span class="hs-identifier hs-var">value</span></a></span><span> </span><span class="annot"><span class="annottext">ParsecT Void [SnailToken a] Identity (Either (Snail a) a)
--&gt; ParsecT Void [SnailToken a] Identity (Either (Snail a) a)
--&gt; ParsecT Void [SnailToken a] Identity (Either (Snail a) a)
+</span><span class="hs-identifier hs-var">try</span></span><span> </span><span class="annot"><span class="annottext">ParsecT Void [SnailfishToken a] Identity a
+</span><a href="#local-6989586621679081391"><span class="hs-identifier hs-var">value</span></a></span><span> </span><span class="annot"><span class="annottext">ParsecT Void [SnailfishToken a] Identity (Either (Snailfish a) a)
+-&gt; ParsecT
+     Void [SnailfishToken a] Identity (Either (Snailfish a) a)
+-&gt; ParsecT
+     Void [SnailfishToken a] Identity (Either (Snailfish a) a)
 forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
-</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">Snail a -&gt; Either (Snail a) a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">Snailfish a -&gt; Either (Snailfish a) a
 forall a b. a -&gt; Either a b
-</span><span class="hs-identifier hs-var">Left</span></span><span> </span><span class="annot"><span class="annottext">(Snail a -&gt; Either (Snail a) a)
--&gt; Parsec Void [SnailToken a] (Snail a)
--&gt; ParsecT Void [SnailToken a] Identity (Either (Snail a) a)
+</span><span class="hs-identifier hs-var">Left</span></span><span> </span><span class="annot"><span class="annottext">(Snailfish a -&gt; Either (Snailfish a) a)
+-&gt; Parsec Void [SnailfishToken a] (Snailfish a)
+-&gt; ParsecT
+     Void [SnailfishToken a] Identity (Either (Snailfish a) a)
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
-</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">Parsec Void [SnailToken a] (Snail a)
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">Parsec Void [SnailfishToken a] (Snailfish a)
 </span><a href="#local-6989586621679081395"><span class="hs-identifier hs-var">tokenParser</span></a></span><span>
-</span><span id="line-30"></span><span>        </span><span id="local-6989586621679081391"><span class="annot"><span class="annottext">value :: ParsecT Void [SnailToken a] Identity a
-</span><a href="#local-6989586621679081391"><span class="hs-identifier hs-var hs-var">value</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((SnailToken a -&gt; Maybe a)
- -&gt; Set (ErrorItem (Token [SnailToken a]))
- -&gt; ParsecT Void [SnailToken a] Identity a)
--&gt; Set (ErrorItem (Token [SnailToken a]))
--&gt; (SnailToken a -&gt; Maybe a)
--&gt; ParsecT Void [SnailToken a] Identity a
+</span><span id="line-30"></span><span>        </span><span id="local-6989586621679081391"><span class="annot"><span class="annottext">value :: ParsecT Void [SnailfishToken a] Identity a
+</span><a href="#local-6989586621679081391"><span class="hs-identifier hs-var hs-var">value</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((SnailfishToken a -&gt; Maybe a)
+ -&gt; Set (ErrorItem (Token [SnailfishToken a]))
+ -&gt; ParsecT Void [SnailfishToken a] Identity a)
+-&gt; Set (ErrorItem (Token [SnailfishToken a]))
+-&gt; (SnailfishToken a -&gt; Maybe a)
+-&gt; ParsecT Void [SnailfishToken a] Identity a
 forall a b c. (a -&gt; b -&gt; c) -&gt; b -&gt; a -&gt; c
-</span><span class="hs-identifier hs-var">flip</span></span><span> </span><span class="annot"><span class="annottext">(SnailToken a -&gt; Maybe a)
--&gt; Set (ErrorItem (Token [SnailToken a]))
--&gt; ParsecT Void [SnailToken a] Identity a
+</span><span class="hs-identifier hs-var">flip</span></span><span> </span><span class="annot"><span class="annottext">(SnailfishToken a -&gt; Maybe a)
+-&gt; Set (ErrorItem (Token [SnailfishToken a]))
+-&gt; ParsecT Void [SnailfishToken a] Identity a
 forall e s (m :: * -&gt; *) a.
 MonadParsec e s m =&gt;
 (Token s -&gt; Maybe a) -&gt; Set (ErrorItem (Token s)) -&gt; m a
-</span><span class="hs-identifier hs-var">token</span></span><span> </span><span class="annot"><span class="annottext">Set (ErrorItem (Token [SnailToken a]))
+</span><span class="hs-identifier hs-var">token</span></span><span> </span><span class="annot"><span class="annottext">Set (ErrorItem (Token [SnailfishToken a]))
 forall a. Set a
-</span><span class="hs-identifier hs-var">Set.empty</span></span><span> </span><span class="annot"><span class="annottext">((SnailToken a -&gt; Maybe a)
- -&gt; ParsecT Void [SnailToken a] Identity a)
--&gt; (SnailToken a -&gt; Maybe a)
--&gt; ParsecT Void [SnailToken a] Identity a
+</span><span class="hs-identifier hs-var">Set.empty</span></span><span> </span><span class="annot"><span class="annottext">((SnailfishToken a -&gt; Maybe a)
+ -&gt; ParsecT Void [SnailfishToken a] Identity a)
+-&gt; (SnailfishToken a -&gt; Maybe a)
+-&gt; ParsecT Void [SnailfishToken a] Identity a
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-glyph">\</span><span class="hs-glyph">case</span><span>
 </span><span id="line-31"></span><span>            </span><span class="annot"><a href="Day18.html#Value"><span class="hs-identifier hs-type">Value</span></a></span><span> </span><span id="local-6989586621679081389"><span class="annot"><span class="annottext">a
@@ -254,105 +286,113 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679081389"><span class="hs-identifier hs-var">a</span></a></span><span>
-</span><span id="line-32"></span><span>            </span><span class="annot"><span class="annottext">SnailToken a
+</span><span id="line-32"></span><span>            </span><span class="annot"><span class="annottext">SnailfishToken a
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Maybe a
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-33"></span><span>    </span><span class="annot"><a href="#local-6989586621679081393"><span class="hs-identifier hs-type">flatten</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Day18.html#Snail"><span class="hs-identifier hs-type">Snail</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#SnailToken"><span class="hs-identifier hs-type">SnailToken</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-34"></span><span>    </span><span id="local-6989586621679081393"><span class="annot"><span class="annottext">flatten :: Snail a -&gt; [SnailToken a]
-</span><a href="#local-6989586621679081393"><span class="hs-identifier hs-var hs-var">flatten</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day18.html#Snail"><span class="hs-identifier hs-type">Snail</span></a></span><span> </span><span id="local-6989586621679081388"><span class="annot"><span class="annottext">Either (Snail a) a
-</span><a href="#local-6989586621679081388"><span class="hs-identifier hs-var">lhs</span></a></span></span><span> </span><span id="local-6989586621679081387"><span class="annot"><span class="annottext">Either (Snail a) a
-</span><a href="#local-6989586621679081387"><span class="hs-identifier hs-var">rhs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SnailToken a
-forall a. SnailToken a
-</span><a href="Day18.html#Open"><span class="hs-identifier hs-var">Open</span></a></span><span> </span><span class="annot"><span class="annottext">SnailToken a -&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><span id="line-33"></span><span>    </span><span class="annot"><a href="#local-6989586621679081393"><span class="hs-identifier hs-type">flatten</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Day18.html#Snailfish"><span class="hs-identifier hs-type">Snailfish</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#SnailfishToken"><span class="hs-identifier hs-type">SnailfishToken</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-34"></span><span>    </span><span id="local-6989586621679081393"><span class="annot"><span class="annottext">flatten :: Snailfish a -&gt; [SnailfishToken a]
+</span><a href="#local-6989586621679081393"><span class="hs-identifier hs-var hs-var">flatten</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day18.html#Snailfish"><span class="hs-identifier hs-type">Snailfish</span></a></span><span> </span><span id="local-6989586621679081388"><span class="annot"><span class="annottext">Either (Snailfish a) a
+</span><a href="#local-6989586621679081388"><span class="hs-identifier hs-var">lhs</span></a></span></span><span> </span><span id="local-6989586621679081387"><span class="annot"><span class="annottext">Either (Snailfish a) a
+</span><a href="#local-6989586621679081387"><span class="hs-identifier hs-var">rhs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SnailfishToken a
+forall a. SnailfishToken a
+</span><a href="Day18.html#Open"><span class="hs-identifier hs-var">Open</span></a></span><span> </span><span class="annot"><span class="annottext">SnailfishToken a -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 forall a. a -&gt; [a] -&gt; [a]
-</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">Either (Snail a) a -&gt; [SnailToken a]
-</span><a href="#local-6989586621679081386"><span class="hs-identifier hs-var">flatten'</span></a></span><span> </span><span class="annot"><span class="annottext">Either (Snail a) a
-</span><a href="#local-6989586621679081388"><span class="hs-identifier hs-var">lhs</span></a></span><span> </span><span class="annot"><span class="annottext">[SnailToken a] -&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">Either (Snailfish a) a -&gt; [SnailfishToken a]
+</span><a href="#local-6989586621679081386"><span class="hs-identifier hs-var">flatten'</span></a></span><span> </span><span class="annot"><span class="annottext">Either (Snailfish a) a
+</span><a href="#local-6989586621679081388"><span class="hs-identifier hs-var">lhs</span></a></span><span> </span><span class="annot"><span class="annottext">[SnailfishToken a] -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Either (Snail a) a -&gt; [SnailToken a]
-</span><a href="#local-6989586621679081386"><span class="hs-identifier hs-var">flatten'</span></a></span><span> </span><span class="annot"><span class="annottext">Either (Snail a) a
-</span><a href="#local-6989586621679081387"><span class="hs-identifier hs-var">rhs</span></a></span><span> </span><span class="annot"><span class="annottext">[SnailToken a] -&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Either (Snailfish a) a -&gt; [SnailfishToken a]
+</span><a href="#local-6989586621679081386"><span class="hs-identifier hs-var">flatten'</span></a></span><span> </span><span class="annot"><span class="annottext">Either (Snailfish a) a
+</span><a href="#local-6989586621679081387"><span class="hs-identifier hs-var">rhs</span></a></span><span> </span><span class="annot"><span class="annottext">[SnailfishToken a] -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">SnailToken a
-forall a. SnailToken a
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">SnailfishToken a
+forall a. SnailfishToken a
 </span><a href="Day18.html#Close"><span class="hs-identifier hs-var">Close</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-35"></span><span>        </span><span id="local-6989586621679081386"><span class="annot"><span class="annottext">flatten' :: Either (Snail a) a -&gt; [SnailToken a]
-</span><a href="#local-6989586621679081386"><span class="hs-identifier hs-var hs-var">flatten'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Snail a -&gt; [SnailToken a])
--&gt; (a -&gt; [SnailToken a]) -&gt; Either (Snail a) a -&gt; [SnailToken a]
+</span><span id="line-35"></span><span>        </span><span id="local-6989586621679081386"><span class="annot"><span class="annottext">flatten' :: Either (Snailfish a) a -&gt; [SnailfishToken a]
+</span><a href="#local-6989586621679081386"><span class="hs-identifier hs-var hs-var">flatten'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Snailfish a -&gt; [SnailfishToken a])
+-&gt; (a -&gt; [SnailfishToken a])
+-&gt; Either (Snailfish a) a
+-&gt; [SnailfishToken a]
 forall a c b. (a -&gt; c) -&gt; (b -&gt; c) -&gt; Either a b -&gt; c
-</span><span class="hs-identifier hs-var">either</span></span><span> </span><span class="annot"><span class="annottext">Snail a -&gt; [SnailToken a]
-</span><a href="#local-6989586621679081393"><span class="hs-identifier hs-var">flatten</span></a></span><span> </span><span class="annot"><span class="annottext">((a -&gt; [SnailToken a]) -&gt; Either (Snail a) a -&gt; [SnailToken a])
--&gt; (a -&gt; [SnailToken a]) -&gt; Either (Snail a) a -&gt; [SnailToken a]
+</span><span class="hs-identifier hs-var">either</span></span><span> </span><span class="annot"><span class="annottext">Snailfish a -&gt; [SnailfishToken a]
+</span><a href="#local-6989586621679081393"><span class="hs-identifier hs-var">flatten</span></a></span><span> </span><span class="annot"><span class="annottext">((a -&gt; [SnailfishToken a])
+ -&gt; Either (Snailfish a) a -&gt; [SnailfishToken a])
+-&gt; (a -&gt; [SnailfishToken a])
+-&gt; Either (Snailfish a) a
+-&gt; [SnailfishToken a]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SnailToken a -&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SnailfishToken a -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 forall a. a -&gt; [a] -&gt; [a]
-</span><span class="hs-glyph hs-var">:</span></span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(SnailToken a -&gt; [SnailToken a])
--&gt; (a -&gt; SnailToken a) -&gt; a -&gt; [SnailToken a]
+</span><span class="hs-glyph hs-var">:</span></span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(SnailfishToken a -&gt; [SnailfishToken a])
+-&gt; (a -&gt; SnailfishToken a) -&gt; a -&gt; [SnailfishToken a]
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; SnailToken a
-forall a. a -&gt; SnailToken a
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; SnailfishToken a
+forall a. a -&gt; SnailfishToken a
 </span><a href="Day18.html#Value"><span class="hs-identifier hs-var">Value</span></a></span><span>
-</span><span id="line-36"></span><span>    </span><span class="annot"><a href="#local-6989586621679081394"><span class="hs-identifier hs-type">explode</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#SnailToken"><span class="hs-identifier hs-type">SnailToken</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#SnailToken"><span class="hs-identifier hs-type">SnailToken</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#SnailToken"><span class="hs-identifier hs-type">SnailToken</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-37"></span><span>    </span><span id="local-6989586621679081394"><span class="annot"><span class="annottext">explode :: Int -&gt; [SnailToken a] -&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><span id="line-36"></span><span>    </span><span class="annot"><a href="#local-6989586621679081394"><span class="hs-identifier hs-type">explode</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#SnailfishToken"><span class="hs-identifier hs-type">SnailfishToken</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#SnailfishToken"><span class="hs-identifier hs-type">SnailfishToken</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#SnailfishToken"><span class="hs-identifier hs-type">SnailfishToken</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-37"></span><span>    </span><span id="local-6989586621679081394"><span class="annot"><span class="annottext">explode :: Int
+-&gt; [SnailfishToken a] -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 </span><a href="#local-6989586621679081394"><span class="hs-identifier hs-var hs-var">explode</span></a></span></span><span> </span><span id="local-6989586621679081384"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679081384"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679081383"><span class="annot"><span class="annottext">[SnailToken a]
-</span><a href="#local-6989586621679081383"><span class="hs-identifier hs-var">pre</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SnailToken a
+</span><a href="#local-6989586621679081384"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679081383"><span class="annot"><span class="annottext">[SnailfishToken a]
+</span><a href="#local-6989586621679081383"><span class="hs-identifier hs-var">pre</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SnailfishToken a
 </span><a href="Day18.html#Open"><span class="hs-identifier hs-var">Open</span></a></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span class="annot"><a href="Day18.html#Value"><span class="hs-identifier hs-type">Value</span></a></span><span> </span><span id="local-6989586621679081382"><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679081382"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span class="annot"><a href="Day18.html#Value"><span class="hs-identifier hs-type">Value</span></a></span><span> </span><span id="local-6989586621679081381"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679081381"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span class="annot"><span class="annottext">SnailToken a
-</span><a href="Day18.html#Close"><span class="hs-identifier hs-var">Close</span></a></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679081380"><span class="annot"><span class="annottext">[SnailToken a]
+</span><a href="#local-6989586621679081381"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span class="annot"><span class="annottext">SnailfishToken a
+</span><a href="Day18.html#Close"><span class="hs-identifier hs-var">Close</span></a></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679081380"><span class="annot"><span class="annottext">[SnailfishToken a]
 </span><a href="#local-6989586621679081380"><span class="hs-identifier hs-var">post</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Int
 </span><a href="#local-6989586621679081384"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
 forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">&gt;=</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><span class="hs-number">4</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; [SnailToken a] -&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><span class="hs-number">4</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
+-&gt; [SnailfishToken a] -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 </span><a href="#local-6989586621679081394"><span class="hs-identifier hs-var">explode</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><span class="hs-number">0</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">([SnailToken a] -&gt; [SnailToken a])
--&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><span class="hs-number">0</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">([SnailfishToken a] -&gt; [SnailfishToken a])
+-&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
-</span><span id="line-38"></span><span>        </span><span class="annot"><span class="annottext">[SnailToken a] -&gt; [SnailToken a]
+</span><span id="line-38"></span><span>        </span><span class="annot"><span class="annottext">[SnailfishToken a] -&gt; [SnailfishToken a]
 forall a. [a] -&gt; [a]
-</span><span class="hs-identifier hs-var">reverse</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(a -&gt; a) -&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><span class="hs-identifier hs-var">reverse</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(a -&gt; a) -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 </span><a href="#local-6989586621679081378"><span class="hs-identifier hs-var">modifyFirstValue</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679081382"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[SnailToken a]
-</span><a href="#local-6989586621679081383"><span class="hs-identifier hs-var">pre</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[SnailToken a] -&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><a href="#local-6989586621679081382"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[SnailfishToken a]
+</span><a href="#local-6989586621679081383"><span class="hs-identifier hs-var">pre</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[SnailfishToken a] -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; SnailToken a
-forall a. a -&gt; SnailToken a
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; SnailfishToken a
+forall a. a -&gt; SnailfishToken a
 </span><a href="Day18.html#Value"><span class="hs-identifier hs-var">Value</span></a></span><span> </span><span class="annot"><span class="annottext">a
-</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">SnailToken a -&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">SnailfishToken a -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 forall a. a -&gt; [a] -&gt; [a]
-</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">(a -&gt; a) -&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">(a -&gt; a) -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 </span><a href="#local-6989586621679081378"><span class="hs-identifier hs-var">modifyFirstValue</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679081381"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[SnailToken a]
+</span><a href="#local-6989586621679081381"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[SnailfishToken a]
 </span><a href="#local-6989586621679081380"><span class="hs-identifier hs-var">post</span></a></span><span>
 </span><span id="line-39"></span><span>    </span><span class="annot"><a href="#local-6989586621679081394"><span class="hs-identifier hs-var">explode</span></a></span><span> </span><span id="local-6989586621679081376"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679081376"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679081375"><span class="annot"><span class="annottext">[SnailToken a]
-</span><a href="#local-6989586621679081375"><span class="hs-identifier hs-var">pre</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679081374"><span class="annot"><span class="annottext">SnailToken a
-</span><a href="#local-6989586621679081374"><span class="hs-identifier hs-var">cur</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679081373"><span class="annot"><span class="annottext">[SnailToken a]
-</span><a href="#local-6989586621679081373"><span class="hs-identifier hs-var">post</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; [SnailToken a] -&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><a href="#local-6989586621679081376"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679081375"><span class="annot"><span class="annottext">[SnailfishToken a]
+</span><a href="#local-6989586621679081375"><span class="hs-identifier hs-var">pre</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679081374"><span class="annot"><span class="annottext">SnailfishToken a
+</span><a href="#local-6989586621679081374"><span class="hs-identifier hs-var">cur</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679081373"><span class="annot"><span class="annottext">[SnailfishToken a]
+</span><a href="#local-6989586621679081373"><span class="hs-identifier hs-var">post</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
+-&gt; [SnailfishToken a] -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 </span><a href="#local-6989586621679081394"><span class="hs-identifier hs-var">explode</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679081372"><span class="hs-identifier hs-var">n'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SnailToken a
-</span><a href="#local-6989586621679081374"><span class="hs-identifier hs-var">cur</span></a></span><span> </span><span class="annot"><span class="annottext">SnailToken a -&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><a href="#local-6989586621679081372"><span class="hs-identifier hs-var">n'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SnailfishToken a
+</span><a href="#local-6989586621679081374"><span class="hs-identifier hs-var">cur</span></a></span><span> </span><span class="annot"><span class="annottext">SnailfishToken a -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 forall a. a -&gt; [a] -&gt; [a]
-</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[SnailToken a]
-</span><a href="#local-6989586621679081375"><span class="hs-identifier hs-var">pre</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[SnailToken a]
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[SnailfishToken a]
+</span><a href="#local-6989586621679081375"><span class="hs-identifier hs-var">pre</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[SnailfishToken a]
 </span><a href="#local-6989586621679081373"><span class="hs-identifier hs-var">post</span></a></span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-40"></span><span>        </span><span id="local-6989586621679081372"><span class="annot"><span class="annottext">n' :: Int
-</span><a href="#local-6989586621679081372"><span class="hs-identifier hs-var hs-var">n'</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">SnailToken a
-</span><a href="Day18.html#Open"><span class="hs-identifier hs-var">Open</span></a></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">SnailToken a
+</span><a href="#local-6989586621679081372"><span class="hs-identifier hs-var hs-var">n'</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">SnailfishToken a
+</span><a href="Day18.html#Open"><span class="hs-identifier hs-var">Open</span></a></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">SnailfishToken a
 </span><a href="#local-6989586621679081374"><span class="hs-identifier hs-var">cur</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
 </span><a href="#local-6989586621679081376"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><span class="hs-number">1</span></span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">SnailToken a
-</span><a href="Day18.html#Close"><span class="hs-identifier hs-var">Close</span></a></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">SnailToken a
+</span><span class="hs-number">1</span></span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">SnailfishToken a
+</span><a href="Day18.html#Close"><span class="hs-identifier hs-var">Close</span></a></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">SnailfishToken a
 </span><a href="#local-6989586621679081374"><span class="hs-identifier hs-var">cur</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
 </span><a href="#local-6989586621679081376"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
@@ -361,74 +401,75 @@ forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-identifier hs-var">otherwise</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
 </span><a href="#local-6989586621679081376"><span class="hs-identifier hs-var">n</span></a></span><span>
 </span><span id="line-41"></span><span>    </span><span class="annot"><a href="#local-6989586621679081394"><span class="hs-identifier hs-var">explode</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679081371"><span class="annot"><span class="annottext">[SnailToken a]
-</span><a href="#local-6989586621679081371"><span class="hs-identifier hs-var">pre</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[SnailToken a] -&gt; [SnailToken a] -&gt; [SnailToken a]
-</span><a href="#local-6989586621679081370"><span class="hs-identifier hs-var">split</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">([SnailToken a] -&gt; [SnailToken a])
--&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679081371"><span class="annot"><span class="annottext">[SnailfishToken a]
+</span><a href="#local-6989586621679081371"><span class="hs-identifier hs-var">pre</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[SnailfishToken a] -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
+</span><a href="#local-6989586621679081370"><span class="hs-identifier hs-var">split</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">([SnailfishToken a] -&gt; [SnailfishToken a])
+-&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[SnailToken a] -&gt; [SnailToken a]
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[SnailfishToken a] -&gt; [SnailfishToken a]
 forall a. [a] -&gt; [a]
-</span><span class="hs-identifier hs-var">reverse</span></span><span> </span><span class="annot"><span class="annottext">[SnailToken a]
+</span><span class="hs-identifier hs-var">reverse</span></span><span> </span><span class="annot"><span class="annottext">[SnailfishToken a]
 </span><a href="#local-6989586621679081371"><span class="hs-identifier hs-var">pre</span></a></span><span>
-</span><span id="line-42"></span><span>    </span><span class="annot"><a href="#local-6989586621679081378"><span class="hs-identifier hs-type">modifyFirstValue</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#SnailToken"><span class="hs-identifier hs-type">SnailToken</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#SnailToken"><span class="hs-identifier hs-type">SnailToken</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-43"></span><span>    </span><span id="local-6989586621679081378"><span class="annot"><span class="annottext">modifyFirstValue :: (a -&gt; a) -&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><span id="line-42"></span><span>    </span><span class="annot"><a href="#local-6989586621679081378"><span class="hs-identifier hs-type">modifyFirstValue</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#SnailfishToken"><span class="hs-identifier hs-type">SnailfishToken</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#SnailfishToken"><span class="hs-identifier hs-type">SnailfishToken</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-43"></span><span>    </span><span id="local-6989586621679081378"><span class="annot"><span class="annottext">modifyFirstValue :: (a -&gt; a) -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 </span><a href="#local-6989586621679081378"><span class="hs-identifier hs-var hs-var">modifyFirstValue</span></a></span></span><span> </span><span id="local-6989586621679081369"><span class="annot"><span class="annottext">a -&gt; a
 </span><a href="#local-6989586621679081369"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day18.html#Value"><span class="hs-identifier hs-type">Value</span></a></span><span> </span><span id="local-6989586621679081368"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679081368"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679081367"><span class="annot"><span class="annottext">[SnailToken a]
-</span><a href="#local-6989586621679081367"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; SnailToken a
-forall a. a -&gt; SnailToken a
+</span><a href="#local-6989586621679081368"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679081367"><span class="annot"><span class="annottext">[SnailfishToken a]
+</span><a href="#local-6989586621679081367"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; SnailfishToken a
+forall a. a -&gt; SnailfishToken a
 </span><a href="Day18.html#Value"><span class="hs-identifier hs-var">Value</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; a
 </span><a href="#local-6989586621679081369"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679081368"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">SnailToken a -&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><a href="#local-6989586621679081368"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">SnailfishToken a -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 forall a. a -&gt; [a] -&gt; [a]
-</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[SnailToken a]
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[SnailfishToken a]
 </span><a href="#local-6989586621679081367"><span class="hs-identifier hs-var">rest</span></a></span><span>
 </span><span id="line-44"></span><span>    </span><span class="annot"><a href="#local-6989586621679081378"><span class="hs-identifier hs-var">modifyFirstValue</span></a></span><span> </span><span id="local-6989586621679081366"><span class="annot"><span class="annottext">a -&gt; a
-</span><a href="#local-6989586621679081366"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679081365"><span class="annot"><span class="annottext">SnailToken a
-</span><a href="#local-6989586621679081365"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679081364"><span class="annot"><span class="annottext">[SnailToken a]
-</span><a href="#local-6989586621679081364"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SnailToken a
-</span><a href="#local-6989586621679081365"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">SnailToken a -&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><a href="#local-6989586621679081366"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679081365"><span class="annot"><span class="annottext">SnailfishToken a
+</span><a href="#local-6989586621679081365"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679081364"><span class="annot"><span class="annottext">[SnailfishToken a]
+</span><a href="#local-6989586621679081364"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SnailfishToken a
+</span><a href="#local-6989586621679081365"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">SnailfishToken a -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 forall a. a -&gt; [a] -&gt; [a]
-</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">(a -&gt; a) -&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">(a -&gt; a) -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 </span><a href="#local-6989586621679081378"><span class="hs-identifier hs-var">modifyFirstValue</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a
-</span><a href="#local-6989586621679081366"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">[SnailToken a]
+</span><a href="#local-6989586621679081366"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">[SnailfishToken a]
 </span><a href="#local-6989586621679081364"><span class="hs-identifier hs-var">rest</span></a></span><span>
 </span><span id="line-45"></span><span>    </span><span class="annot"><a href="#local-6989586621679081378"><span class="hs-identifier hs-var">modifyFirstValue</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-46"></span><span>    </span><span class="annot"><a href="#local-6989586621679081370"><span class="hs-identifier hs-type">split</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#SnailToken"><span class="hs-identifier hs-type">SnailToken</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#SnailToken"><span class="hs-identifier hs-type">SnailToken</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#SnailToken"><span class="hs-identifier hs-type">SnailToken</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-47"></span><span>    </span><span id="local-6989586621679081370"><span class="annot"><span class="annottext">split :: [SnailToken a] -&gt; [SnailToken a] -&gt; [SnailToken a]
-</span><a href="#local-6989586621679081370"><span class="hs-identifier hs-var hs-var">split</span></a></span></span><span> </span><span id="local-6989586621679081363"><span class="annot"><span class="annottext">[SnailToken a]
+</span><span id="line-46"></span><span>    </span><span class="annot"><a href="#local-6989586621679081370"><span class="hs-identifier hs-type">split</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#SnailfishToken"><span class="hs-identifier hs-type">SnailfishToken</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#SnailfishToken"><span class="hs-identifier hs-type">SnailfishToken</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#SnailfishToken"><span class="hs-identifier hs-type">SnailfishToken</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081475"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-47"></span><span>    </span><span id="local-6989586621679081370"><span class="annot"><span class="annottext">split :: [SnailfishToken a] -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
+</span><a href="#local-6989586621679081370"><span class="hs-identifier hs-var hs-var">split</span></a></span></span><span> </span><span id="local-6989586621679081363"><span class="annot"><span class="annottext">[SnailfishToken a]
 </span><a href="#local-6989586621679081363"><span class="hs-identifier hs-var">pre</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day18.html#Value"><span class="hs-identifier hs-type">Value</span></a></span><span> </span><span id="local-6989586621679081362"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679081362"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679081361"><span class="annot"><span class="annottext">[SnailToken a]
+</span><a href="#local-6989586621679081362"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679081361"><span class="annot"><span class="annottext">[SnailfishToken a]
 </span><a href="#local-6989586621679081361"><span class="hs-identifier hs-var">post</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679081362"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; Bool
 forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">&gt;</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><span class="hs-number">9</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; [SnailToken a] -&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><span class="hs-number">9</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
+-&gt; [SnailfishToken a] -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 </span><a href="#local-6989586621679081394"><span class="hs-identifier hs-var">explode</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><span class="hs-number">0</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">([SnailToken a] -&gt; [SnailToken a])
--&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><span class="hs-number">0</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">([SnailfishToken a] -&gt; [SnailfishToken a])
+-&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
-</span><span id="line-48"></span><span>        </span><span class="annot"><span class="annottext">[SnailToken a] -&gt; [SnailToken a]
+</span><span id="line-48"></span><span>        </span><span class="annot"><span class="annottext">[SnailfishToken a] -&gt; [SnailfishToken a]
 forall a. [a] -&gt; [a]
-</span><span class="hs-identifier hs-var">reverse</span></span><span> </span><span class="annot"><span class="annottext">[SnailToken a]
-</span><a href="#local-6989586621679081363"><span class="hs-identifier hs-var">pre</span></a></span><span> </span><span class="annot"><span class="annottext">[SnailToken a] -&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><span class="hs-identifier hs-var">reverse</span></span><span> </span><span class="annot"><span class="annottext">[SnailfishToken a]
+</span><a href="#local-6989586621679081363"><span class="hs-identifier hs-var">pre</span></a></span><span> </span><span class="annot"><span class="annottext">[SnailfishToken a] -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">SnailToken a
-forall a. SnailToken a
-</span><a href="Day18.html#Open"><span class="hs-identifier hs-var">Open</span></a></span><span> </span><span class="annot"><span class="annottext">SnailToken a -&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">SnailfishToken a
+forall a. SnailfishToken a
+</span><a href="Day18.html#Open"><span class="hs-identifier hs-var">Open</span></a></span><span> </span><span class="annot"><span class="annottext">SnailfishToken a -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 forall a. a -&gt; [a] -&gt; [a]
-</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; SnailToken a
-forall a. a -&gt; SnailToken a
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; SnailfishToken a
+forall a. a -&gt; SnailfishToken a
 </span><a href="Day18.html#Value"><span class="hs-identifier hs-var">Value</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679081362"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
 forall a. Integral a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">`div`</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><span class="hs-number">2</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">SnailToken a -&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><span class="hs-number">2</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">SnailfishToken a -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 forall a. a -&gt; [a] -&gt; [a]
-</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; SnailToken a
-forall a. a -&gt; SnailToken a
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; SnailfishToken a
+forall a. a -&gt; SnailfishToken a
 </span><a href="Day18.html#Value"><span class="hs-identifier hs-var">Value</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">a
 </span><a href="#local-6989586621679081362"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
 forall a. Num a =&gt; a -&gt; a -&gt; a
@@ -436,70 +477,71 @@ forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
 forall a. Integral a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">`div`</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><span class="hs-number">2</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">SnailToken a -&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><span class="hs-number">2</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">SnailfishToken a -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 forall a. a -&gt; [a] -&gt; [a]
-</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">SnailToken a
-forall a. SnailToken a
-</span><a href="Day18.html#Close"><span class="hs-identifier hs-var">Close</span></a></span><span> </span><span class="annot"><span class="annottext">SnailToken a -&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">SnailfishToken a
+forall a. SnailfishToken a
+</span><a href="Day18.html#Close"><span class="hs-identifier hs-var">Close</span></a></span><span> </span><span class="annot"><span class="annottext">SnailfishToken a -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 forall a. a -&gt; [a] -&gt; [a]
-</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[SnailToken a]
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[SnailfishToken a]
 </span><a href="#local-6989586621679081361"><span class="hs-identifier hs-var">post</span></a></span><span>
-</span><span id="line-49"></span><span>    </span><span class="annot"><a href="#local-6989586621679081370"><span class="hs-identifier hs-var">split</span></a></span><span> </span><span id="local-6989586621679081358"><span class="annot"><span class="annottext">[SnailToken a]
-</span><a href="#local-6989586621679081358"><span class="hs-identifier hs-var">pre</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679081357"><span class="annot"><span class="annottext">SnailToken a
-</span><a href="#local-6989586621679081357"><span class="hs-identifier hs-var">cur</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679081356"><span class="annot"><span class="annottext">[SnailToken a]
-</span><a href="#local-6989586621679081356"><span class="hs-identifier hs-var">post</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[SnailToken a] -&gt; [SnailToken a] -&gt; [SnailToken a]
-</span><a href="#local-6989586621679081370"><span class="hs-identifier hs-var">split</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SnailToken a
-</span><a href="#local-6989586621679081357"><span class="hs-identifier hs-var">cur</span></a></span><span> </span><span class="annot"><span class="annottext">SnailToken a -&gt; [SnailToken a] -&gt; [SnailToken a]
+</span><span id="line-49"></span><span>    </span><span class="annot"><a href="#local-6989586621679081370"><span class="hs-identifier hs-var">split</span></a></span><span> </span><span id="local-6989586621679081358"><span class="annot"><span class="annottext">[SnailfishToken a]
+</span><a href="#local-6989586621679081358"><span class="hs-identifier hs-var">pre</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679081357"><span class="annot"><span class="annottext">SnailfishToken a
+</span><a href="#local-6989586621679081357"><span class="hs-identifier hs-var">cur</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679081356"><span class="annot"><span class="annottext">[SnailfishToken a]
+</span><a href="#local-6989586621679081356"><span class="hs-identifier hs-var">post</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[SnailfishToken a] -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
+</span><a href="#local-6989586621679081370"><span class="hs-identifier hs-var">split</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SnailfishToken a
+</span><a href="#local-6989586621679081357"><span class="hs-identifier hs-var">cur</span></a></span><span> </span><span class="annot"><span class="annottext">SnailfishToken a -&gt; [SnailfishToken a] -&gt; [SnailfishToken a]
 forall a. a -&gt; [a] -&gt; [a]
-</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[SnailToken a]
-</span><a href="#local-6989586621679081358"><span class="hs-identifier hs-var">pre</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[SnailToken a]
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[SnailfishToken a]
+</span><a href="#local-6989586621679081358"><span class="hs-identifier hs-var">pre</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[SnailfishToken a]
 </span><a href="#local-6989586621679081356"><span class="hs-identifier hs-var">post</span></a></span><span>
-</span><span id="line-50"></span><span>    </span><span class="annot"><a href="#local-6989586621679081370"><span class="hs-identifier hs-var">split</span></a></span><span> </span><span id="local-6989586621679081355"><span class="annot"><span class="annottext">[SnailToken a]
-</span><a href="#local-6989586621679081355"><span class="hs-identifier hs-var">k</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[SnailToken a] -&gt; [SnailToken a]
+</span><span id="line-50"></span><span>    </span><span class="annot"><a href="#local-6989586621679081370"><span class="hs-identifier hs-var">split</span></a></span><span> </span><span id="local-6989586621679081355"><span class="annot"><span class="annottext">[SnailfishToken a]
+</span><a href="#local-6989586621679081355"><span class="hs-identifier hs-var">k</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[SnailfishToken a] -&gt; [SnailfishToken a]
 forall a. [a] -&gt; [a]
-</span><span class="hs-identifier hs-var">reverse</span></span><span> </span><span class="annot"><span class="annottext">[SnailToken a]
+</span><span class="hs-identifier hs-var">reverse</span></span><span> </span><span class="annot"><span class="annottext">[SnailfishToken a]
 </span><a href="#local-6989586621679081355"><span class="hs-identifier hs-var">k</span></a></span><span>
 </span><span id="line-51"></span><span>
-</span><span id="line-52"></span><span id="local-6989586621679081454"><span class="annot"><a href="Day18.html#snailAdd"><span class="hs-identifier hs-type">snailAdd</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Integral</span></span><span> </span><span class="annot"><a href="#local-6989586621679081454"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Ord</span></span><span> </span><span class="annot"><a href="#local-6989586621679081454"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Day18.html#Snail"><span class="hs-identifier hs-type">Snail</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081454"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Day18.html#Snail"><span class="hs-identifier hs-type">Snail</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081454"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Day18.html#Snail"><span class="hs-identifier hs-type">Snail</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081454"><span class="hs-identifier hs-type">a</span></a></span></span><span>
-</span><span id="line-53"></span><span id="snailAdd"><span class="annot"><span class="annottext">snailAdd :: Snail a -&gt; Snail a -&gt; Snail a
-</span><a href="Day18.html#snailAdd"><span class="hs-identifier hs-var hs-var">snailAdd</span></a></span></span><span> </span><span id="local-6989586621679081353"><span class="annot"><span class="annottext">Snail a
-</span><a href="#local-6989586621679081353"><span class="hs-identifier hs-var">lhs</span></a></span></span><span> </span><span id="local-6989586621679081352"><span class="annot"><span class="annottext">Snail a
-</span><a href="#local-6989586621679081352"><span class="hs-identifier hs-var">rhs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Snail a -&gt; Snail a
-forall a. (Integral a, Ord a) =&gt; Snail a -&gt; Snail a
-</span><a href="Day18.html#snailReduce"><span class="hs-identifier hs-var">snailReduce</span></a></span><span> </span><span class="annot"><span class="annottext">(Snail a -&gt; Snail a) -&gt; Snail a -&gt; Snail a
+</span><span id="line-52"></span><span id="local-6989586621679081454"><span class="annot"><a href="Day18.html#snailfishAdd"><span class="hs-identifier hs-type">snailfishAdd</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Integral</span></span><span> </span><span class="annot"><a href="#local-6989586621679081454"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Ord</span></span><span> </span><span class="annot"><a href="#local-6989586621679081454"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Day18.html#Snailfish"><span class="hs-identifier hs-type">Snailfish</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081454"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Day18.html#Snailfish"><span class="hs-identifier hs-type">Snailfish</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081454"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Day18.html#Snailfish"><span class="hs-identifier hs-type">Snailfish</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081454"><span class="hs-identifier hs-type">a</span></a></span></span><span>
+</span><span id="line-53"></span><span id="snailfishAdd"><span class="annot"><span class="annottext">snailfishAdd :: Snailfish a -&gt; Snailfish a -&gt; Snailfish a
+</span><a href="Day18.html#snailfishAdd"><span class="hs-identifier hs-var hs-var">snailfishAdd</span></a></span></span><span> </span><span id="local-6989586621679081353"><span class="annot"><span class="annottext">Snailfish a
+</span><a href="#local-6989586621679081353"><span class="hs-identifier hs-var">lhs</span></a></span></span><span> </span><span id="local-6989586621679081352"><span class="annot"><span class="annottext">Snailfish a
+</span><a href="#local-6989586621679081352"><span class="hs-identifier hs-var">rhs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Snailfish a -&gt; Snailfish a
+forall a. (Integral a, Ord a) =&gt; Snailfish a -&gt; Snailfish a
+</span><a href="Day18.html#snailfishReduce"><span class="hs-identifier hs-var">snailfishReduce</span></a></span><span> </span><span class="annot"><span class="annottext">(Snailfish a -&gt; Snailfish a) -&gt; Snailfish a -&gt; Snailfish a
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Either (Snail a) a -&gt; Either (Snail a) a -&gt; Snail a
-forall a. Either (Snail a) a -&gt; Either (Snail a) a -&gt; Snail a
-</span><a href="Day18.html#Snail"><span class="hs-identifier hs-var">Snail</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Snail a -&gt; Either (Snail a) a
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Either (Snailfish a) a -&gt; Either (Snailfish a) a -&gt; Snailfish a
+forall a.
+Either (Snailfish a) a -&gt; Either (Snailfish a) a -&gt; Snailfish a
+</span><a href="Day18.html#Snailfish"><span class="hs-identifier hs-var">Snailfish</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Snailfish a -&gt; Either (Snailfish a) a
 forall a b. a -&gt; Either a b
-</span><span class="hs-identifier hs-var">Left</span></span><span> </span><span class="annot"><span class="annottext">Snail a
-</span><a href="#local-6989586621679081353"><span class="hs-identifier hs-var">lhs</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Snail a -&gt; Either (Snail a) a
+</span><span class="hs-identifier hs-var">Left</span></span><span> </span><span class="annot"><span class="annottext">Snailfish a
+</span><a href="#local-6989586621679081353"><span class="hs-identifier hs-var">lhs</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Snailfish a -&gt; Either (Snailfish a) a
 forall a b. a -&gt; Either a b
-</span><span class="hs-identifier hs-var">Left</span></span><span> </span><span class="annot"><span class="annottext">Snail a
+</span><span class="hs-identifier hs-var">Left</span></span><span> </span><span class="annot"><span class="annottext">Snailfish a
 </span><a href="#local-6989586621679081352"><span class="hs-identifier hs-var">rhs</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-54"></span><span>
-</span><span id="line-55"></span><span id="local-6989586621679081473"><span class="annot"><a href="Day18.html#magnitude"><span class="hs-identifier hs-type">magnitude</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Num</span></span><span> </span><span class="annot"><a href="#local-6989586621679081473"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Day18.html#Snail"><span class="hs-identifier hs-type">Snail</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081473"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679081473"><span class="hs-identifier hs-type">a</span></a></span></span><span>
-</span><span id="line-56"></span><span id="magnitude"><span class="annot"><span class="annottext">magnitude :: Snail a -&gt; a
-</span><a href="Day18.html#magnitude"><span class="hs-identifier hs-var hs-var">magnitude</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day18.html#Snail"><span class="hs-identifier hs-type">Snail</span></a></span><span> </span><span id="local-6989586621679081350"><span class="annot"><span class="annottext">Either (Snail a) a
-</span><a href="#local-6989586621679081350"><span class="hs-identifier hs-var">lhs</span></a></span></span><span> </span><span id="local-6989586621679081349"><span class="annot"><span class="annottext">Either (Snail a) a
+</span><span id="line-55"></span><span id="local-6989586621679081473"><span class="annot"><a href="Day18.html#magnitude"><span class="hs-identifier hs-type">magnitude</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Num</span></span><span> </span><span class="annot"><a href="#local-6989586621679081473"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Day18.html#Snailfish"><span class="hs-identifier hs-type">Snailfish</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679081473"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679081473"><span class="hs-identifier hs-type">a</span></a></span></span><span>
+</span><span id="line-56"></span><span id="magnitude"><span class="annot"><span class="annottext">magnitude :: Snailfish a -&gt; a
+</span><a href="Day18.html#magnitude"><span class="hs-identifier hs-var hs-var">magnitude</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day18.html#Snailfish"><span class="hs-identifier hs-type">Snailfish</span></a></span><span> </span><span id="local-6989586621679081350"><span class="annot"><span class="annottext">Either (Snailfish a) a
+</span><a href="#local-6989586621679081350"><span class="hs-identifier hs-var">lhs</span></a></span></span><span> </span><span id="local-6989586621679081349"><span class="annot"><span class="annottext">Either (Snailfish a) a
 </span><a href="#local-6989586621679081349"><span class="hs-identifier hs-var">rhs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a
 </span><span class="hs-number">3</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">Either (Snail a) a -&gt; a
-</span><a href="#local-6989586621679081347"><span class="hs-identifier hs-var">magnitude'</span></a></span><span> </span><span class="annot"><span class="annottext">Either (Snail a) a
+</span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">Either (Snailfish a) a -&gt; a
+</span><a href="#local-6989586621679081347"><span class="hs-identifier hs-var">magnitude'</span></a></span><span> </span><span class="annot"><span class="annottext">Either (Snailfish a) a
 </span><a href="#local-6989586621679081350"><span class="hs-identifier hs-var">lhs</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">a
 </span><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
 forall a. Num a =&gt; a -&gt; a -&gt; a
-</span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">Either (Snail a) a -&gt; a
-</span><a href="#local-6989586621679081347"><span class="hs-identifier hs-var">magnitude'</span></a></span><span> </span><span class="annot"><span class="annottext">Either (Snail a) a
+</span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">Either (Snailfish a) a -&gt; a
+</span><a href="#local-6989586621679081347"><span class="hs-identifier hs-var">magnitude'</span></a></span><span> </span><span class="annot"><span class="annottext">Either (Snailfish a) a
 </span><a href="#local-6989586621679081349"><span class="hs-identifier hs-var">rhs</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-57"></span><span>    </span><span id="local-6989586621679081347"><span class="annot"><span class="annottext">magnitude' :: Either (Snail a) a -&gt; a
-</span><a href="#local-6989586621679081347"><span class="hs-identifier hs-var hs-var">magnitude'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Snail a -&gt; a) -&gt; (a -&gt; a) -&gt; Either (Snail a) a -&gt; a
+</span><span id="line-57"></span><span>    </span><span id="local-6989586621679081347"><span class="annot"><span class="annottext">magnitude' :: Either (Snailfish a) a -&gt; a
+</span><a href="#local-6989586621679081347"><span class="hs-identifier hs-var hs-var">magnitude'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Snailfish a -&gt; a) -&gt; (a -&gt; a) -&gt; Either (Snailfish a) a -&gt; a
 forall a c b. (a -&gt; c) -&gt; (b -&gt; c) -&gt; Either a b -&gt; c
-</span><span class="hs-identifier hs-var">either</span></span><span> </span><span class="annot"><span class="annottext">Snail a -&gt; a
-forall a. Num a =&gt; Snail a -&gt; a
+</span><span class="hs-identifier hs-var">either</span></span><span> </span><span class="annot"><span class="annottext">Snailfish a -&gt; a
+forall a. Num a =&gt; Snailfish a -&gt; a
 </span><a href="Day18.html#magnitude"><span class="hs-identifier hs-var">magnitude</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a
 forall a. a -&gt; a
 </span><span class="hs-identifier hs-var">id</span></span><span>
@@ -508,26 +550,28 @@ forall a. a -&gt; a
 </span><span id="line-60"></span><span id="day18a"><span class="annot"><span class="annottext">day18a :: Text -&gt; Either (ParseErrorBundle Text Void) (Maybe Int)
 </span><a href="Day18.html#day18a"><span class="hs-identifier hs-var hs-var">day18a</span></a></span></span><span> </span><span id="local-6989586621679081345"><span class="annot"><span class="annottext">Text
 </span><a href="#local-6989586621679081345"><span class="hs-identifier hs-var">input</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-61"></span><span>    </span><span id="local-6989586621679081344"><span class="annot"><span class="annottext">[Snail Int]
-</span><a href="#local-6989586621679081344"><span class="hs-identifier hs-var">snails</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Parsec Void Text [Snail Int]
+</span><span id="line-61"></span><span>    </span><span id="local-6989586621679081344"><span class="annot"><span class="annottext">[Snailfish Int]
+</span><a href="#local-6989586621679081344"><span class="hs-identifier hs-var">snailfishs</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Parsec Void Text [Snailfish Int]
 -&gt; String
 -&gt; Text
--&gt; Either (ParseErrorBundle Text Void) [Snail Int]
+-&gt; Either (ParseErrorBundle Text Void) [Snailfish Int]
 forall e s a.
 Parsec e s a -&gt; String -&gt; s -&gt; Either (ParseErrorBundle s e) a
-</span><span class="hs-identifier hs-var">parse</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ParsecT Void Text Identity (Snail Int)
+</span><span class="hs-identifier hs-var">parse</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ParsecT Void Text Identity (Snailfish Int)
 forall e s (m :: * -&gt; *) a.
 (MonadParsec e s m, Token s ~ Char, Num a) =&gt;
-m (Snail a)
-</span><a href="Day18.html#parser"><span class="hs-identifier hs-var">parser</span></a></span><span> </span><span class="annot"><span class="annottext">ParsecT Void Text Identity (Snail Int)
--&gt; ParsecT Void Text Identity Char -&gt; Parsec Void Text [Snail Int]
+m (Snailfish a)
+</span><a href="Day18.html#parser"><span class="hs-identifier hs-var">parser</span></a></span><span> </span><span class="annot"><span class="annottext">ParsecT Void Text Identity (Snailfish Int)
+-&gt; ParsecT Void Text Identity Char
+-&gt; Parsec Void Text [Snailfish Int]
 forall (m :: * -&gt; *) a sep. MonadPlus m =&gt; m a -&gt; m sep -&gt; m [a]
 </span><span class="hs-operator hs-var">`sepEndBy`</span></span><span> </span><span class="annot"><span class="annottext">ParsecT Void Text Identity Char
 forall e s (m :: * -&gt; *).
 (MonadParsec e s m, Token s ~ Char) =&gt;
 m (Token s)
-</span><span class="hs-identifier hs-var">newline</span></span><span> </span><span class="annot"><span class="annottext">Parsec Void Text [Snail Int]
--&gt; ParsecT Void Text Identity () -&gt; Parsec Void Text [Snail Int]
+</span><span class="hs-identifier hs-var">newline</span></span><span> </span><span class="annot"><span class="annottext">Parsec Void Text [Snailfish Int]
+-&gt; ParsecT Void Text Identity ()
+-&gt; Parsec Void Text [Snailfish Int]
 forall (f :: * -&gt; *) a b. Applicative f =&gt; f a -&gt; f b -&gt; f a
 </span><span class="hs-operator hs-var">&lt;*</span></span><span> </span><span class="annot"><span class="annottext">ParsecT Void Text Identity ()
 forall e s (m :: * -&gt; *). MonadParsec e s m =&gt; m ()
@@ -539,50 +583,54 @@ forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
 </span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">(Maybe Int -&gt; Either (ParseErrorBundle Text Void) (Maybe Int))
 -&gt; Maybe Int -&gt; Either (ParseErrorBundle Text Void) (Maybe Int)
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Snail Int -&gt; Int
-forall a. Num a =&gt; Snail a -&gt; a
-</span><a href="Day18.html#magnitude"><span class="hs-identifier hs-var">magnitude</span></a></span><span> </span><span class="annot"><span class="annottext">(Snail Int -&gt; Int)
--&gt; (NonEmpty (Snail Int) -&gt; Snail Int)
--&gt; NonEmpty (Snail Int)
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Snailfish Int -&gt; Int
+forall a. Num a =&gt; Snailfish a -&gt; a
+</span><a href="Day18.html#magnitude"><span class="hs-identifier hs-var">magnitude</span></a></span><span> </span><span class="annot"><span class="annottext">(Snailfish Int -&gt; Int)
+-&gt; (NonEmpty (Snailfish Int) -&gt; Snailfish Int)
+-&gt; NonEmpty (Snailfish Int)
 -&gt; Int
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(Snail Int -&gt; Snail Int -&gt; Snail Int)
--&gt; NonEmpty (Snail Int) -&gt; Snail Int
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(Snailfish Int -&gt; Snailfish Int -&gt; Snailfish Int)
+-&gt; NonEmpty (Snailfish Int) -&gt; Snailfish Int
 forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; a -&gt; a) -&gt; t a -&gt; a
-</span><span class="hs-identifier hs-var">foldl1</span></span><span> </span><span class="annot"><span class="annottext">Snail Int -&gt; Snail Int -&gt; Snail Int
-forall a. (Integral a, Ord a) =&gt; Snail a -&gt; Snail a -&gt; Snail a
-</span><a href="Day18.html#snailAdd"><span class="hs-identifier hs-var">snailAdd</span></a></span><span> </span><span class="annot"><span class="annottext">(NonEmpty (Snail Int) -&gt; Int)
--&gt; Maybe (NonEmpty (Snail Int)) -&gt; Maybe Int
+</span><span class="hs-identifier hs-var">foldl1</span></span><span> </span><span class="annot"><span class="annottext">Snailfish Int -&gt; Snailfish Int -&gt; Snailfish Int
+forall a.
+(Integral a, Ord a) =&gt;
+Snailfish a -&gt; Snailfish a -&gt; Snailfish a
+</span><a href="Day18.html#snailfishAdd"><span class="hs-identifier hs-var">snailfishAdd</span></a></span><span> </span><span class="annot"><span class="annottext">(NonEmpty (Snailfish Int) -&gt; Int)
+-&gt; Maybe (NonEmpty (Snailfish Int)) -&gt; Maybe Int
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
-</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">[Snail Int] -&gt; Maybe (NonEmpty (Snail Int))
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">[Snailfish Int] -&gt; Maybe (NonEmpty (Snailfish Int))
 forall a. [a] -&gt; Maybe (NonEmpty a)
-</span><span class="hs-identifier hs-var">nonEmpty</span></span><span> </span><span class="annot"><span class="annottext">[Snail Int]
-</span><a href="#local-6989586621679081344"><span class="hs-identifier hs-var">snails</span></a></span><span>
+</span><span class="hs-identifier hs-var">nonEmpty</span></span><span> </span><span class="annot"><span class="annottext">[Snailfish Int]
+</span><a href="#local-6989586621679081344"><span class="hs-identifier hs-var">snailfishs</span></a></span><span>
 </span><span id="line-63"></span><span>
 </span><span id="line-64"></span><span class="annot"><a href="Day18.html#day18b"><span class="hs-identifier hs-type">day18b</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ParseErrorBundle</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Void</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">)</span><span>
 </span><span id="line-65"></span><span id="day18b"><span class="annot"><span class="annottext">day18b :: Text -&gt; Either (ParseErrorBundle Text Void) (Maybe Int)
 </span><a href="Day18.html#day18b"><span class="hs-identifier hs-var hs-var">day18b</span></a></span></span><span> </span><span id="local-6989586621679081342"><span class="annot"><span class="annottext">Text
 </span><a href="#local-6989586621679081342"><span class="hs-identifier hs-var">input</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-66"></span><span>    </span><span id="local-6989586621679081341"><span class="annot"><span class="annottext">[Snail Int]
-</span><a href="#local-6989586621679081341"><span class="hs-identifier hs-var">snails</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Parsec Void Text [Snail Int]
+</span><span id="line-66"></span><span>    </span><span id="local-6989586621679081341"><span class="annot"><span class="annottext">[Snailfish Int]
+</span><a href="#local-6989586621679081341"><span class="hs-identifier hs-var">snailfishs</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Parsec Void Text [Snailfish Int]
 -&gt; String
 -&gt; Text
--&gt; Either (ParseErrorBundle Text Void) [Snail Int]
+-&gt; Either (ParseErrorBundle Text Void) [Snailfish Int]
 forall e s a.
 Parsec e s a -&gt; String -&gt; s -&gt; Either (ParseErrorBundle s e) a
-</span><span class="hs-identifier hs-var">parse</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ParsecT Void Text Identity (Snail Int)
+</span><span class="hs-identifier hs-var">parse</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ParsecT Void Text Identity (Snailfish Int)
 forall e s (m :: * -&gt; *) a.
 (MonadParsec e s m, Token s ~ Char, Num a) =&gt;
-m (Snail a)
-</span><a href="Day18.html#parser"><span class="hs-identifier hs-var">parser</span></a></span><span> </span><span class="annot"><span class="annottext">ParsecT Void Text Identity (Snail Int)
--&gt; ParsecT Void Text Identity Char -&gt; Parsec Void Text [Snail Int]
+m (Snailfish a)
+</span><a href="Day18.html#parser"><span class="hs-identifier hs-var">parser</span></a></span><span> </span><span class="annot"><span class="annottext">ParsecT Void Text Identity (Snailfish Int)
+-&gt; ParsecT Void Text Identity Char
+-&gt; Parsec Void Text [Snailfish Int]
 forall (m :: * -&gt; *) a sep. MonadPlus m =&gt; m a -&gt; m sep -&gt; m [a]
 </span><span class="hs-operator hs-var">`sepEndBy`</span></span><span> </span><span class="annot"><span class="annottext">ParsecT Void Text Identity Char
 forall e s (m :: * -&gt; *).
 (MonadParsec e s m, Token s ~ Char) =&gt;
 m (Token s)
-</span><span class="hs-identifier hs-var">newline</span></span><span> </span><span class="annot"><span class="annottext">Parsec Void Text [Snail Int]
--&gt; ParsecT Void Text Identity () -&gt; Parsec Void Text [Snail Int]
+</span><span class="hs-identifier hs-var">newline</span></span><span> </span><span class="annot"><span class="annottext">Parsec Void Text [Snailfish Int]
+-&gt; ParsecT Void Text Identity ()
+-&gt; Parsec Void Text [Snailfish Int]
 forall (f :: * -&gt; *) a b. Applicative f =&gt; f a -&gt; f b -&gt; f a
 </span><span class="hs-operator hs-var">&lt;*</span></span><span> </span><span class="annot"><span class="annottext">ParsecT Void Text Identity ()
 forall e s (m :: * -&gt; *). MonadParsec e s m =&gt; m ()
@@ -606,35 +654,40 @@ forall a. [a] -&gt; Maybe (NonEmpty a)
 </span><span class="hs-identifier hs-var">nonEmpty</span></span><span> </span><span class="annot"><span class="annottext">([Int] -&gt; Maybe (NonEmpty Int)) -&gt; [Int] -&gt; Maybe (NonEmpty Int)
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-68"></span><span>        </span><span class="hs-special">(</span><span id="local-6989586621679081339"><span class="annot"><span class="annottext">[Snail Int]
-</span><a href="#local-6989586621679081339"><span class="hs-identifier hs-var">pre</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679081338"><span class="annot"><span class="annottext">Snail Int
-</span><a href="#local-6989586621679081338"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679081337"><span class="annot"><span class="annottext">[Snail Int]
-</span><a href="#local-6989586621679081337"><span class="hs-identifier hs-var">post</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">[[Snail Int]] -&gt; [[Snail Int]] -&gt; [([Snail Int], [Snail Int])]
+</span><span id="line-68"></span><span>        </span><span class="hs-special">(</span><span id="local-6989586621679081339"><span class="annot"><span class="annottext">[Snailfish Int]
+</span><a href="#local-6989586621679081339"><span class="hs-identifier hs-var">pre</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679081338"><span class="annot"><span class="annottext">Snailfish Int
+</span><a href="#local-6989586621679081338"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679081337"><span class="annot"><span class="annottext">[Snailfish Int]
+</span><a href="#local-6989586621679081337"><span class="hs-identifier hs-var">post</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">[[Snailfish Int]]
+-&gt; [[Snailfish Int]] -&gt; [([Snailfish Int], [Snailfish Int])]
 forall a b. [a] -&gt; [b] -&gt; [(a, b)]
-</span><span class="hs-identifier hs-var">zip</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Snail Int] -&gt; [[Snail Int]]
+</span><span class="hs-identifier hs-var">zip</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Snailfish Int] -&gt; [[Snailfish Int]]
 forall a. [a] -&gt; [[a]]
-</span><span class="hs-identifier hs-var">inits</span></span><span> </span><span class="annot"><span class="annottext">[Snail Int]
-</span><a href="#local-6989586621679081341"><span class="hs-identifier hs-var">snails</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Snail Int] -&gt; [[Snail Int]]
+</span><span class="hs-identifier hs-var">inits</span></span><span> </span><span class="annot"><span class="annottext">[Snailfish Int]
+</span><a href="#local-6989586621679081341"><span class="hs-identifier hs-var">snailfishs</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Snailfish Int] -&gt; [[Snailfish Int]]
 forall a. [a] -&gt; [[a]]
-</span><span class="hs-identifier hs-var">tails</span></span><span> </span><span class="annot"><span class="annottext">[Snail Int]
-</span><a href="#local-6989586621679081341"><span class="hs-identifier hs-var">snails</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-69"></span><span>        </span><span id="local-6989586621679081336"><span class="annot"><span class="annottext">Snail Int
-</span><a href="#local-6989586621679081336"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">[Snail Int]
-</span><a href="#local-6989586621679081339"><span class="hs-identifier hs-var">pre</span></a></span><span> </span><span class="annot"><span class="annottext">[Snail Int] -&gt; [Snail Int] -&gt; [Snail Int]
+</span><span class="hs-identifier hs-var">tails</span></span><span> </span><span class="annot"><span class="annottext">[Snailfish Int]
+</span><a href="#local-6989586621679081341"><span class="hs-identifier hs-var">snailfishs</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-69"></span><span>        </span><span id="local-6989586621679081336"><span class="annot"><span class="annottext">Snailfish Int
+</span><a href="#local-6989586621679081336"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">[Snailfish Int]
+</span><a href="#local-6989586621679081339"><span class="hs-identifier hs-var">pre</span></a></span><span> </span><span class="annot"><span class="annottext">[Snailfish Int] -&gt; [Snailfish Int] -&gt; [Snailfish Int]
 forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[Snail Int]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[Snailfish Int]
 </span><a href="#local-6989586621679081337"><span class="hs-identifier hs-var">post</span></a></span><span>
-</span><span id="line-70"></span><span>        </span><span class="annot"><span class="annottext">Snail Int -&gt; Int
-forall a. Num a =&gt; Snail a -&gt; a
-</span><a href="Day18.html#magnitude"><span class="hs-identifier hs-var">magnitude</span></a></span><span> </span><span class="annot"><span class="annottext">(Snail Int -&gt; Int) -&gt; [Snail Int] -&gt; [Int]
+</span><span id="line-70"></span><span>        </span><span class="annot"><span class="annottext">Snailfish Int -&gt; Int
+forall a. Num a =&gt; Snailfish a -&gt; a
+</span><a href="Day18.html#magnitude"><span class="hs-identifier hs-var">magnitude</span></a></span><span> </span><span class="annot"><span class="annottext">(Snailfish Int -&gt; Int) -&gt; [Snailfish Int] -&gt; [Int]
 forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
-</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Snail Int -&gt; Snail Int -&gt; Snail Int
-forall a. (Integral a, Ord a) =&gt; Snail a -&gt; Snail a -&gt; Snail a
-</span><a href="Day18.html#snailAdd"><span class="hs-identifier hs-var">snailAdd</span></a></span><span> </span><span class="annot"><span class="annottext">Snail Int
-</span><a href="#local-6989586621679081338"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Snail Int
-</span><a href="#local-6989586621679081336"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Snail Int -&gt; Snail Int -&gt; Snail Int
-forall a. (Integral a, Ord a) =&gt; Snail a -&gt; Snail a -&gt; Snail a
-</span><a href="Day18.html#snailAdd"><span class="hs-identifier hs-var">snailAdd</span></a></span><span> </span><span class="annot"><span class="annottext">Snail Int
-</span><a href="#local-6989586621679081336"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Snail Int
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Snailfish Int -&gt; Snailfish Int -&gt; Snailfish Int
+forall a.
+(Integral a, Ord a) =&gt;
+Snailfish a -&gt; Snailfish a -&gt; Snailfish a
+</span><a href="Day18.html#snailfishAdd"><span class="hs-identifier hs-var">snailfishAdd</span></a></span><span> </span><span class="annot"><span class="annottext">Snailfish Int
+</span><a href="#local-6989586621679081338"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Snailfish Int
+</span><a href="#local-6989586621679081336"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Snailfish Int -&gt; Snailfish Int -&gt; Snailfish Int
+forall a.
+(Integral a, Ord a) =&gt;
+Snailfish a -&gt; Snailfish a -&gt; Snailfish a
+</span><a href="Day18.html#snailfishAdd"><span class="hs-identifier hs-var">snailfishAdd</span></a></span><span> </span><span class="annot"><span class="annottext">Snailfish Int
+</span><a href="#local-6989586621679081336"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Snailfish Int
 </span><a href="#local-6989586621679081338"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-71"></span></pre></body></html>

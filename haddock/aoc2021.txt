@@ -92,20 +92,20 @@ day17 :: Text -> Either (ParseErrorBundle Text Void) (Int, Int)
 
 
 module Day18
-data Snail a
-Snail :: Either (Snail a) a -> Either (Snail a) a -> Snail a
-data SnailToken a
-Open :: SnailToken a
-Close :: SnailToken a
-Value :: a -> SnailToken a
-parser :: (MonadParsec e s m, Token s ~ Char, Num a) => m (Snail a)
-snailReduce :: forall a. (Integral a, Ord a) => Snail a -> Snail a
-snailAdd :: (Integral a, Ord a) => Snail a -> Snail a -> Snail a
-magnitude :: Num a => Snail a -> a
+data Snailfish a
+Snailfish :: Either (Snailfish a) a -> Either (Snailfish a) a -> Snailfish a
+data SnailfishToken a
+Open :: SnailfishToken a
+Close :: SnailfishToken a
+Value :: a -> SnailfishToken a
+parser :: (MonadParsec e s m, Token s ~ Char, Num a) => m (Snailfish a)
+snailfishReduce :: forall a. (Integral a, Ord a) => Snailfish a -> Snailfish a
+snailfishAdd :: (Integral a, Ord a) => Snailfish a -> Snailfish a -> Snailfish a
+magnitude :: Num a => Snailfish a -> a
 day18a :: Text -> Either (ParseErrorBundle Text Void) (Maybe Int)
 day18b :: Text -> Either (ParseErrorBundle Text Void) (Maybe Int)
-instance GHC.Classes.Ord a => GHC.Classes.Ord (Day18.SnailToken a)
-instance GHC.Classes.Eq a => GHC.Classes.Eq (Day18.SnailToken a)
+instance GHC.Classes.Ord a => GHC.Classes.Ord (Day18.SnailfishToken a)
+instance GHC.Classes.Eq a => GHC.Classes.Eq (Day18.SnailfishToken a)
 
 
 module Day2
