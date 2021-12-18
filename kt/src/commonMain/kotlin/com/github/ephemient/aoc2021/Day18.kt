@@ -63,7 +63,9 @@ class Day18(lines: List<String>) {
         override val firstValue: Int,
         override val secondSnailfish: Snailfish?,
         override val secondValue: Int,
-    ) : Snailfish
+    ) : Snailfish {
+        override fun toString(): String = "[${firstSnailfish ?: firstValue},${secondSnailfish ?: secondValue}]"
+    }
 
     private class MutableSnailfish(
         override var firstSnailfish: MutableSnailfish?,

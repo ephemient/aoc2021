@@ -1,6 +1,6 @@
 {-|
 Module:         Day18
-Description:    <https://adventofcode.com/2021/day/18 Day 18: Snailfishfish>
+Description:    <https://adventofcode.com/2021/day/18 Day 18: Snailfish>
 -}
 {-# LANGUAGE LambdaCase, ScopedTypeVariables, TypeFamilies #-}
 module Day18 (day18a, day18b) where
