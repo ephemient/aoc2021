@@ -75,7 +75,7 @@ class Day18(lines: List<String>) {
             @Suppress("LoopWithTooManyJumpStatements")
             while (true) {
                 if (explode(ExplodeInput(this)) != null) continue
-                if (!split(this)) continue
+                if (split(this)) continue
                 break
             }
         }
