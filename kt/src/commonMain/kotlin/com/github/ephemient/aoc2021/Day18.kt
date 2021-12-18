@@ -1,172 +1,102 @@
 package com.github.ephemient.aoc2021
 
-import kotlin.reflect.KMutableProperty0
-
 /** Day 18: Snailfish */
 @ExperimentalStdlibApi
 class Day18(lines: List<String>) {
-    private val snails = lines.map { it.toSnail() }
+    private val snails = lines.map { it.tokens() }
 
-    fun part1(): Int = snails.reduce { x, y -> (x + y) }.magnitude()
+    fun part1(): Int = snails.reduce { x, y -> x + y }.magnitude()
 
-    @Suppress("NestedBlockDepth")
-    fun part2(): Int {
-        check(snails.size > 1)
-        var bestMagnitude: Int = Int.MIN_VALUE
+    fun part2(): Int = sequence {
         for ((i, x) in snails.withIndex()) {
             for ((j, y) in snails.withIndex()) {
-                if (i != j) {
-                    val magnitude = (x + y).magnitude()
-                    if (bestMagnitude < magnitude) bestMagnitude = magnitude
-                }
+                if (i != j) yield(x + y)
             }
         }
-        return bestMagnitude
-    }
+    }.maxOf { it.magnitude() }
 
-    private interface Snailfish {
-        val firstSnailfish: Snailfish?
-        val firstValue: Int
-        val secondSnailfish: Snailfish?
-        val secondValue: Int
-
-        operator fun plus(other: Snailfish): Snailfish = MutableSnailfish(
-            firstSnailfish = this.toMutable(),
-            firstValue = 0,
-            secondSnailfish = other.toMutable(),
-            secondValue = 0,
-        ).apply { reduce() }
-
-        fun toMutable(): MutableSnailfish = toMutable(this)
-
-        fun magnitude(): Int = magnitude(this)
-
-        companion object {
-            private val toMutable = DeepRecursiveFunction<Snailfish, MutableSnailfish> { snail ->
-                MutableSnailfish(
-                    firstSnailfish = snail.firstSnailfish?.let { callRecursive(it) },
-                    firstValue = snail.firstValue,
-                    secondSnailfish = snail.secondSnailfish?.let { callRecursive(it) },
-                    secondValue = snail.secondValue,
-                )
-            }
-
-            private val magnitude = DeepRecursiveFunction<Snailfish, Int> { snail ->
-                3 * (snail.firstSnailfish?.let { callRecursive(it) } ?: snail.firstValue) +
-                    2 * (snail.secondSnailfish?.let { callRecursive(it) } ?: snail.secondValue)
-            }
-        }
-    }
-
-    private class SnailfishImpl(
-        override val firstSnailfish: Snailfish?,
-        override val firstValue: Int,
-        override val secondSnailfish: Snailfish?,
-        override val secondValue: Int,
-    ) : Snailfish {
-        override fun toString(): String = "[${firstSnailfish ?: firstValue},${secondSnailfish ?: secondValue}]"
-    }
-
-    private class MutableSnailfish(
-        override var firstSnailfish: MutableSnailfish?,
-        override var firstValue: Int,
-        override var secondSnailfish: MutableSnailfish?,
-        override var secondValue: Int,
-    ) : Snailfish {
-        fun reduce() {
-            @Suppress("LoopWithTooManyJumpStatements")
-            while (true) {
-                if (explode(ExplodeInput(this)) != null) continue
-                if (split(this)) continue
-                break
-            }
-        }
-
-        override fun toString(): String = "[${firstSnailfish ?: firstValue},${secondSnailfish ?: secondValue}]"
-
-        private data class ExplodeInput(val snail: MutableSnailfish, val depth: Int = 0)
-
-        private data class ExplodeOutput(val replace: Boolean, val first: Int, val second: Int)
-
-        companion object {
-            private val explode = DeepRecursiveFunction<ExplodeInput, ExplodeOutput?> explode@{ (snail, depth) ->
-                val firstSnail = snail.firstSnailfish
-                val secondSnail = snail.secondSnailfish
-                if (depth > 3 && firstSnail == null && secondSnail == null) {
-                    return@explode ExplodeOutput(true, snail.firstValue, snail.secondValue)
-                }
-                firstSnail?.let { callRecursive(ExplodeInput(it, depth + 1)) }?.let { (replace, first, second) ->
-                    if (replace) {
-                        snail.firstSnailfish = null
-                        snail.firstValue = 0
-                    }
-                    if (secondSnail != null) {
-                        generateSequence(secondSnail) { it.firstSnailfish }.last().firstValue += second
-                    } else snail.secondValue += second
-                    ExplodeOutput(
-                        false,
-                        first,
-                        0,
-                    )
-                } ?: secondSnail?.let { callRecursive(ExplodeInput(it, depth + 1)) }?.let { (replace, first, second) ->
-                    if (replace) {
-                        snail.secondSnailfish = null
-                        snail.secondValue = 0
-                    }
-                    if (firstSnail != null) {
-                        generateSequence(firstSnail) { it.secondSnailfish }.last().secondValue += first
-                    } else snail.firstValue += first
-                    ExplodeOutput(
-                        false,
-                        0,
-                        second,
-                    )
-                }
-            }
-
-            private val split = DeepRecursiveFunction<MutableSnailfish, Boolean> {
-                splitHelper(it::firstSnailfish, it::firstValue) || splitHelper(it::secondSnailfish, it::secondValue)
-            }
-
-            private suspend fun DeepRecursiveScope<MutableSnailfish, Boolean>.splitHelper(
-                snailProperty: KMutableProperty0<MutableSnailfish?>,
-                valueProperty: KMutableProperty0<Int>
-            ): Boolean {
-                snailProperty.get()?.let { return callRecursive(it) }
-                val value = valueProperty.get()
-                return if (value > 9) {
-                    snailProperty.set(MutableSnailfish(null, value shr 1, null, value + 1 shr 1))
-                    true
-                } else false
-            }
-        }
+    private sealed class Token {
+        object Open : Token()
+        object Close : Token()
+        class Value(val value: Int) : Token()
     }
 
     companion object {
-        private fun String.toSnail(): Snailfish {
+        private fun String.tokens(): List<Token> = buildList {
             var i = 0
-            val snail = DeepRecursiveFunction<Unit, Snailfish> {
-                check(get(i++) == '[')
-                var firstSnailfish: Snailfish? = null
-                var firstValue = 0
-                if (get(i).isDigit()) {
-                    i = indexOf(',', i).also { firstValue = substring(i, it).toInt() } + 1
-                } else {
-                    firstSnailfish = callRecursive(Unit)
-                    check(get(i++) == ',')
-                }
-                var secondSnailfish: Snailfish? = null
-                var secondValue = 0
-                if (get(i).isDigit()) {
-                    i = indexOf(']', i).also { secondValue = substring(i, it).toInt() } + 1
-                } else {
-                    secondSnailfish = callRecursive(Unit)
-                    check(get(i++) == ']')
-                }
-                SnailfishImpl(firstSnailfish, firstValue, secondSnailfish, secondValue)
+            DeepRecursiveFunction<Unit, Unit> {
+                check(this@tokens[i++] == '[')
+                add(Token.Open)
+                if (this@tokens[i].isDigit()) add(Token.Value(this@tokens[i++].digitToInt())) else callRecursive(Unit)
+                check(this@tokens[i++] == ',')
+                if (this@tokens[i].isDigit()) add(Token.Value(this@tokens[i++].digitToInt())) else callRecursive(Unit)
+                check(this@tokens[i++] == ']')
+                add(Token.Close)
             }(Unit)
-            check(i == length)
-            return snail
+            check(i == this@tokens.length)
+        }
+
+        @Suppress(
+            "ComplexMethod", "NestedBlockDepth", "LoopWithTooManyJumpStatements",
+            "UnusedPrivateMember", // Detekt false-positive
+        )
+        private operator fun List<Token>.plus(other: List<Token>): List<Token> =
+            ArrayList<Token>(this.size + other.size + 2).apply {
+                add(Token.Open)
+                addAll(this@plus)
+                addAll(other)
+                add(Token.Close)
+                loop@while (true) {
+                    var depth = 0
+                    for (i in 0 until this.size - 4) {
+                        if (depth > 3 && this[i] == Token.Open && this[i + 3] == Token.Close) {
+                            val lhs = this[i + 1]
+                            val rhs = this[i + 2]
+                            if (lhs is Token.Value && rhs is Token.Value) {
+                                this[i] = Token.Value(0)
+                                this.subList(i + 1, i + 4).clear()
+                                for (j in i - 1 downTo 0) {
+                                    val token = this[j] as? Token.Value ?: continue
+                                    this[j] = Token.Value(token.value + lhs.value)
+                                    break
+                                }
+                                for (j in i + 1 until this.size) {
+                                    val token = this[j] as? Token.Value ?: continue
+                                    this[j] = Token.Value(token.value + rhs.value)
+                                    break
+                                }
+                                continue@loop
+                            }
+                        }
+                        when (this[i]) {
+                            Token.Open -> depth++
+                            Token.Close -> depth--
+                            else -> {}
+                        }
+                    }
+                    for ((i, token) in this.withIndex()) {
+                        if (token is Token.Value && token.value > 9) {
+                            this[i] = Token.Open
+                            this.addAll(
+                                i + 1,
+                                listOf(Token.Value(token.value / 2), Token.Value((token.value + 1) / 2), Token.Close),
+                            )
+                            continue@loop
+                        }
+                    }
+                    break@loop
+                }
+            }
+
+        private fun List<Token>.magnitude(): Int {
+            var i = 0
+            return DeepRecursiveFunction<Unit, Int> {
+                when (val token = this@magnitude[i++]) {
+                    is Token.Open -> (3 * callRecursive(Unit) + 2 * callRecursive(Unit)).also { i++ }
+                    is Token.Value -> token.value
+                    else -> TODO()
+                }
+            }.invoke(Unit)
         }
     }
 }
