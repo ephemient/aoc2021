@@ -2,69 +2,62 @@
 Module:         Day18
 Description:    <https://adventofcode.com/2021/day/18 Day 18: Snailfish>
 -}
-{-# LANGUAGE LambdaCase, ScopedTypeVariables, TypeFamilies #-}
+{-# LANGUAGE TypeFamilies, ViewPatterns #-}
 module Day18 (day18a, day18b) where
 
 import Data.List (inits, tails)
 import Data.List.NonEmpty (nonEmpty)
-import Data.Maybe (fromJust)
-import qualified Data.Set as Set (empty)
 import Data.Text (Text)
 import Data.Void (Void)
-import Text.Megaparsec (MonadParsec, ParseErrorBundle, Parsec, Token, (<|>), between, eof, parse, parseMaybe, sepEndBy, single, token, try)
+import Text.Megaparsec (MonadParsec, ParseErrorBundle, (<|>), between, eof, parse, sepEndBy, single, try)
+import qualified Text.Megaparsec as P (Token)
 import Text.Megaparsec.Char (newline)
 import Text.Megaparsec.Char.Lexer (decimal)
 
-data Snailfish a = Snailfish (Either (Snailfish a) a) (Either (Snailfish a) a)
-data SnailfishToken a = Open | Close | Value a deriving (Eq, Ord)
+data Token a = Open | Close | Value a
 
-parser :: (MonadParsec e s m, Token s ~ Char, Num a) => m (Snailfish a)
-parser = between (single '[') (single ']') $ Snailfish <$> parser' <* single ',' <*> parser' where
-    parser' = Right <$> try decimal <|> Left <$> parser
+parser :: (MonadParsec e s m, P.Token s ~ Char, Num a) => m [Token a]
+parser = between (single '[') (single ']') $ do
+    lhs <- parser' <* single ','
+    rhs <- parser'
+    pure $ Open : lhs ++ rhs ++ [Close]
+  where parser' = (:[]) . Value <$> try decimal <|> parser
 
-snailfishReduce :: forall a. (Integral a, Ord a) => Snailfish a -> Snailfish a
-snailfishReduce = fromJust . parseMaybe (tokenParser <* eof) . explode 0 [] . flatten where
-    tokenParser :: Parsec Void [SnailfishToken a] (Snailfish a)
-    tokenParser = between (single Open) (single Close) $ Snailfish <$> tokenParser' <*> tokenParser' where
-        tokenParser' = Right <$> try value <|> Left <$> tokenParser
-        value = flip token Set.empty $ \case
-            Value a -> Just a
-            _ -> Nothing
-    flatten :: Snailfish a -> [SnailfishToken a]
-    flatten (Snailfish lhs rhs) = Open : flatten' lhs ++ flatten' rhs ++ [Close] where
-        flatten' = either flatten $ (:[]) . Value
-    explode :: Int -> [SnailfishToken a] -> [SnailfishToken a] -> [SnailfishToken a]
-    explode n pre (Open : Value x : Value y : Close : post) | n >= 4 = explode 0 [] $
+add :: (Integral a, Ord a) => [Token a] -> [Token a] -> [Token a]
+add lhs rhs = explode (0 :: Int) [] $ Open : lhs ++ rhs ++ [Close] where
+    explode n pre (Open : Value x : Value y : Close : post) | n >= 4 = explode (0 :: Int) [] $
         reverse (modifyFirstValue (+ x) pre) ++ Value 0 : modifyFirstValue (+ y) post
     explode n pre (cur : post) = explode n' (cur : pre) post where
         n' | Open <- cur = n + 1 | Close <- cur = n - 1 | otherwise = n
     explode _ pre [] = split [] $ reverse pre
-    modifyFirstValue :: (a -> a) -> [SnailfishToken a] -> [SnailfishToken a]
     modifyFirstValue f (Value x : rest) = Value (f x) : rest
     modifyFirstValue f (x : rest) = x : modifyFirstValue f rest
     modifyFirstValue _ [] = []
-    split :: [SnailfishToken a] -> [SnailfishToken a] -> [SnailfishToken a]
     split pre (Value x : post) | x > 9 = explode 0 [] $
         reverse pre ++ Open : Value (x `div` 2) : Value ((x + 1) `div` 2) : Close : post
     split pre (cur : post) = split (cur : pre) post
     split k [] = reverse k
 
-snailfishAdd :: (Integral a, Ord a) => Snailfish a -> Snailfish a -> Snailfish a
-snailfishAdd lhs rhs = snailfishReduce $ Snailfish (Left lhs) (Left rhs)
-
-magnitude :: (Num a) => Snailfish a -> a
-magnitude (Snailfish lhs rhs) = 3 * magnitude' lhs + 2 * magnitude' rhs where
-    magnitude' = either magnitude id
+magnitude :: (Num a) => [Token a] -> Maybe a
+magnitude input
+  | (result, []) <- magnitude' input = result
+  | otherwise = Nothing
+  where
+    magnitude' (Open : (magnitude' -> (Just lhs, magnitude' -> (Just rhs, Close : rest)))) =
+        (Just $ 3 * lhs + 2 * rhs, rest)
+    magnitude' (Value value : rest) = (Just value, rest)
+    magnitude' rest = (Nothing, rest)
 
 day18a :: Text -> Either (ParseErrorBundle Text Void) (Maybe Int)
 day18a input = do
-    snailfishs <- parse (parser `sepEndBy` newline <* eof) "" input
-    pure $ magnitude . foldl1 snailfishAdd <$> nonEmpty snailfishs
+    list <- parse (parser `sepEndBy` newline <* eof) "" input
+    pure $ nonEmpty list >>= magnitude . foldl1 add
 
 day18b :: Text -> Either (ParseErrorBundle Text Void) (Maybe Int)
 day18b input = do
-    snailfishs <- parse (parser `sepEndBy` newline <* eof) "" input
-    pure $ fmap maximum $ nonEmpty $ do
-        (pre, x : post) <- zip (inits snailfishs) (tails snailfishs)
-        y <- pre ++ post
-        magnitude <$> [snailfishAdd x y, snailfishAdd y x]
+    list <- parse (parser `sepEndBy` newline <* eof) "" input
+    let sums = do
+            (pre, x : post) <- zip (inits list) (tails list)
+            y <- pre ++ post
+            [add x y, add y x]
+    pure $ fmap maximum $ mapM magnitude sums >>= nonEmpty
