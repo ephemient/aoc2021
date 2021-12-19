@@ -92,20 +92,22 @@ day17 :: Text -> Either (ParseErrorBundle Text Void) (Int, Int)
 
 
 module Day18
-data Snailfish a
-Snailfish :: Either (Snailfish a) a -> Either (Snailfish a) a -> Snailfish a
-data SnailfishToken a
-Open :: SnailfishToken a
-Close :: SnailfishToken a
-Value :: a -> SnailfishToken a
-parser :: (MonadParsec e s m, Token s ~ Char, Num a) => m (Snailfish a)
-snailfishReduce :: forall a. (Integral a, Ord a) => Snailfish a -> Snailfish a
-snailfishAdd :: (Integral a, Ord a) => Snailfish a -> Snailfish a -> Snailfish a
-magnitude :: Num a => Snailfish a -> a
+data Token a
+Open :: Token a
+Close :: Token a
+Value :: a -> Token a
+parser :: (MonadParsec e s m, Token s ~ Char, Num a) => m [Token a]
+add :: (Integral a, Ord a) => [Token a] -> [Token a] -> [Token a]
+magnitude :: Num a => [Token a] -> Maybe a
 day18a :: Text -> Either (ParseErrorBundle Text Void) (Maybe Int)
 day18b :: Text -> Either (ParseErrorBundle Text Void) (Maybe Int)
-instance GHC.Classes.Ord a => GHC.Classes.Ord (Day18.SnailfishToken a)
-instance GHC.Classes.Eq a => GHC.Classes.Eq (Day18.SnailfishToken a)
+
+
+module Day19
+parser :: (MonadParsec e s m, IsString (Tokens s), Token s ~ Char, Num a) => m [[[a]]]
+allTransforms :: Int -> [[(Bool, Int)]]
+applyTransform :: Num a => [(Bool, Int)] -> [a] -> [a]
+day19 :: Text -> Either (ParseErrorBundle Text Void) (Maybe (Int, Int))
 
 
 module Day2
