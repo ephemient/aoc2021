@@ -27,9 +27,6 @@ parser = do
     y1 <- chunk "..-" *> (negate <$> decimal)
     pure ((x0, y0), (x1, y1))
 
--- $> day17 $ Data.Text.pack "target area: x=20..30, y=-10..-5"
---
--- $> day17 <$> Data.Text.IO.readFile "day17.txt"
 day17 :: Text -> Either (ParseErrorBundle Text Void) (Int, Int)
 day17 input = do
     ((x0, y0), (x1, y1)) <- parse parser "" input

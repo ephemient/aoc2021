@@ -24,19 +24,21 @@ parser = between (single '[') (single ']') $ do
   where parser' = (:[]) . Value <$> try decimal <|> parser
 
 add :: (Integral a, Ord a) => [Token a] -> [Token a] -> [Token a]
-add lhs rhs = explode (0 :: Int) [] $ Open : lhs ++ rhs ++ [Close] where
-    explode n pre (Open : Value x : Value y : Close : post) | n >= 4 = explode (0 :: Int) [] $
-        reverse (modifyFirstValue (+ x) pre) ++ Value 0 : modifyFirstValue (+ y) post
-    explode n pre (cur : post) = explode n' (cur : pre) post where
-        n' | Open <- cur = n + 1 | Close <- cur = n - 1 | otherwise = n
-    explode _ pre [] = split [] $ reverse pre
+add lhs rhs = explode $ Open : lhs ++ rhs ++ [Close] where
+    explode tokens = explode' (0 :: Int) [] tokens where
+        explode' n pre (Open : Value x : Value y : Close : post) | n >= 4 = explode $
+            reverse (modifyFirstValue (+ x) pre) ++ Value 0 : modifyFirstValue (+ y) post
+        explode' n pre (cur : post) = explode' n' (cur : pre) post where
+            n' | Open <- cur = n + 1 | Close <- cur = n - 1 | otherwise = n
+        explode' _ _ [] = split tokens
     modifyFirstValue f (Value x : rest) = Value (f x) : rest
     modifyFirstValue f (x : rest) = x : modifyFirstValue f rest
     modifyFirstValue _ [] = []
-    split pre (Value x : post) | x > 9 = explode 0 [] $
-        reverse pre ++ Open : Value (x `div` 2) : Value ((x + 1) `div` 2) : Close : post
-    split pre (cur : post) = split (cur : pre) post
-    split k [] = reverse k
+    split tokens = split' [] tokens where
+        split' pre (Value x : post) | x > 9 = explode $
+            reverse pre ++ Open : Value (x `div` 2) : Value ((x + 1) `div` 2) : Close : post
+        split' pre (cur : post) = split' (cur : pre) post
+        split' _ [] = tokens
 
 magnitude :: (Num a) => [Token a] -> Maybe a
 magnitude input
