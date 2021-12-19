@@ -138,8 +138,9 @@ fun main(args: Array<String>) {
     if (days?.contains(17) != false) {
         val day17 = Day17(getInput(17))
         println("Day 17")
-        println(day17.part1())
-        println(day17.part2())
+        val (part1, part2) = day17.solve()
+        println(part1)
+        println(part2)
         println()
     }
 
@@ -148,6 +149,15 @@ fun main(args: Array<String>) {
         println("Day 18")
         println(day18.part1())
         println(day18.part2())
+        println()
+    }
+
+    if (days?.contains(19) != false) {
+        val day19 = Day19(getInput(19))
+        println("Day 19")
+        val (part1, part2) = day19.solve()!!
+        println(part1)
+        println(part2)
         println()
     }
 }

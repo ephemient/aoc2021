@@ -5,13 +5,8 @@ import kotlin.test.assertEquals
 
 class Day17Test {
     @Test
-    fun part1() {
-        assertEquals(45, Day17(SAMPLE_INPUT).part1())
-    }
-
-    @Test
-    fun part2() {
-        assertEquals(112, Day17(SAMPLE_INPUT).part2())
+    fun solve() {
+        assertEquals(45 to 112, Day17(SAMPLE_INPUT).solve())
     }
 
     companion object {

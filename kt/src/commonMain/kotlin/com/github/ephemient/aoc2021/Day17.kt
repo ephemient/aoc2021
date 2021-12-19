@@ -6,12 +6,17 @@ import kotlin.math.sqrt
 
 /** Day 17: Trick Shot */
 class Day17(lines: List<String>) {
-    private val part1: Int
-    private val part2: Int
+    private val xRange: IntRange
+    private val yRange: IntRange
     init {
         val (xRange, yRange) = PATTERN.matchEntire(lines.single())!!.destructured.let { (x0, x1, y0, y1) ->
             (x0.toInt()..x1.toInt()) to (y0.toInt()..y1.toInt())
         }
+        this.xRange = xRange
+        this.yRange = yRange
+    }
+
+    fun solve(): IntPair {
         var maxT = 0
         val dyHits = mutableMapOf<Int, MutableList<Int>>()
         for (dy in yRange.first..-yRange.first) {
@@ -34,13 +39,8 @@ class Day17(lines: List<String>) {
             maxDy = dys.fold(maxDy, ::maxOf)
             count += dys.size
         }
-        part1 = maxDy * (maxDy + 1) / 2
-        part2 = count
+        return maxDy * (maxDy + 1) / 2 to count
     }
-
-    fun part1(): Int = part1
-
-    fun part2(): Int = part2
 
     companion object {
         private val PATTERN = """target area: x=(\d+)\.\.(\d+), y=(-\d+)\.\.(-\d+)""".toRegex()
