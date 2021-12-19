@@ -21,6 +21,7 @@ from aoc2021 import (
     day16,
     day17,
     day18,
+    day19,
 )
 
 
@@ -161,3 +162,7 @@ def test_day18_part1_bench(benchmark):
 
 def test_day18_part2_bench(benchmark):
     benchmark(day18.part2, data(18))
+
+
+def test_day19_solve_bench(benchmark):
+    benchmark(day19.solve, data(19))
