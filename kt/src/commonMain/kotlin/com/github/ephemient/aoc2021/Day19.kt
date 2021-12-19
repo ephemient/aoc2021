@@ -26,9 +26,11 @@ class Day19(lines: List<String>) {
     }
 
     private val allTransformations = buildList {
-        permutationIndices(this@Day19.size) { indices ->
+        permutationIndices(this@Day19.size) { indices, parity ->
             repeat(1 shl this@Day19.size) { bits ->
-                add(IntArray(this@Day19.size) { if (1 shl it and bits == 0) indices[it] else indices[it].inv() })
+                if (bits.countOneBits() and 1 != 0 == parity) {
+                    add(IntArray(this@Day19.size) { if (1 shl it and bits == 0) indices[it] else indices[it].inv() })
+                }
             }
         }
     }
