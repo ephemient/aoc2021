@@ -16,6 +16,7 @@ class Day17(lines: List<String>) {
         this.yRange = yRange
     }
 
+    @Suppress("NestedBlockDepth")
     fun solve(): IntPair {
         var maxT = 0
         val dyHits = mutableMapOf<Int, MutableList<Int>>()

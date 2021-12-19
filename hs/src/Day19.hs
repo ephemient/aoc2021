@@ -6,6 +6,7 @@ Description:    <https://adventofcode.com/2021/day/19 Day 19: Beacon Scanner>
 module Day19 (day19) where
 
 import Control.Monad (guard, mfilter, replicateM)
+import Data.Bits (setBit, testBit)
 import Data.Bool (bool)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Function (on)
@@ -30,7 +31,11 @@ parser = mfilter checkSizes $ scanner `sepBy1` newline where
     checkSizes _ = False
 
 allTransforms :: Int -> [[(Bool, Int)]]
-allTransforms n = zip <$> replicateM n [False, True] <*> permutations [0..n - 1]
+allTransforms n = filter parity $ zip <$> replicateM n [False, True] <*> permutations [0..n - 1] where
+    parity t = snd $ foldr decomp (0 :: Int, True) [0..n - 1] where
+        decomp i k@(bits, p) = if testBit bits i then k else decomp' i bits $ not p
+        decomp' i bits p = if testBit bits i then (bits, p) else decomp' j (setBit bits i) $ p == q where
+            (q, j) = t !! i
 
 applyTransform :: (Num a) => [(Bool, Int)] -> [a] -> [a]
 applyTransform t point = [bool id negate s $ point !! i | (s, i) <- t]

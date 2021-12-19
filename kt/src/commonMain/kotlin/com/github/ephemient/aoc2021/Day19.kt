@@ -46,10 +46,10 @@ class Day19(lines: List<String>) {
             for (i in 1 until scanners.size) for (t in allTransformations.indices) yield(i to t)
         }.groupBy { (i, t) -> untransformedDeltas[i].mapTo(mutableSetOf()) { transform(t, it) } }
         return DeepRecursiveFunction<Triple<Set<List<Int>>, List<List<Int>>, Set<Int>>, IntPair?> {
-                (beacons, positions, remaining) ->
+            (beacons, positions, remaining) ->
             if (remaining.isEmpty()) {
                 return@DeepRecursiveFunction beacons.size to
-                        positions.maxOf { x -> positions.maxOf { y -> (0 until size).sumOf { abs(x[it] - y[it]) } } }
+                    positions.maxOf { x -> positions.maxOf { y -> (0 until size).sumOf { abs(x[it] - y[it]) } } }
             }
             val delta = buildSet { for (x in beacons) for (y in beacons) add(x.zip(y, Int::minus)) }
             val next = deltas.entries.mapTo(mutableListOf()) { (key, value) -> key.count { it in delta } to value }
