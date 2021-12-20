@@ -6,15 +6,17 @@ import kotlinx.benchmark.Setup
 import kotlinx.benchmark.State
 
 @State(Scope.Benchmark)
-class Day19Bench {
+class Day20Bench {
     private lateinit var lines: List<String>
 
     @Setup
     fun prepare() {
-        lines = getInput(19)
+        lines = getInput(20)
     }
 
     @Benchmark
-    @ExperimentalStdlibApi
-    fun solve(): IntPair? = Day19(lines).solve()
+    fun part1(): Int = Day20(lines).part1()
+
+    @Benchmark
+    fun part2(): Int = Day20(lines).part2()
 }
