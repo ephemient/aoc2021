@@ -17,7 +17,7 @@ def images(lines):
     image = [line.strip() for line in lines[2:]]
     fill = "."
     while True:
-        yield image
+        yield image if fill == "." else None
         width = len(image[0])
         image = [
             "".join(
