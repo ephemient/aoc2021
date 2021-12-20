@@ -119,6 +119,12 @@ day2a :: Text -> Either String Int
 day2b :: Text -> Either String Int
 
 
+module Day20
+day20 :: Text -> Maybe [Int]
+day20a :: Text -> Maybe Int
+day20b :: Text -> Maybe Int
+
+
 module Day3
 common :: Ord a => [a] -> a
 uncommon :: Ord a => [a] -> a
