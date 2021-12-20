@@ -43,7 +43,7 @@ jobs:
         run: |
           cat >>gh-docs/criterion/index.html <<'EOF'
           <script>
-            document.querySelectorAll('li a[href]')
+            document.querySelectorAll('ul ul li a[href]')
               .forEach(a => {
                 let b = a.getAttribute('href');
                 b = b.substr(0, b.lastIndexOf('/') + 1);
@@ -56,10 +56,9 @@ jobs:
                   .then(r => r.text())
                   .then(t => new DOMParser().parseFromString(t, 'text/html'))
                   .then(d => {
-                    d.querySelectorAll('[src]')
-                      .forEach(e => e.setAttribute('src', `${b}${e.getAttribute('src')}`));
-                    d.querySelectorAll('[href]')
-                      .forEach(e => e.setAttribute('href', `${b}${e.getAttribute('href')}`));
+                    d.querySelectorAll('.explanation').forEach(e => e.remove());
+                    d.querySelectorAll('[src]').forEach(e => e.setAttribute('src', `${b}${e.getAttribute('src')}`));
+                    d.querySelectorAll('[href]').forEach(e => e.setAttribute('href', `${b}${e.getAttribute('href')}`));
                     a.insertAdjacentElement('afterend', d.querySelector('.body'));
                     d.querySelectorAll('style').forEach(e => document.head.append(e));
                   });

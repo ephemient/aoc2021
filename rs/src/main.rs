@@ -2,8 +2,8 @@
 extern crate build_const;
 
 use aoc2021::{
-    day1, day10, day11, day12, day13, day14, day15, day16, day17, day18, day19, day2, day3, day4,
-    day5, day6, day7, day8, day9, util,
+    day1, day10, day11, day12, day13, day14, day15, day16, day17, day18, day19, day2, day20, day3,
+    day4, day5, day6, day7, day8, day9, util,
 };
 use std::collections::HashSet;
 use std::env;
@@ -190,6 +190,19 @@ fn main() -> io::Result<()> {
         let (part1, part2) = day19::solve(DAY19).map_err(util::to_ioerror)?;
         println!("{:?}", part1);
         println!("{:?}", part2);
+        println!();
+    }
+
+    if args.is_empty() || args.contains("20") {
+        println!("Day 20");
+        println!(
+            "{:?}",
+            day20::part1(DAY20).ok_or_else(|| util::to_ioerror(util::Error))?
+        );
+        println!(
+            "{:?}",
+            day20::part2(DAY20).ok_or_else(|| util::to_ioerror(util::Error))?
+        );
         println!();
     }
 
