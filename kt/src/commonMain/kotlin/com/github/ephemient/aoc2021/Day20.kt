@@ -1,5 +1,6 @@
 package com.github.ephemient.aoc2021
 
+/** Day 20: Trench Map*/
 class Day20(lines: List<String>) {
     private val alg = lines.first()
     private fun lookup(vararg key: Char): Char = alg[key.fold(0) { acc, c -> 2 * acc + c.code.and(1) }]
