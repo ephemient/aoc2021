@@ -21,6 +21,7 @@ import Day17 (day17)
 import Day18 (day18a, day18b)
 import Day19 (day19)
 import Day20 (day20a, day20b)
+import Day21 (day21a, day21b)
 
 import Control.Monad ((<=<), when)
 import Data.Maybe (mapMaybe)
@@ -72,3 +73,4 @@ main = do
     run 18 (print <=< justOrFail <=< rightOrFail) [day18a, day18b]
     run 19 (print <=< justOrFail <=< rightOrFail) [day19]
     run 20 (print <=< justOrFail) [day20a, day20b]
+    run 21 (print <=< rightOrFail) [day21a, day21b]
