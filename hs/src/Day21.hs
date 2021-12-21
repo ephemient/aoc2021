@@ -5,7 +5,7 @@ Description:    <https://adventofcode.com/2021/day/21 Day 21: Dirac Dice>
 {-# LANGUAGE FlexibleContexts, OverloadedStrings, TypeFamilies #-}
 module Day21 (day21a, day21b) where
 
-import Control.Monad (replicateM)
+import Control.Monad (guard, join, replicateM)
 import Data.Array ((!), listArray, range)
 import qualified Data.IntMap as IntMap (assocs, fromListWith)
 import Data.String (IsString)
@@ -23,14 +23,12 @@ parser = (,) <$>
 day21a :: Text -> Either (ParseErrorBundle Text Void) Int
 day21a input = do
     (p1, p2) <- parse parser "" input
-    pure $ head
-      [ n * score1
-      | (n, (_, _, score1, score2, _)) <- zip [0, 3..] $ iterate step (p1, p2, 0, 0, 1)
-      , score2 >= 1000
-      ]
+    pure $ head $ do
+        ((_, _, s1, s2), n) <- join (zip . scanl f (p1, p2, 0, 0)) [0, 3..]
+        n * s1 <$ guard (s2 >= 1000)
   where
-      step (p1, p2, s1, s2, d) = (p2, p1', s2, s1 + p1', (d + 2) `mod` 100 + 1) where
-          p1' = (p1 + d + (d `mod` 100 + 1) + ((d + 1) `mod` 100 + 1) - 1) `mod` 10 + 1
+    f (p1, p2, s1, s2) n = (p2, k, s2, s1 + k) where
+        k = (p1 + n `mod` 100 + (n + 1) `mod` 100 + (n + 2) `mod` 100 + 2) `mod` 10 + 1
 
 day21b :: Text -> Either (ParseErrorBundle Text Void) Int
 day21b input = do
@@ -42,7 +40,7 @@ day21b input = do
           [ if s1 + k >= 21 then (n, 0) else (y * n, x * n)
           | (d, n) <- IntMap.assocs $ IntMap.fromListWith (+) [(d, 1) | d <- sum <$> replicateM 3 [1..3]]
           , let k = (p1 + d - 1) `mod` 10 + 1
-                (x, y) = scores ! (p2, (p1 + d - 1) `mod` 10 + 1, s2, s1 + k)
+                (x, y) = scores ! (p2, k, s2, s1 + k)
           ]
       | (p1, p2, s1, s2) <- range ((1, 1, 0, 0), (10, 10, 20, 20))
       ]
