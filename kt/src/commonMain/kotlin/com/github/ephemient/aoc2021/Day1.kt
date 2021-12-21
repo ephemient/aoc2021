@@ -1,6 +1,6 @@
 package com.github.ephemient.aoc2021
 
-/** Day 1: Sonar Sweep */
+/** [Day 1](https://adventofcode.com/2021/day/1): Sonar Sweep */
 class Day1(lines: List<String>) {
     private val nums = lines.map { it.toInt() }
 

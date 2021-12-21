@@ -2,7 +2,7 @@ package com.github.ephemient.aoc2021
 
 import kotlin.native.concurrent.ThreadLocal
 
-/** Day 21: Dirac Dice */
+/** [Day 21](https://adventofcode.com/2021/day/21): Dirac Dice */
 class Day21(lines: List<String>) {
     private val player1Start = lines[0].removePrefix("Player 1 starting position: ").toInt()
     private val player2Start = lines[1].removePrefix("Player 2 starting position: ").toInt()

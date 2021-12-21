@@ -1,6 +1,6 @@
 package com.github.ephemient.aoc2021
 
-/** Day 15: Chiton */
+/** [Day 15](https://adventofcode.com/2021/day/15): Chiton */
 class Day15(lines: List<String>) {
     private val width: Int = lines.first().length
     private val height: Int = lines.size

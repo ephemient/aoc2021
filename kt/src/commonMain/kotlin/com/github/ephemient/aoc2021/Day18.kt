@@ -1,6 +1,6 @@
 package com.github.ephemient.aoc2021
 
-/** Day 18: Snailfish */
+/** [Day 18](https://adventofcode.com/2021/day/18): Snailfish */
 @ExperimentalStdlibApi
 class Day18(lines: List<String>) {
     private val snails = lines.map { it.tokens() }

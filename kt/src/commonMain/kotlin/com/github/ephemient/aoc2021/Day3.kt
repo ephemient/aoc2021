@@ -1,6 +1,6 @@
 package com.github.ephemient.aoc2021
 
-/** Day 3: Binary Diagnostic */
+/** [Day 3](https://adventofcode.com/2021/day/3): Binary Diagnostic */
 class Day3(private val lines: List<String>) {
     fun part1(): Int {
         val common = CharArray(lines.minOfOrNull { it.length } ?: 0) { i ->

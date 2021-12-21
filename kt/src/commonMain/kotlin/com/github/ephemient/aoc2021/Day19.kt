@@ -2,7 +2,7 @@ package com.github.ephemient.aoc2021
 
 import kotlin.math.abs
 
-/** Day 19: Beacon Scanner */
+/** [Day 19](https://adventofcode.com/2021/day/19): Beacon Scanner */
 class Day19(lines: List<String>) {
     private val scanners = buildList {
         val iterator = lines.iterator()

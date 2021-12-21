@@ -1,6 +1,6 @@
 package com.github.ephemient.aoc2021
 
-/** Day 2: Dive! */
+/** [Day 2](https://adventofcode.com/2021/day/2): Dive! */
 class Day2(private val lines: List<String>) {
     fun part1(): Int {
         var x = 0

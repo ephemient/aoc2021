@@ -4,7 +4,7 @@ import kotlin.math.ceil
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
-/** Day 17: Trick Shot */
+/** [Day 17](https://adventofcode.com/2021/day/17): Trick Shot */
 class Day17(lines: List<String>) {
     private val xRange: IntRange
     private val yRange: IntRange
