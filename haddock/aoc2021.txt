@@ -120,9 +120,15 @@ day2b :: Text -> Either String Int
 
 
 module Day20
-day20 :: Text -> Maybe [Int]
+day20 :: Text -> Maybe [Maybe Int]
 day20a :: Text -> Maybe Int
 day20b :: Text -> Maybe Int
+
+
+module Day21
+parser :: (MonadParsec e s m, IsString (Tokens s), Token s ~ Char) => m (Int, Int)
+day21a :: Text -> Either (ParseErrorBundle Text Void) Int
+day21b :: Text -> Either (ParseErrorBundle Text Void) Int
 
 
 module Day3
