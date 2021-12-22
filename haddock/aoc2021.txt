@@ -131,6 +131,13 @@ day21a :: Text -> Either (ParseErrorBundle Text Void) Int
 day21b :: Text -> Either (ParseErrorBundle Text Void) Int
 
 
+module Day22
+parser :: (MonadParsec e s m, IsString (Tokens s), Token s ~ Char, Num a) => m (Bool, ((a, a, a), (a, a, a)))
+day22 :: (Ix a, Num a) => [(Bool, ((a, a, a), (a, a, a)))] -> Int
+day22a :: Text -> Either (ParseErrorBundle Text Void) Int
+day22b :: Text -> Either (ParseErrorBundle Text Void) Int
+
+
 module Day3
 common :: Ord a => [a] -> a
 uncommon :: Ord a => [a] -> a

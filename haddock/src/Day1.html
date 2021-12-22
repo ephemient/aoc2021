@@ -12,10 +12,10 @@ Description:    &lt;https://adventofcode.com/2021/day/1 Day 1: Sonar Sweep&gt;
 </span><span id="line-12"></span><span>
 </span><span id="line-13"></span><span class="annot"><a href="Day1.html#day1a"><span class="hs-identifier hs-type">day1a</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
 </span><span id="line-14"></span><span id="day1a"><span class="annot"><span class="annottext">day1a :: Text -&gt; Either String Int
-</span><a href="Day1.html#day1a"><span class="hs-identifier hs-var hs-var">day1a</span></a></span></span><span> </span><span id="local-6989586621679082177"><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679082177"><span class="hs-identifier hs-var">input</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-15"></span><span>    </span><span id="local-6989586621679082176"><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679082176"><span class="hs-identifier hs-var">nums</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">(Text -&gt; Either String Int) -&gt; [Text] -&gt; Either String [Int]
+</span><a href="Day1.html#day1a"><span class="hs-identifier hs-var hs-var">day1a</span></a></span></span><span> </span><span id="local-6989586621679083481"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679083481"><span class="hs-identifier hs-var">input</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-15"></span><span>    </span><span id="local-6989586621679083480"><span class="annot"><span class="annottext">[Int]
+</span><a href="#local-6989586621679083480"><span class="hs-identifier hs-var">nums</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">(Text -&gt; Either String Int) -&gt; [Text] -&gt; Either String [Int]
 forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
 (Traversable t, Monad m) =&gt;
 (a -&gt; m b) -&gt; t a -&gt; m (t b)
@@ -25,7 +25,7 @@ forall a. Reader a -&gt; Text -&gt; Either String a
 forall a. Integral a =&gt; Reader a
 </span><span class="hs-identifier hs-var">T.decimal</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Text -&gt; [Text]
 </span><span class="hs-identifier hs-var">T.lines</span></span><span> </span><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679082177"><span class="hs-identifier hs-var">input</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679083481"><span class="hs-identifier hs-var">input</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-16"></span><span>    </span><span class="annot"><span class="annottext">Int -&gt; Either String Int
 forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
 </span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">(Int -&gt; Either String Int) -&gt; Int -&gt; Either String Int
@@ -45,20 +45,20 @@ forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
 </span><span class="hs-identifier hs-var">zipWith</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
 forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">(&lt;)</span></span><span> </span><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679082176"><span class="hs-identifier hs-var">nums</span></a></span><span> </span><span class="annot"><span class="annottext">([Int] -&gt; [Bool]) -&gt; [Int] -&gt; [Bool]
+</span><a href="#local-6989586621679083480"><span class="hs-identifier hs-var">nums</span></a></span><span> </span><span class="annot"><span class="annottext">([Int] -&gt; [Bool]) -&gt; [Int] -&gt; [Bool]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; [Int] -&gt; [Int]
 forall a. Int -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">drop</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679082176"><span class="hs-identifier hs-var">nums</span></a></span><span>
+</span><a href="#local-6989586621679083480"><span class="hs-identifier hs-var">nums</span></a></span><span>
 </span><span id="line-17"></span><span>
 </span><span id="line-18"></span><span class="annot"><a href="Day1.html#day1b"><span class="hs-identifier hs-type">day1b</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
 </span><span id="line-19"></span><span id="day1b"><span class="annot"><span class="annottext">day1b :: Text -&gt; Either String Int
-</span><a href="Day1.html#day1b"><span class="hs-identifier hs-var hs-var">day1b</span></a></span></span><span> </span><span id="local-6989586621679082169"><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679082169"><span class="hs-identifier hs-var">input</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-20"></span><span>    </span><span id="local-6989586621679082168"><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679082168"><span class="hs-identifier hs-var">nums</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">(Text -&gt; Either String Int) -&gt; [Text] -&gt; Either String [Int]
+</span><a href="Day1.html#day1b"><span class="hs-identifier hs-var hs-var">day1b</span></a></span></span><span> </span><span id="local-6989586621679083473"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679083473"><span class="hs-identifier hs-var">input</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-20"></span><span>    </span><span id="local-6989586621679083472"><span class="annot"><span class="annottext">[Int]
+</span><a href="#local-6989586621679083472"><span class="hs-identifier hs-var">nums</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">(Text -&gt; Either String Int) -&gt; [Text] -&gt; Either String [Int]
 forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
 (Traversable t, Monad m) =&gt;
 (a -&gt; m b) -&gt; t a -&gt; m (t b)
@@ -68,28 +68,28 @@ forall a. Reader a -&gt; Text -&gt; Either String a
 forall a. Integral a =&gt; Reader a
 </span><span class="hs-identifier hs-var">T.decimal</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Text -&gt; [Text]
 </span><span class="hs-identifier hs-var">T.lines</span></span><span> </span><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679082169"><span class="hs-identifier hs-var">input</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-21"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679082167"><span class="annot"><span class="annottext">sums :: [Int]
-</span><a href="#local-6989586621679082167"><span class="hs-identifier hs-var hs-var">sums</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082166"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679083473"><span class="hs-identifier hs-var">input</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-21"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679083471"><span class="annot"><span class="annottext">sums :: [Int]
+</span><a href="#local-6989586621679083471"><span class="hs-identifier hs-var hs-var">sums</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679083470"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082164"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679083468"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082163"><span class="hs-identifier hs-var">z</span></a></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="local-6989586621679082166"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082166"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679082168"><span class="hs-identifier hs-var">nums</span></a></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="local-6989586621679082164"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082164"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Int -&gt; [Int] -&gt; [Int]
+</span><a href="#local-6989586621679083467"><span class="hs-identifier hs-var">z</span></a></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="local-6989586621679083470"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679083470"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">[Int]
+</span><a href="#local-6989586621679083472"><span class="hs-identifier hs-var">nums</span></a></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="local-6989586621679083468"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679083468"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Int -&gt; [Int] -&gt; [Int]
 forall a. Int -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">drop</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679082168"><span class="hs-identifier hs-var">nums</span></a></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="local-6989586621679082163"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082163"><span class="hs-identifier hs-var">z</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Int -&gt; [Int] -&gt; [Int]
+</span><a href="#local-6989586621679083472"><span class="hs-identifier hs-var">nums</span></a></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="local-6989586621679083467"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679083467"><span class="hs-identifier hs-var">z</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Int -&gt; [Int] -&gt; [Int]
 forall a. Int -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">drop</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679082168"><span class="hs-identifier hs-var">nums</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679083472"><span class="hs-identifier hs-var">nums</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-22"></span><span>    </span><span class="annot"><span class="annottext">Int -&gt; Either String Int
 forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
 </span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">(Int -&gt; Either String Int) -&gt; Int -&gt; Either String Int
@@ -109,11 +109,11 @@ forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
 </span><span class="hs-identifier hs-var">zipWith</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
 forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">(&lt;)</span></span><span> </span><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679082167"><span class="hs-identifier hs-var">sums</span></a></span><span> </span><span class="annot"><span class="annottext">([Int] -&gt; [Bool]) -&gt; [Int] -&gt; [Bool]
+</span><a href="#local-6989586621679083471"><span class="hs-identifier hs-var">sums</span></a></span><span> </span><span class="annot"><span class="annottext">([Int] -&gt; [Bool]) -&gt; [Int] -&gt; [Bool]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; [Int] -&gt; [Int]
 forall a. Int -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">drop</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679082167"><span class="hs-identifier hs-var">sums</span></a></span><span>
+</span><a href="#local-6989586621679083471"><span class="hs-identifier hs-var">sums</span></a></span><span>
 </span><span id="line-23"></span></pre></body></html>
