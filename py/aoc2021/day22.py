@@ -125,103 +125,70 @@ def parse(lines):
     return cuboids
 
 
-def solve(cuboids):
+class Above:
+    def __init__(self, hi):
+        self.hi = hi
+
+    def __call__(self, u, v):
+        if v > self.hi:
+            return max(self.hi + 1, u), v
+
+
+class Below:
+    def __init__(self, lo):
+        self.lo = lo
+
+    def __call__(self, u, v):
+        if u < self.lo:
+            return u, min(self.lo - 1, v)
+
+
+class Clip:
+    def __init__(self, lo, hi):
+        self.lo = lo
+        self.hi = hi
+
+    def __call__(self, u, v):
+        if u <= self.hi and v >= self.lo:
+            return max(self.lo, u), min(self.hi, v)
+
+
+def filter_map(cuboids, f, g, h):
+    for cuboid in cuboids:
+        x = f(cuboid.x0, cuboid.x1) if f else (cuboid.x0, cuboid.x1)
+        y = g(cuboid.y0, cuboid.y1) if g else (cuboid.y0, cuboid.y1)
+        z = h(cuboid.z0, cuboid.z1) if h else (cuboid.z0, cuboid.z1)
+        if x and y and z:
+            yield Cuboid(cuboid.on, x[0], x[1], y[0], y[1], z[0], z[1])
+
+
+def solve(cuboids, on=True):
     it = iter(cuboids)
-    for cuboid in it:
-        if cuboid.on:
+    for top in it:
+        if top.on == on:
             break
     else:
         return 0
-    cuboids = list(it)
+    rest = list(it)
     return (
-        cuboid.volume()
+        top.volume()
         - solve(
-            Cuboid(
-                not on,
-                max(cuboid.x0, x0),
-                min(cuboid.x1, x1),
-                max(cuboid.y0, y0),
-                min(cuboid.y1, y1),
-                max(cuboid.z0, z0),
-                min(cuboid.z1, z1),
-            )
-            for on, x0, x1, y0, y1, z0, z1 in cuboids
-            if x0 <= cuboid.x1
-            and x1 >= cuboid.x0
-            and y0 <= cuboid.y1
-            and y1 >= cuboid.y0
-            and z0 <= cuboid.z1
-            and z1 >= cuboid.z0
+            filter_map(
+                rest, Clip(top.x0, top.x1), Clip(top.y0, top.y1), Clip(top.z0, top.z1)
+            ),
+            not on,
+        )
+        + solve(filter_map(rest, None, None, Below(top.z0)), on)
+        + solve(filter_map(rest, None, None, Above(top.z1)), on)
+        + solve(filter_map(rest, None, Below(top.y0), Clip(top.z0, top.z1)), on)
+        + solve(filter_map(rest, None, Above(top.y1), Clip(top.z0, top.z1)), on)
+        + solve(
+            filter_map(rest, Below(top.x0), Clip(top.y0, top.y1), Clip(top.z0, top.z1)),
+            on,
         )
         + solve(
-            Cuboid(on, x0, x1, y0, y1, min(cuboid.z0 - 1, z0), min(cuboid.z0 - 1, z1))
-            for on, x0, x1, y0, y1, z0, z1 in cuboids
-            if z0 < cuboid.z0
-        )
-        + solve(
-            Cuboid(on, x0, x1, y0, y1, max(cuboid.z1 + 1, z0), max(cuboid.z1 + 1, z1))
-            for on, x0, x1, y0, y1, z0, z1 in cuboids
-            if z1 > cuboid.z1
-        )
-        + solve(
-            Cuboid(
-                on,
-                x0,
-                x1,
-                min(cuboid.y0 - 1, y0),
-                min(cuboid.y0 - 1, y1),
-                max(cuboid.z0, z0),
-                min(cuboid.z1, z1),
-            )
-            for on, x0, x1, y0, y1, z0, z1 in cuboids
-            if y0 < cuboid.y0 and z0 <= cuboid.z1 and z1 >= cuboid.z0
-        )
-        + solve(
-            Cuboid(
-                on,
-                x0,
-                x1,
-                max(cuboid.y1 + 1, y0),
-                max(cuboid.y1 + 1, y1),
-                max(cuboid.z0, z0),
-                min(cuboid.z1, z1),
-            )
-            for on, x0, x1, y0, y1, z0, z1 in cuboids
-            if y1 > cuboid.y1 and z0 <= cuboid.z1 and z1 >= cuboid.z0
-        )
-        + solve(
-            Cuboid(
-                on,
-                min(cuboid.x0 - 1, x0),
-                min(cuboid.x0 - 1, x1),
-                max(cuboid.y0, y0),
-                min(cuboid.y1, y1),
-                max(cuboid.z0, z0),
-                min(cuboid.z1, z1),
-            )
-            for on, x0, x1, y0, y1, z0, z1 in cuboids
-            if x0 < cuboid.x0
-            and y0 <= cuboid.y1
-            and y1 >= cuboid.y0
-            and z0 <= cuboid.z1
-            and z1 >= cuboid.z0
-        )
-        + solve(
-            Cuboid(
-                on,
-                max(cuboid.x1 + 1, x0),
-                max(cuboid.x1 + 1, x1),
-                max(cuboid.y0, y0),
-                min(cuboid.y1, y1),
-                max(cuboid.z0, z0),
-                min(cuboid.z1, z1),
-            )
-            for on, x0, x1, y0, y1, z0, z1 in cuboids
-            if x1 > cuboid.x1
-            and y0 <= cuboid.y1
-            and y1 >= cuboid.y0
-            and z0 <= cuboid.z1
-            and z1 >= cuboid.z0
+            filter_map(rest, Above(top.x1), Clip(top.y0, top.y1), Clip(top.z0, top.z1)),
+            on,
         )
     )
 

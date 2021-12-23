@@ -38,7 +38,8 @@ day21b input = do
     scores = listArray ((1, 1, 0, 0), (10, 10, 20, 20))
       [ foldr add2 (0, 0)
           [ if s1 + k >= 21 then (n, 0) else (y * n, x * n)
-          | (d, n) <- IntMap.assocs $ IntMap.fromListWith (+) [(d, 1) | d <- sum <$> replicateM 3 [1..3]]
+          | (d, n) <- IntMap.assocs $ IntMap.fromListWith (+)
+                [(d, 1) | d <- sum <$> replicateM 3 [1..3]]
           , let k = (p1 + d - 1) `mod` 10 + 1
                 (x, y) = scores ! (p2, k, s2, s1 + k)
           ]

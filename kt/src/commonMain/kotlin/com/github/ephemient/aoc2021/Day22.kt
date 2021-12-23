@@ -28,80 +28,52 @@ class Day22(lines: List<String>) {
             get() = (x1 - x0 + 1L) * (y1 - y0 + 1L) * (z1 - z0 + 1L)
     }
 
+    private interface FilterMap {
+        operator fun invoke(first: Int, second: Int): IntPair?
+    }
+
+    private class Above(private val min: Int) : FilterMap {
+        override fun invoke(first: Int, second: Int): IntPair? =
+            if (second > min) first.coerceAtLeast(min + 1) to second else null
+    }
+
+    private class Below(private val max: Int) : FilterMap {
+        override fun invoke(first: Int, second: Int): IntPair? =
+            if (first < max) first to second.coerceAtMost(max - 1) else null
+    }
+
+    private class Clip(private val min: Int, private val max: Int) : FilterMap {
+        override fun invoke(first: Int, second: Int): IntPair? =
+            if (first <= max && second >= min) first.coerceAtLeast(min) to second.coerceAtMost(max) else null
+    }
+
+    private object Identity : FilterMap {
+        override operator fun invoke(first: Int, second: Int): IntPair = first to second
+    }
+
     companion object {
         private val PATTERN = """(on|off) x=(-?\d+)\.\.(-?\d+),y=(-?\d+)\.\.(-?\d+),z=(-?\d+)\.\.(-?\d+)""".toRegex()
 
-        @Suppress("ComplexCondition", "ComplexMethod", "LongMethod")
-        private fun solve(cuboids: List<Cuboid>): Long {
-            val i = cuboids.indexOfFirst { it.on }
+        private fun Iterable<Cuboid>.filterMap(x: FilterMap, y: FilterMap, z: FilterMap): List<Cuboid> = mapNotNull {
+            val (x0, x1) = x(it.x0, it.x1) ?: return@mapNotNull null
+            val (y0, y1) = y(it.y0, it.y1) ?: return@mapNotNull null
+            val (z0, z1) = z(it.z0, it.z1) ?: return@mapNotNull null
+            Cuboid(it.on, x0, x1, y0, y1, z0, z1)
+        }
+
+        private fun solve(cuboids: List<Cuboid>, on: Boolean = true): Long {
+            val i = cuboids.indexOfFirst { it.on == on }
             if (i < 0) return 0
             val top = cuboids[i]
-            return top.volume - solve(
-                cuboids.drop(i + 1).mapNotNull { (on, x0, x1, y0, y1, z0, z1) ->
-                    if (x0 <= top.x1 && x1 >= top.x0 && y0 <= top.y1 && y1 >= top.y0 && z0 <= top.z1 && z1 >= top.z0) {
-                        Cuboid(
-                            !on,
-                            x0.coerceIn(top.x0..top.x1), x1.coerceIn(top.x0..top.x1),
-                            y0.coerceIn(top.y0..top.y1), y1.coerceIn(top.y0..top.y1),
-                            z0.coerceIn(top.z0..top.z1), z1.coerceIn(top.z0..top.z1),
-                        )
-                    } else null
-                }
-            ) + solve(
-                cuboids.drop(i + 1).mapNotNull { (on, x0, x1, y0, y1, z0, z1) ->
-                    if (z0 < top.z0) {
-                        Cuboid(on, x0, x1, y0, y1, z0.coerceAtMost(top.z0 - 1), z1.coerceAtMost(top.z0 - 1))
-                    } else null
-                }
-            ) + solve(
-                cuboids.drop(i + 1).mapNotNull { (on, x0, x1, y0, y1, z0, z1) ->
-                    if (z1 > top.z1) {
-                        Cuboid(on, x0, x1, y0, y1, z0.coerceAtLeast(top.z1 + 1), z1.coerceAtLeast(top.z1 + 1))
-                    } else null
-                }
-            ) + solve(
-                cuboids.drop(i + 1).mapNotNull { (on, x0, x1, y0, y1, z0, z1) ->
-                    if (z0 <= top.z1 && z1 >= top.z0 && y0 < top.y0) {
-                        Cuboid(
-                            on, x0, x1,
-                            y0.coerceAtMost(top.y0 - 1), y1.coerceAtMost(top.y0 - 1),
-                            z0.coerceIn(top.z0..top.z1), z1.coerceIn(top.z0..top.z1)
-                        )
-                    } else null
-                }
-            ) + solve(
-                cuboids.drop(i + 1).mapNotNull { (on, x0, x1, y0, y1, z0, z1) ->
-                    if (z0 <= top.z1 && z1 >= top.z0 && y1 > top.y1) {
-                        Cuboid(
-                            on, x0, x1,
-                            y0.coerceAtLeast(top.y1 + 1), y1.coerceAtLeast(top.y1 + 1),
-                            z0.coerceIn(top.z0..top.z1), z1.coerceIn(top.z0..top.z1)
-                        )
-                    } else null
-                }
-            ) + solve(
-                cuboids.drop(i + 1).mapNotNull { (on, x0, x1, y0, y1, z0, z1) ->
-                    if (z0 <= top.z1 && z1 >= top.z0 && y0 <= top.y1 && y1 >= top.y0 && x0 < top.x0) {
-                        Cuboid(
-                            on,
-                            x0.coerceAtMost(top.x0 - 1), x1.coerceAtMost(top.x0 - 1),
-                            y0.coerceIn(top.y0..top.y1), y1.coerceIn(top.y0..top.y1),
-                            z0.coerceIn(top.z0..top.z1), z1.coerceIn(top.z0..top.z1)
-                        )
-                    } else null
-                }
-            ) + solve(
-                cuboids.drop(i + 1).mapNotNull { (on, x0, x1, y0, y1, z0, z1) ->
-                    if (z0 <= top.z1 && z1 >= top.z0 && y0 <= top.y1 && y1 >= top.y0 && x1 > top.x1) {
-                        Cuboid(
-                            on,
-                            x0.coerceAtLeast(top.x1 + 1), x1.coerceAtLeast(top.x1 + 1),
-                            y0.coerceIn(top.y0..top.y1), y1.coerceIn(top.y0..top.y1),
-                            z0.coerceIn(top.z0..top.z1), z1.coerceIn(top.z0..top.z1)
-                        )
-                    } else null
-                }
-            )
+            val rest = cuboids.drop(i + 1)
+            return top.volume -
+                solve(rest.filterMap(Clip(top.x0, top.x1), Clip(top.y0, top.y1), Clip(top.z0, top.z1)), !on) +
+                solve(rest.filterMap(Identity, Identity, Below(top.z0)), on) +
+                solve(rest.filterMap(Identity, Identity, Above(top.z1)), on) +
+                solve(rest.filterMap(Identity, Below(top.y0), Clip(top.z0, top.z1)), on) +
+                solve(rest.filterMap(Identity, Above(top.y1), Clip(top.z0, top.z1)), on) +
+                solve(rest.filterMap(Below(top.x0), Clip(top.y0, top.y1), Clip(top.z0, top.z1)), on) +
+                solve(rest.filterMap(Above(top.x1), Clip(top.y0, top.y1), Clip(top.z0, top.z1)), on)
         }
     }
 }
