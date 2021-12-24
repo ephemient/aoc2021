@@ -184,4 +184,12 @@ fun main(args: Array<String>) {
         println(day22.part2())
         println()
     }
+
+    if (days?.contains(24) != false) {
+        val day24 = Day24(getInput(24))
+        println("Day 24")
+        println(day24.part1())
+        println(day24.part2())
+        println()
+    }
 }
