@@ -1,4 +1,5 @@
 [versions]
+asm = "9.2"
 dependency-updates = "0.39.0"
 detekt = "1.19.0"
 dokka = "1.6.0"
@@ -15,6 +16,8 @@ kotlinx-benchmark = { id = "org.jetbrains.kotlinx.benchmark", version.ref = "kot
 native-image = { id = "org.graalvm.buildtools.native", version.ref = "native-image-plugin" }
 
 [libraries]
+asm = { module = "org.ow2.asm:asm", version.ref = "asm" }
+asm-commons = { module = "org.ow2.asm:asm-commons", version.ref = "asm" }
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }

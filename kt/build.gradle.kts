@@ -192,6 +192,10 @@ kotlin {
 
         getByName("jvmMain") {
             resources.srcDir(jvmResources)
+            dependencies {
+                implementation(libs.asm)
+                implementation(libs.asm.commons)
+            }
         }
         getByName("jvmTest") {
             dependencies {
