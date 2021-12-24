@@ -6,7 +6,6 @@ class Day24(private val lines: List<String>) {
 
     fun part2(): Long? = solve(1..9, visited = LruSet(1 shl 24))
 
-    @Suppress("NestedBlockDepth", "ReturnCount")
     private fun solve(
         range: IntProgression,
         alu: ALU = ALU(),
@@ -18,13 +17,10 @@ class Day24(private val lines: List<String>) {
         while (i < lines.size) {
             val line = lines[i++]
             if (line.startsWith("inp ")) {
-                val lhs = line.substring(4, 5)
-                for (value in range) {
-                    val sub = alu.copy(lhs, value)
-                    if (!visited.add(IndexedValue(i, sub.copy()))) return null
-                    solve(range, sub.copy(lhs, value), i, 10 * prefix + value, visited)?.let { return it }
-                }
-                return null
+                return if (visited.add(IndexedValue(i, alu.copy()))) {
+                    val lhs = line.substring(4, 5)
+                    range.firstNotNullOfOrNull { solve(range, alu.copy(lhs, it), i, 10 * prefix + it, visited) }
+                } else null
             } else {
                 val op = ops.getValue(line.substring(0, 3))
                 val lhs = line.substring(4, 5)
