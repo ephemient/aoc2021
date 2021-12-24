@@ -132,10 +132,25 @@ day21b :: Text -> Either (ParseErrorBundle Text Void) Int
 
 
 module Day22
-parser :: (MonadParsec e s m, IsString (Tokens s), Token s ~ Char, Num a) => m (Bool, ((a, a, a), (a, a, a)))
-day22 :: (Ix a, Num a) => [(Bool, ((a, a, a), (a, a, a)))] -> Int
+parser :: (MonadParsec e s m, IsString (Tokens s), Token s ~ Char, Num a) => m (Bool, ((a, a), (a, a), (a, a)))
+day22 :: (Ix a, Num a) => Bool -> [(Bool, ((a, a), (a, a), (a, a)))] -> Int
 day22a :: Text -> Either (ParseErrorBundle Text Void) Int
 day22b :: Text -> Either (ParseErrorBundle Text Void) Int
+
+
+module Day23
+data Diagram a b
+Diagram :: IntSet -> IntMap a -> Map a IntSet -> IntMap (Set (b, Int, IntSet)) -> IntMap a -> Diagram a b
+[states] :: Diagram a b -> IntSet
+[owners] :: Diagram a b -> IntMap a
+[goals] :: Diagram a b -> Map a IntSet
+[transitions] :: Diagram a b -> IntMap (Set (b, Int, IntSet))
+[initial] :: Diagram a b -> IntMap a
+parse :: Ord a => (Char -> a) -> Text -> Diagram a Int
+solve :: (Alternative f, Ord a, Num b, Ord b) => (a -> b) -> Diagram a b -> f b
+day23a :: Text -> Maybe Int
+day23b :: Text -> Maybe Int
+instance (GHC.Show.Show a, GHC.Show.Show b) => GHC.Show.Show (Day23.Diagram a b)
 
 
 module Day3
