@@ -14,9 +14,9 @@ Description:    &lt;https://adventofcode.com/2021/day/18 Day 18: Snailfish&gt;
 </span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Text.Megaparsec.Char</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">newline</span></span><span class="hs-special">)</span><span>
 </span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Text.Megaparsec.Char.Lexer</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">decimal</span></span><span class="hs-special">)</span><span>
 </span><span id="line-16"></span><span>
-</span><span id="line-17"></span><span class="hs-keyword">data</span><span> </span><span id="Token"><span class="annot"><a href="Day18.html#Token"><span class="hs-identifier hs-var">Token</span></a></span></span><span> </span><span id="local-6989586621679086314"><span class="annot"><a href="#local-6989586621679086314"><span class="hs-identifier hs-type">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Open"><span class="annot"><a href="Day18.html#Open"><span class="hs-identifier hs-var">Open</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Close"><span class="annot"><a href="Day18.html#Close"><span class="hs-identifier hs-var">Close</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Value"><span class="annot"><a href="Day18.html#Value"><span class="hs-identifier hs-var">Value</span></a></span></span><span> </span><span class="annot"><a href="#local-6989586621679086314"><span class="hs-identifier hs-type">a</span></a></span><span>
+</span><span id="line-17"></span><span class="hs-keyword">data</span><span> </span><span id="Token"><span class="annot"><a href="Day18.html#Token"><span class="hs-identifier hs-var">Token</span></a></span></span><span> </span><span id="local-6989586621679086771"><span class="annot"><a href="#local-6989586621679086771"><span class="hs-identifier hs-type">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Open"><span class="annot"><a href="Day18.html#Open"><span class="hs-identifier hs-var">Open</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Close"><span class="annot"><a href="Day18.html#Close"><span class="hs-identifier hs-var">Close</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Value"><span class="annot"><a href="Day18.html#Value"><span class="hs-identifier hs-var">Value</span></a></span></span><span> </span><span class="annot"><a href="#local-6989586621679086771"><span class="hs-identifier hs-type">a</span></a></span><span>
 </span><span id="line-18"></span><span>
-</span><span id="line-19"></span><span id="local-6989586621679086291"><span id="local-6989586621679086292"><span id="local-6989586621679086293"><span id="local-6989586621679086294"><span class="annot"><a href="Day18.html#parser"><span class="hs-identifier hs-type">parser</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">MonadParsec</span></span><span> </span><span class="annot"><a href="#local-6989586621679086294"><span class="hs-identifier hs-type">e</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679086293"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679086292"><span class="hs-identifier hs-type">m</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">P.Token</span></span><span> </span><span class="annot"><a href="#local-6989586621679086293"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><span class="hs-glyph hs-type">~</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Char</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Num</span></span><span> </span><span class="annot"><a href="#local-6989586621679086291"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679086292"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#Token"><span class="hs-identifier hs-type">Token</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679086291"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span></span></span></span></span><span>
+</span><span id="line-19"></span><span id="local-6989586621679086748"><span id="local-6989586621679086749"><span id="local-6989586621679086750"><span id="local-6989586621679086751"><span class="annot"><a href="Day18.html#parser"><span class="hs-identifier hs-type">parser</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">MonadParsec</span></span><span> </span><span class="annot"><a href="#local-6989586621679086751"><span class="hs-identifier hs-type">e</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679086750"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679086749"><span class="hs-identifier hs-type">m</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">P.Token</span></span><span> </span><span class="annot"><a href="#local-6989586621679086750"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><span class="hs-glyph hs-type">~</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Char</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Num</span></span><span> </span><span class="annot"><a href="#local-6989586621679086748"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679086749"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#Token"><span class="hs-identifier hs-type">Token</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679086748"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span></span></span></span></span><span>
 </span><span id="line-20"></span><span id="parser"><span class="annot"><span class="annottext">parser :: m [Token a]
 </span><a href="Day18.html#parser"><span class="hs-identifier hs-var hs-var">parser</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">m Char -&gt; m Char -&gt; m [Token a] -&gt; m [Token a]
 forall (m :: * -&gt; *) open close a.
@@ -37,9 +37,9 @@ Token s
 </span><span class="hs-char">']'</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(m [Token a] -&gt; m [Token a]) -&gt; m [Token a] -&gt; m [Token a]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-21"></span><span>    </span><span id="local-6989586621679086226"><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086226"><span class="hs-identifier hs-var">lhs</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">m [Token a]
-</span><a href="#local-6989586621679086225"><span class="hs-identifier hs-var">parser'</span></a></span><span> </span><span class="annot"><span class="annottext">m [Token a] -&gt; m Char -&gt; m [Token a]
+</span><span id="line-21"></span><span>    </span><span id="local-6989586621679086683"><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086683"><span class="hs-identifier hs-var">lhs</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">m [Token a]
+</span><a href="#local-6989586621679086682"><span class="hs-identifier hs-var">parser'</span></a></span><span> </span><span class="annot"><span class="annottext">m [Token a] -&gt; m Char -&gt; m [Token a]
 forall (f :: * -&gt; *) a b. Applicative f =&gt; f a -&gt; f b -&gt; f a
 </span><span class="hs-operator hs-var">&lt;*</span></span><span> </span><span class="annot"><span class="annottext">Token s -&gt; m (Token s)
 forall e s (m :: * -&gt; *).
@@ -48,9 +48,9 @@ Token s -&gt; m (Token s)
 </span><span class="hs-identifier hs-var">single</span></span><span> </span><span class="annot"><span class="annottext">Char
 Token s
 </span><span class="hs-char">','</span></span><span>
-</span><span id="line-22"></span><span>    </span><span id="local-6989586621679086223"><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086223"><span class="hs-identifier hs-var">rhs</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">m [Token a]
-</span><a href="#local-6989586621679086225"><span class="hs-identifier hs-var">parser'</span></a></span><span>
+</span><span id="line-22"></span><span>    </span><span id="local-6989586621679086680"><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086680"><span class="hs-identifier hs-var">rhs</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">m [Token a]
+</span><a href="#local-6989586621679086682"><span class="hs-identifier hs-var">parser'</span></a></span><span>
 </span><span id="line-23"></span><span>    </span><span class="annot"><span class="annottext">[Token a] -&gt; m [Token a]
 forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
 </span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">([Token a] -&gt; m [Token a]) -&gt; [Token a] -&gt; m [Token a]
@@ -60,16 +60,16 @@ forall a. Token a
 </span><a href="Day18.html#Open"><span class="hs-identifier hs-var">Open</span></a></span><span> </span><span class="annot"><span class="annottext">Token a -&gt; [Token a] -&gt; [Token a]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086226"><span class="hs-identifier hs-var">lhs</span></a></span><span> </span><span class="annot"><span class="annottext">[Token a] -&gt; [Token a] -&gt; [Token a]
+</span><a href="#local-6989586621679086683"><span class="hs-identifier hs-var">lhs</span></a></span><span> </span><span class="annot"><span class="annottext">[Token a] -&gt; [Token a] -&gt; [Token a]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086223"><span class="hs-identifier hs-var">rhs</span></a></span><span> </span><span class="annot"><span class="annottext">[Token a] -&gt; [Token a] -&gt; [Token a]
+</span><a href="#local-6989586621679086680"><span class="hs-identifier hs-var">rhs</span></a></span><span> </span><span class="annot"><span class="annottext">[Token a] -&gt; [Token a] -&gt; [Token a]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Token a
 forall a. Token a
 </span><a href="Day18.html#Close"><span class="hs-identifier hs-var">Close</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-24"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679086225"><span class="annot"><span class="annottext">parser' :: m [Token a]
-</span><a href="#local-6989586621679086225"><span class="hs-identifier hs-var hs-var">parser'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Token a -&gt; [Token a] -&gt; [Token a]
+</span><span id="line-24"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679086682"><span class="annot"><span class="annottext">parser' :: m [Token a]
+</span><a href="#local-6989586621679086682"><span class="hs-identifier hs-var hs-var">parser'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Token a -&gt; [Token a] -&gt; [Token a]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Token a -&gt; [Token a]) -&gt; (a -&gt; Token a) -&gt; a -&gt; [Token a]
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
@@ -91,58 +91,58 @@ forall e s (m :: * -&gt; *) a.
 m [Token a]
 </span><a href="Day18.html#parser"><span class="hs-identifier hs-var">parser</span></a></span><span>
 </span><span id="line-25"></span><span>
-</span><span id="line-26"></span><span id="local-6989586621679086256"><span class="annot"><a href="Day18.html#add"><span class="hs-identifier hs-type">add</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Integral</span></span><span> </span><span class="annot"><a href="#local-6989586621679086256"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Ord</span></span><span> </span><span class="annot"><a href="#local-6989586621679086256"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#Token"><span class="hs-identifier hs-type">Token</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679086256"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#Token"><span class="hs-identifier hs-type">Token</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679086256"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#Token"><span class="hs-identifier hs-type">Token</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679086256"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span></span><span>
+</span><span id="line-26"></span><span id="local-6989586621679086713"><span class="annot"><a href="Day18.html#add"><span class="hs-identifier hs-type">add</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Integral</span></span><span> </span><span class="annot"><a href="#local-6989586621679086713"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Ord</span></span><span> </span><span class="annot"><a href="#local-6989586621679086713"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#Token"><span class="hs-identifier hs-type">Token</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679086713"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#Token"><span class="hs-identifier hs-type">Token</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679086713"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#Token"><span class="hs-identifier hs-type">Token</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679086713"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span></span><span>
 </span><span id="line-27"></span><span id="add"><span class="annot"><span class="annottext">add :: [Token a] -&gt; [Token a] -&gt; [Token a]
-</span><a href="Day18.html#add"><span class="hs-identifier hs-var hs-var">add</span></a></span></span><span> </span><span id="local-6989586621679086219"><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086219"><span class="hs-identifier hs-var">lhs</span></a></span></span><span> </span><span id="local-6989586621679086218"><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086218"><span class="hs-identifier hs-var">rhs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Token a] -&gt; [Token a]
+</span><a href="Day18.html#add"><span class="hs-identifier hs-var hs-var">add</span></a></span></span><span> </span><span id="local-6989586621679086676"><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086676"><span class="hs-identifier hs-var">lhs</span></a></span></span><span> </span><span id="local-6989586621679086675"><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086675"><span class="hs-identifier hs-var">rhs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Token a] -&gt; [Token a]
 forall a. Integral a =&gt; [Token a] -&gt; [Token a]
-</span><a href="#local-6989586621679086217"><span class="hs-identifier hs-var">explode</span></a></span><span> </span><span class="annot"><span class="annottext">([Token a] -&gt; [Token a]) -&gt; [Token a] -&gt; [Token a]
+</span><a href="#local-6989586621679086674"><span class="hs-identifier hs-var">explode</span></a></span><span> </span><span class="annot"><span class="annottext">([Token a] -&gt; [Token a]) -&gt; [Token a] -&gt; [Token a]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Token a
 forall a. Token a
 </span><a href="Day18.html#Open"><span class="hs-identifier hs-var">Open</span></a></span><span> </span><span class="annot"><span class="annottext">Token a -&gt; [Token a] -&gt; [Token a]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086219"><span class="hs-identifier hs-var">lhs</span></a></span><span> </span><span class="annot"><span class="annottext">[Token a] -&gt; [Token a] -&gt; [Token a]
+</span><a href="#local-6989586621679086676"><span class="hs-identifier hs-var">lhs</span></a></span><span> </span><span class="annot"><span class="annottext">[Token a] -&gt; [Token a] -&gt; [Token a]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086218"><span class="hs-identifier hs-var">rhs</span></a></span><span> </span><span class="annot"><span class="annottext">[Token a] -&gt; [Token a] -&gt; [Token a]
+</span><a href="#local-6989586621679086675"><span class="hs-identifier hs-var">rhs</span></a></span><span> </span><span class="annot"><span class="annottext">[Token a] -&gt; [Token a] -&gt; [Token a]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Token a
 forall a. Token a
 </span><a href="Day18.html#Close"><span class="hs-identifier hs-var">Close</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-28"></span><span>    </span><span id="local-6989586621679086217"><span class="annot"><span class="annottext">explode :: [Token a] -&gt; [Token a]
-</span><a href="#local-6989586621679086217"><span class="hs-identifier hs-var hs-var">explode</span></a></span></span><span> </span><span id="local-6989586621679086216"><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086216"><span class="hs-identifier hs-var">tokens</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; [Token a] -&gt; [Token a] -&gt; [Token a]
-</span><a href="#local-6989586621679086215"><span class="hs-identifier hs-var">explode'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><span id="line-28"></span><span>    </span><span id="local-6989586621679086674"><span class="annot"><span class="annottext">explode :: [Token a] -&gt; [Token a]
+</span><a href="#local-6989586621679086674"><span class="hs-identifier hs-var hs-var">explode</span></a></span></span><span> </span><span id="local-6989586621679086673"><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086673"><span class="hs-identifier hs-var">tokens</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; [Token a] -&gt; [Token a] -&gt; [Token a]
+</span><a href="#local-6989586621679086672"><span class="hs-identifier hs-var">explode'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086216"><span class="hs-identifier hs-var">tokens</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-29"></span><span>        </span><span id="local-6989586621679086215"><span class="annot"><span class="annottext">explode' :: Int -&gt; [Token a] -&gt; [Token a] -&gt; [Token a]
-</span><a href="#local-6989586621679086215"><span class="hs-identifier hs-var hs-var">explode'</span></a></span></span><span> </span><span id="local-6989586621679086214"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679086214"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679086213"><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086213"><span class="hs-identifier hs-var">pre</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Token a
-</span><a href="Day18.html#Open"><span class="hs-identifier hs-var">Open</span></a></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span class="annot"><a href="Day18.html#Value"><span class="hs-identifier hs-type">Value</span></a></span><span> </span><span id="local-6989586621679086212"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679086212"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span class="annot"><a href="Day18.html#Value"><span class="hs-identifier hs-type">Value</span></a></span><span> </span><span id="local-6989586621679086211"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679086211"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span class="annot"><span class="annottext">Token a
-</span><a href="Day18.html#Close"><span class="hs-identifier hs-var">Close</span></a></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679086210"><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086210"><span class="hs-identifier hs-var">post</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679086214"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+</span><a href="#local-6989586621679086673"><span class="hs-identifier hs-var">tokens</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-29"></span><span>        </span><span id="local-6989586621679086672"><span class="annot"><span class="annottext">explode' :: Int -&gt; [Token a] -&gt; [Token a] -&gt; [Token a]
+</span><a href="#local-6989586621679086672"><span class="hs-identifier hs-var hs-var">explode'</span></a></span></span><span> </span><span id="local-6989586621679086671"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679086671"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679086670"><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086670"><span class="hs-identifier hs-var">pre</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Token a
+</span><a href="Day18.html#Open"><span class="hs-identifier hs-var">Open</span></a></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span class="annot"><a href="Day18.html#Value"><span class="hs-identifier hs-type">Value</span></a></span><span> </span><span id="local-6989586621679086669"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679086669"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span class="annot"><a href="Day18.html#Value"><span class="hs-identifier hs-type">Value</span></a></span><span> </span><span id="local-6989586621679086668"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679086668"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span class="annot"><span class="annottext">Token a
+</span><a href="Day18.html#Close"><span class="hs-identifier hs-var">Close</span></a></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679086667"><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086667"><span class="hs-identifier hs-var">post</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679086671"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
 forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">&gt;=</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">4</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Token a] -&gt; [Token a]
-</span><a href="#local-6989586621679086217"><span class="hs-identifier hs-var">explode</span></a></span><span> </span><span class="annot"><span class="annottext">([Token a] -&gt; [Token a]) -&gt; [Token a] -&gt; [Token a]
+</span><a href="#local-6989586621679086674"><span class="hs-identifier hs-var">explode</span></a></span><span> </span><span class="annot"><span class="annottext">([Token a] -&gt; [Token a]) -&gt; [Token a] -&gt; [Token a]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
 </span><span id="line-30"></span><span>            </span><span class="annot"><span class="annottext">[Token a] -&gt; [Token a]
 forall a. [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">reverse</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(a -&gt; a) -&gt; [Token a] -&gt; [Token a]
 forall a. (a -&gt; a) -&gt; [Token a] -&gt; [Token a]
-</span><a href="#local-6989586621679086208"><span class="hs-identifier hs-var">modifyFirstValue</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+</span><a href="#local-6989586621679086665"><span class="hs-identifier hs-var">modifyFirstValue</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679086212"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086213"><span class="hs-identifier hs-var">pre</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Token a] -&gt; [Token a] -&gt; [Token a]
+</span><a href="#local-6989586621679086669"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086670"><span class="hs-identifier hs-var">pre</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Token a] -&gt; [Token a] -&gt; [Token a]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; Token a
 forall a. a -&gt; Token a
@@ -151,89 +151,89 @@ forall a. a -&gt; Token a
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">(a -&gt; a) -&gt; [Token a] -&gt; [Token a]
 forall a. (a -&gt; a) -&gt; [Token a] -&gt; [Token a]
-</span><a href="#local-6989586621679086208"><span class="hs-identifier hs-var">modifyFirstValue</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+</span><a href="#local-6989586621679086665"><span class="hs-identifier hs-var">modifyFirstValue</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679086211"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086210"><span class="hs-identifier hs-var">post</span></a></span><span>
-</span><span id="line-31"></span><span>        </span><span class="annot"><a href="#local-6989586621679086215"><span class="hs-identifier hs-var">explode'</span></a></span><span> </span><span id="local-6989586621679086206"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679086206"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679086205"><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086205"><span class="hs-identifier hs-var">pre</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679086204"><span class="annot"><span class="annottext">Token a
-</span><a href="#local-6989586621679086204"><span class="hs-identifier hs-var">cur</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679086203"><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086203"><span class="hs-identifier hs-var">post</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; [Token a] -&gt; [Token a] -&gt; [Token a]
-</span><a href="#local-6989586621679086215"><span class="hs-identifier hs-var">explode'</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679086202"><span class="hs-identifier hs-var">n'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Token a
-</span><a href="#local-6989586621679086204"><span class="hs-identifier hs-var">cur</span></a></span><span> </span><span class="annot"><span class="annottext">Token a -&gt; [Token a] -&gt; [Token a]
+</span><a href="#local-6989586621679086668"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086667"><span class="hs-identifier hs-var">post</span></a></span><span>
+</span><span id="line-31"></span><span>        </span><span class="annot"><a href="#local-6989586621679086672"><span class="hs-identifier hs-var">explode'</span></a></span><span> </span><span id="local-6989586621679086663"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679086663"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679086662"><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086662"><span class="hs-identifier hs-var">pre</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679086661"><span class="annot"><span class="annottext">Token a
+</span><a href="#local-6989586621679086661"><span class="hs-identifier hs-var">cur</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679086660"><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086660"><span class="hs-identifier hs-var">post</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; [Token a] -&gt; [Token a] -&gt; [Token a]
+</span><a href="#local-6989586621679086672"><span class="hs-identifier hs-var">explode'</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679086659"><span class="hs-identifier hs-var">n'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Token a
+</span><a href="#local-6989586621679086661"><span class="hs-identifier hs-var">cur</span></a></span><span> </span><span class="annot"><span class="annottext">Token a -&gt; [Token a] -&gt; [Token a]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086205"><span class="hs-identifier hs-var">pre</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086203"><span class="hs-identifier hs-var">post</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-32"></span><span>            </span><span id="local-6989586621679086202"><span class="annot"><span class="annottext">n' :: Int
-</span><a href="#local-6989586621679086202"><span class="hs-identifier hs-var hs-var">n'</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Token a
+</span><a href="#local-6989586621679086662"><span class="hs-identifier hs-var">pre</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086660"><span class="hs-identifier hs-var">post</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-32"></span><span>            </span><span id="local-6989586621679086659"><span class="annot"><span class="annottext">n' :: Int
+</span><a href="#local-6989586621679086659"><span class="hs-identifier hs-var hs-var">n'</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Token a
 </span><a href="Day18.html#Open"><span class="hs-identifier hs-var">Open</span></a></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Token a
-</span><a href="#local-6989586621679086204"><span class="hs-identifier hs-var">cur</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679086206"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679086661"><span class="hs-identifier hs-var">cur</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679086663"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Token a
 </span><a href="Day18.html#Close"><span class="hs-identifier hs-var">Close</span></a></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Token a
-</span><a href="#local-6989586621679086204"><span class="hs-identifier hs-var">cur</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679086206"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679086661"><span class="hs-identifier hs-var">cur</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679086663"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">otherwise</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679086206"><span class="hs-identifier hs-var">n</span></a></span><span>
-</span><span id="line-33"></span><span>        </span><span class="annot"><a href="#local-6989586621679086215"><span class="hs-identifier hs-var">explode'</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679086663"><span class="hs-identifier hs-var">n</span></a></span><span>
+</span><span id="line-33"></span><span>        </span><span class="annot"><a href="#local-6989586621679086672"><span class="hs-identifier hs-var">explode'</span></a></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">[Token a]
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Token a] -&gt; [Token a]
-</span><a href="#local-6989586621679086201"><span class="hs-identifier hs-var">split</span></a></span><span> </span><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086216"><span class="hs-identifier hs-var">tokens</span></a></span><span>
-</span><span id="line-34"></span><span>    </span><span id="local-6989586621679086208"><span class="annot"><span class="annottext">modifyFirstValue :: (a -&gt; a) -&gt; [Token a] -&gt; [Token a]
-</span><a href="#local-6989586621679086208"><span class="hs-identifier hs-var hs-var">modifyFirstValue</span></a></span></span><span> </span><span id="local-6989586621679086200"><span class="annot"><span class="annottext">a -&gt; a
-</span><a href="#local-6989586621679086200"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day18.html#Value"><span class="hs-identifier hs-type">Value</span></a></span><span> </span><span id="local-6989586621679086199"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679086199"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679086198"><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086198"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; Token a
+</span><a href="#local-6989586621679086658"><span class="hs-identifier hs-var">split</span></a></span><span> </span><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086673"><span class="hs-identifier hs-var">tokens</span></a></span><span>
+</span><span id="line-34"></span><span>    </span><span id="local-6989586621679086665"><span class="annot"><span class="annottext">modifyFirstValue :: (a -&gt; a) -&gt; [Token a] -&gt; [Token a]
+</span><a href="#local-6989586621679086665"><span class="hs-identifier hs-var hs-var">modifyFirstValue</span></a></span></span><span> </span><span id="local-6989586621679086657"><span class="annot"><span class="annottext">a -&gt; a
+</span><a href="#local-6989586621679086657"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day18.html#Value"><span class="hs-identifier hs-type">Value</span></a></span><span> </span><span id="local-6989586621679086656"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679086656"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679086655"><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086655"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; Token a
 forall a. a -&gt; Token a
 </span><a href="Day18.html#Value"><span class="hs-identifier hs-var">Value</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; a
-</span><a href="#local-6989586621679086200"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679086199"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Token a -&gt; [Token a] -&gt; [Token a]
+</span><a href="#local-6989586621679086657"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679086656"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Token a -&gt; [Token a] -&gt; [Token a]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086198"><span class="hs-identifier hs-var">rest</span></a></span><span>
-</span><span id="line-35"></span><span>    </span><span class="annot"><a href="#local-6989586621679086208"><span class="hs-identifier hs-var">modifyFirstValue</span></a></span><span> </span><span id="local-6989586621679086197"><span class="annot"><span class="annottext">a -&gt; a
-</span><a href="#local-6989586621679086197"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679086196"><span class="annot"><span class="annottext">Token a
-</span><a href="#local-6989586621679086196"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679086195"><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086195"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Token a
-</span><a href="#local-6989586621679086196"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Token a -&gt; [Token a] -&gt; [Token a]
+</span><a href="#local-6989586621679086655"><span class="hs-identifier hs-var">rest</span></a></span><span>
+</span><span id="line-35"></span><span>    </span><span class="annot"><a href="#local-6989586621679086665"><span class="hs-identifier hs-var">modifyFirstValue</span></a></span><span> </span><span id="local-6989586621679086654"><span class="annot"><span class="annottext">a -&gt; a
+</span><a href="#local-6989586621679086654"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679086653"><span class="annot"><span class="annottext">Token a
+</span><a href="#local-6989586621679086653"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679086652"><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086652"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Token a
+</span><a href="#local-6989586621679086653"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Token a -&gt; [Token a] -&gt; [Token a]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">(a -&gt; a) -&gt; [Token a] -&gt; [Token a]
-</span><a href="#local-6989586621679086208"><span class="hs-identifier hs-var">modifyFirstValue</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a
-</span><a href="#local-6989586621679086197"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086195"><span class="hs-identifier hs-var">rest</span></a></span><span>
-</span><span id="line-36"></span><span>    </span><span class="annot"><a href="#local-6989586621679086208"><span class="hs-identifier hs-var">modifyFirstValue</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a
+</span><a href="#local-6989586621679086665"><span class="hs-identifier hs-var">modifyFirstValue</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a
+</span><a href="#local-6989586621679086654"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086652"><span class="hs-identifier hs-var">rest</span></a></span><span>
+</span><span id="line-36"></span><span>    </span><span class="annot"><a href="#local-6989586621679086665"><span class="hs-identifier hs-var">modifyFirstValue</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-37"></span><span>    </span><span id="local-6989586621679086201"><span class="annot"><span class="annottext">split :: [Token a] -&gt; [Token a]
-</span><a href="#local-6989586621679086201"><span class="hs-identifier hs-var hs-var">split</span></a></span></span><span> </span><span id="local-6989586621679086194"><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086194"><span class="hs-identifier hs-var">tokens</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Token a] -&gt; [Token a] -&gt; [Token a]
-</span><a href="#local-6989586621679086193"><span class="hs-identifier hs-var">split'</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086194"><span class="hs-identifier hs-var">tokens</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-38"></span><span>        </span><span id="local-6989586621679086193"><span class="annot"><span class="annottext">split' :: [Token a] -&gt; [Token a] -&gt; [Token a]
-</span><a href="#local-6989586621679086193"><span class="hs-identifier hs-var hs-var">split'</span></a></span></span><span> </span><span id="local-6989586621679086192"><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086192"><span class="hs-identifier hs-var">pre</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day18.html#Value"><span class="hs-identifier hs-type">Value</span></a></span><span> </span><span id="local-6989586621679086191"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679086191"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679086190"><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086190"><span class="hs-identifier hs-var">post</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679086191"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; Bool
+</span><span id="line-37"></span><span>    </span><span id="local-6989586621679086658"><span class="annot"><span class="annottext">split :: [Token a] -&gt; [Token a]
+</span><a href="#local-6989586621679086658"><span class="hs-identifier hs-var hs-var">split</span></a></span></span><span> </span><span id="local-6989586621679086651"><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086651"><span class="hs-identifier hs-var">tokens</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Token a] -&gt; [Token a] -&gt; [Token a]
+</span><a href="#local-6989586621679086650"><span class="hs-identifier hs-var">split'</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086651"><span class="hs-identifier hs-var">tokens</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-38"></span><span>        </span><span id="local-6989586621679086650"><span class="annot"><span class="annottext">split' :: [Token a] -&gt; [Token a] -&gt; [Token a]
+</span><a href="#local-6989586621679086650"><span class="hs-identifier hs-var hs-var">split'</span></a></span></span><span> </span><span id="local-6989586621679086649"><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086649"><span class="hs-identifier hs-var">pre</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day18.html#Value"><span class="hs-identifier hs-type">Value</span></a></span><span> </span><span id="local-6989586621679086648"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679086648"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679086647"><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086647"><span class="hs-identifier hs-var">post</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679086648"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; Bool
 forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">&gt;</span></span><span> </span><span class="annot"><span class="annottext">a
 </span><span class="hs-number">9</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Token a] -&gt; [Token a]
-</span><a href="#local-6989586621679086217"><span class="hs-identifier hs-var">explode</span></a></span><span> </span><span class="annot"><span class="annottext">([Token a] -&gt; [Token a]) -&gt; [Token a] -&gt; [Token a]
+</span><a href="#local-6989586621679086674"><span class="hs-identifier hs-var">explode</span></a></span><span> </span><span class="annot"><span class="annottext">([Token a] -&gt; [Token a]) -&gt; [Token a] -&gt; [Token a]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
 </span><span id="line-39"></span><span>            </span><span class="annot"><span class="annottext">[Token a] -&gt; [Token a]
 forall a. [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">reverse</span></span><span> </span><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086192"><span class="hs-identifier hs-var">pre</span></a></span><span> </span><span class="annot"><span class="annottext">[Token a] -&gt; [Token a] -&gt; [Token a]
+</span><a href="#local-6989586621679086649"><span class="hs-identifier hs-var">pre</span></a></span><span> </span><span class="annot"><span class="annottext">[Token a] -&gt; [Token a] -&gt; [Token a]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Token a
 forall a. Token a
@@ -242,7 +242,7 @@ forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; Token a
 forall a. a -&gt; Token a
 </span><a href="Day18.html#Value"><span class="hs-identifier hs-var">Value</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679086191"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+</span><a href="#local-6989586621679086648"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
 forall a. Integral a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">`div`</span></span><span> </span><span class="annot"><span class="annottext">a
 </span><span class="hs-number">2</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Token a -&gt; [Token a] -&gt; [Token a]
@@ -250,7 +250,7 @@ forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; Token a
 forall a. a -&gt; Token a
 </span><a href="Day18.html#Value"><span class="hs-identifier hs-var">Value</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679086191"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+</span><a href="#local-6989586621679086648"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">a
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
@@ -263,45 +263,45 @@ forall a. Token a
 </span><a href="Day18.html#Close"><span class="hs-identifier hs-var">Close</span></a></span><span> </span><span class="annot"><span class="annottext">Token a -&gt; [Token a] -&gt; [Token a]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086190"><span class="hs-identifier hs-var">post</span></a></span><span>
-</span><span id="line-40"></span><span>        </span><span class="annot"><a href="#local-6989586621679086193"><span class="hs-identifier hs-var">split'</span></a></span><span> </span><span id="local-6989586621679086187"><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086187"><span class="hs-identifier hs-var">pre</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679086186"><span class="annot"><span class="annottext">Token a
-</span><a href="#local-6989586621679086186"><span class="hs-identifier hs-var">cur</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679086185"><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086185"><span class="hs-identifier hs-var">post</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Token a] -&gt; [Token a] -&gt; [Token a]
-</span><a href="#local-6989586621679086193"><span class="hs-identifier hs-var">split'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Token a
-</span><a href="#local-6989586621679086186"><span class="hs-identifier hs-var">cur</span></a></span><span> </span><span class="annot"><span class="annottext">Token a -&gt; [Token a] -&gt; [Token a]
+</span><a href="#local-6989586621679086647"><span class="hs-identifier hs-var">post</span></a></span><span>
+</span><span id="line-40"></span><span>        </span><span class="annot"><a href="#local-6989586621679086650"><span class="hs-identifier hs-var">split'</span></a></span><span> </span><span id="local-6989586621679086644"><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086644"><span class="hs-identifier hs-var">pre</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679086643"><span class="annot"><span class="annottext">Token a
+</span><a href="#local-6989586621679086643"><span class="hs-identifier hs-var">cur</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679086642"><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086642"><span class="hs-identifier hs-var">post</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Token a] -&gt; [Token a] -&gt; [Token a]
+</span><a href="#local-6989586621679086650"><span class="hs-identifier hs-var">split'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Token a
+</span><a href="#local-6989586621679086643"><span class="hs-identifier hs-var">cur</span></a></span><span> </span><span class="annot"><span class="annottext">Token a -&gt; [Token a] -&gt; [Token a]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086187"><span class="hs-identifier hs-var">pre</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086185"><span class="hs-identifier hs-var">post</span></a></span><span>
-</span><span id="line-41"></span><span>        </span><span class="annot"><a href="#local-6989586621679086193"><span class="hs-identifier hs-var">split'</span></a></span><span> </span><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086644"><span class="hs-identifier hs-var">pre</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086642"><span class="hs-identifier hs-var">post</span></a></span><span>
+</span><span id="line-41"></span><span>        </span><span class="annot"><a href="#local-6989586621679086650"><span class="hs-identifier hs-var">split'</span></a></span><span> </span><span class="annot"><span class="annottext">[Token a]
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086194"><span class="hs-identifier hs-var">tokens</span></a></span><span>
+</span><a href="#local-6989586621679086651"><span class="hs-identifier hs-var">tokens</span></a></span><span>
 </span><span id="line-42"></span><span>
-</span><span id="line-43"></span><span id="local-6989586621679086259"><span class="annot"><a href="Day18.html#magnitude"><span class="hs-identifier hs-type">magnitude</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Num</span></span><span> </span><span class="annot"><a href="#local-6989586621679086259"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#Token"><span class="hs-identifier hs-type">Token</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679086259"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="#local-6989586621679086259"><span class="hs-identifier hs-type">a</span></a></span></span><span>
+</span><span id="line-43"></span><span id="local-6989586621679086716"><span class="annot"><a href="Day18.html#magnitude"><span class="hs-identifier hs-type">magnitude</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Num</span></span><span> </span><span class="annot"><a href="#local-6989586621679086716"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Day18.html#Token"><span class="hs-identifier hs-type">Token</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679086716"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="#local-6989586621679086716"><span class="hs-identifier hs-type">a</span></a></span></span><span>
 </span><span id="line-44"></span><span id="magnitude"><span class="annot"><span class="annottext">magnitude :: [Token a] -&gt; Maybe a
-</span><a href="Day18.html#magnitude"><span class="hs-identifier hs-var hs-var">magnitude</span></a></span></span><span> </span><span id="local-6989586621679086183"><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086183"><span class="hs-identifier hs-var">input</span></a></span></span><span>
-</span><span id="line-45"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679086182"><span class="annot"><span class="annottext">Maybe a
-</span><a href="#local-6989586621679086182"><span class="hs-identifier hs-var">result</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">[Token a] -&gt; (Maybe a, [Token a])
+</span><a href="Day18.html#magnitude"><span class="hs-identifier hs-var hs-var">magnitude</span></a></span></span><span> </span><span id="local-6989586621679086640"><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086640"><span class="hs-identifier hs-var">input</span></a></span></span><span>
+</span><span id="line-45"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679086639"><span class="annot"><span class="annottext">Maybe a
+</span><a href="#local-6989586621679086639"><span class="hs-identifier hs-var">result</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">[Token a] -&gt; (Maybe a, [Token a])
 forall a. Num a =&gt; [Token a] -&gt; (Maybe a, [Token a])
-</span><a href="#local-6989586621679086181"><span class="hs-identifier hs-var">magnitude'</span></a></span><span> </span><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086183"><span class="hs-identifier hs-var">input</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe a
-</span><a href="#local-6989586621679086182"><span class="hs-identifier hs-var">result</span></a></span><span>
+</span><a href="#local-6989586621679086638"><span class="hs-identifier hs-var">magnitude'</span></a></span><span> </span><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086640"><span class="hs-identifier hs-var">input</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe a
+</span><a href="#local-6989586621679086639"><span class="hs-identifier hs-var">result</span></a></span><span>
 </span><span id="line-46"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">otherwise</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe a
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
 </span><span id="line-47"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-48"></span><span>    </span><span id="local-6989586621679086181"><span class="annot"><span class="annottext">magnitude' :: [Token a] -&gt; (Maybe a, [Token a])
-</span><a href="#local-6989586621679086181"><span class="hs-identifier hs-var hs-var">magnitude'</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Token a
+</span><span id="line-48"></span><span>    </span><span id="local-6989586621679086638"><span class="annot"><span class="annottext">magnitude' :: [Token a] -&gt; (Maybe a, [Token a])
+</span><a href="#local-6989586621679086638"><span class="hs-identifier hs-var hs-var">magnitude'</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Token a
 </span><a href="Day18.html#Open"><span class="hs-identifier hs-var">Open</span></a></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Token a] -&gt; (Maybe a, [Token a])
-</span><a href="#local-6989586621679086181"><span class="hs-identifier hs-var">magnitude'</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span id="local-6989586621679086180"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679086180"><span class="hs-identifier hs-var">lhs</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Token a] -&gt; (Maybe a, [Token a])
-</span><a href="#local-6989586621679086181"><span class="hs-identifier hs-var">magnitude'</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span id="local-6989586621679086179"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679086179"><span class="hs-identifier hs-var">rhs</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Token a
-</span><a href="Day18.html#Close"><span class="hs-identifier hs-var">Close</span></a></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679086178"><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086178"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
+</span><a href="#local-6989586621679086638"><span class="hs-identifier hs-var">magnitude'</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span id="local-6989586621679086637"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679086637"><span class="hs-identifier hs-var">lhs</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Token a] -&gt; (Maybe a, [Token a])
+</span><a href="#local-6989586621679086638"><span class="hs-identifier hs-var">magnitude'</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span id="local-6989586621679086636"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679086636"><span class="hs-identifier hs-var">rhs</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Token a
+</span><a href="Day18.html#Close"><span class="hs-identifier hs-var">Close</span></a></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679086635"><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086635"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-49"></span><span>        </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; Maybe a
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">(a -&gt; Maybe a) -&gt; a -&gt; Maybe a
@@ -310,33 +310,33 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-number">3</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679086180"><span class="hs-identifier hs-var">lhs</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+</span><a href="#local-6989586621679086637"><span class="hs-identifier hs-var">lhs</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">a
 </span><span class="hs-number">2</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679086179"><span class="hs-identifier hs-var">rhs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086178"><span class="hs-identifier hs-var">rest</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-50"></span><span>    </span><span class="annot"><a href="#local-6989586621679086181"><span class="hs-identifier hs-var">magnitude'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day18.html#Value"><span class="hs-identifier hs-type">Value</span></a></span><span> </span><span id="local-6989586621679086176"><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679086176"><span class="hs-identifier hs-var">value</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679086175"><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086175"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; Maybe a
+</span><a href="#local-6989586621679086636"><span class="hs-identifier hs-var">rhs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086635"><span class="hs-identifier hs-var">rest</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-50"></span><span>    </span><span class="annot"><a href="#local-6989586621679086638"><span class="hs-identifier hs-var">magnitude'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day18.html#Value"><span class="hs-identifier hs-type">Value</span></a></span><span> </span><span id="local-6989586621679086633"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679086633"><span class="hs-identifier hs-var">value</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679086632"><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086632"><span class="hs-identifier hs-var">rest</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; Maybe a
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679086176"><span class="hs-identifier hs-var">value</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086175"><span class="hs-identifier hs-var">rest</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-51"></span><span>    </span><span class="annot"><a href="#local-6989586621679086181"><span class="hs-identifier hs-var">magnitude'</span></a></span><span> </span><span id="local-6989586621679086174"><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086174"><span class="hs-identifier hs-var">rest</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Maybe a
+</span><a href="#local-6989586621679086633"><span class="hs-identifier hs-var">value</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086632"><span class="hs-identifier hs-var">rest</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-51"></span><span>    </span><span class="annot"><a href="#local-6989586621679086638"><span class="hs-identifier hs-var">magnitude'</span></a></span><span> </span><span id="local-6989586621679086631"><span class="annot"><span class="annottext">[Token a]
+</span><a href="#local-6989586621679086631"><span class="hs-identifier hs-var">rest</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Maybe a
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Token a]
-</span><a href="#local-6989586621679086174"><span class="hs-identifier hs-var">rest</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679086631"><span class="hs-identifier hs-var">rest</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-52"></span><span>
 </span><span id="line-53"></span><span class="annot"><a href="Day18.html#day18a"><span class="hs-identifier hs-type">day18a</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ParseErrorBundle</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Void</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">)</span><span>
 </span><span id="line-54"></span><span id="day18a"><span class="annot"><span class="annottext">day18a :: Text -&gt; Either (ParseErrorBundle Text Void) (Maybe Int)
-</span><a href="Day18.html#day18a"><span class="hs-identifier hs-var hs-var">day18a</span></a></span></span><span> </span><span id="local-6989586621679086173"><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679086173"><span class="hs-identifier hs-var">input</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-55"></span><span>    </span><span id="local-6989586621679086172"><span class="annot"><span class="annottext">[[Token Int]]
-</span><a href="#local-6989586621679086172"><span class="hs-identifier hs-var">list</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Parsec Void Text [[Token Int]]
+</span><a href="Day18.html#day18a"><span class="hs-identifier hs-var hs-var">day18a</span></a></span></span><span> </span><span id="local-6989586621679086630"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679086630"><span class="hs-identifier hs-var">input</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-55"></span><span>    </span><span id="local-6989586621679086629"><span class="annot"><span class="annottext">[[Token Int]]
+</span><a href="#local-6989586621679086629"><span class="hs-identifier hs-var">list</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Parsec Void Text [[Token Int]]
 -&gt; String
 -&gt; Text
 -&gt; Either (ParseErrorBundle Text Void) [[Token Int]]
@@ -361,7 +361,7 @@ forall (f :: * -&gt; *) a b. Applicative f =&gt; f a -&gt; f b -&gt; f a
 forall e s (m :: * -&gt; *). MonadParsec e s m =&gt; m ()
 </span><span class="hs-identifier hs-var">eof</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&quot;</span></span><span> </span><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679086173"><span class="hs-identifier hs-var">input</span></a></span><span>
+</span><a href="#local-6989586621679086630"><span class="hs-identifier hs-var">input</span></a></span><span>
 </span><span id="line-56"></span><span>    </span><span class="annot"><span class="annottext">Maybe Int -&gt; Either (ParseErrorBundle Text Void) (Maybe Int)
 forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
 </span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">(Maybe Int -&gt; Either (ParseErrorBundle Text Void) (Maybe Int))
@@ -370,7 +370,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[[Token Int]] -&gt; Maybe (NonEmpty [Token Int])
 forall a. [a] -&gt; Maybe (NonEmpty a)
 </span><span class="hs-identifier hs-var">nonEmpty</span></span><span> </span><span class="annot"><span class="annottext">[[Token Int]]
-</span><a href="#local-6989586621679086172"><span class="hs-identifier hs-var">list</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe (NonEmpty [Token Int])
+</span><a href="#local-6989586621679086629"><span class="hs-identifier hs-var">list</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe (NonEmpty [Token Int])
 -&gt; (NonEmpty [Token Int] -&gt; Maybe Int) -&gt; Maybe Int
 forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
 </span><span class="hs-operator hs-var">&gt;&gt;=</span></span><span> </span><span class="annot"><span class="annottext">[Token Int] -&gt; Maybe Int
@@ -391,10 +391,10 @@ forall a.
 </span><span id="line-57"></span><span>
 </span><span id="line-58"></span><span class="annot"><a href="Day18.html#day18b"><span class="hs-identifier hs-type">day18b</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ParseErrorBundle</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Void</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">)</span><span>
 </span><span id="line-59"></span><span id="day18b"><span class="annot"><span class="annottext">day18b :: Text -&gt; Either (ParseErrorBundle Text Void) (Maybe Int)
-</span><a href="Day18.html#day18b"><span class="hs-identifier hs-var hs-var">day18b</span></a></span></span><span> </span><span id="local-6989586621679086170"><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679086170"><span class="hs-identifier hs-var">input</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-60"></span><span>    </span><span id="local-6989586621679086169"><span class="annot"><span class="annottext">[[Token Int]]
-</span><a href="#local-6989586621679086169"><span class="hs-identifier hs-var">list</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Parsec Void Text [[Token Int]]
+</span><a href="Day18.html#day18b"><span class="hs-identifier hs-var hs-var">day18b</span></a></span></span><span> </span><span id="local-6989586621679086627"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679086627"><span class="hs-identifier hs-var">input</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-60"></span><span>    </span><span id="local-6989586621679086626"><span class="annot"><span class="annottext">[[Token Int]]
+</span><a href="#local-6989586621679086626"><span class="hs-identifier hs-var">list</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Parsec Void Text [[Token Int]]
 -&gt; String
 -&gt; Text
 -&gt; Either (ParseErrorBundle Text Void) [[Token Int]]
@@ -419,41 +419,41 @@ forall (f :: * -&gt; *) a b. Applicative f =&gt; f a -&gt; f b -&gt; f a
 forall e s (m :: * -&gt; *). MonadParsec e s m =&gt; m ()
 </span><span class="hs-identifier hs-var">eof</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
 </span><span class="hs-string">&quot;&quot;</span></span><span> </span><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679086170"><span class="hs-identifier hs-var">input</span></a></span><span>
-</span><span id="line-61"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679086168"><span class="annot"><span class="annottext">sums :: [[Token Int]]
-</span><a href="#local-6989586621679086168"><span class="hs-identifier hs-var hs-var">sums</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-62"></span><span>            </span><span class="hs-special">(</span><span id="local-6989586621679086167"><span class="annot"><span class="annottext">[[Token Int]]
-</span><a href="#local-6989586621679086167"><span class="hs-identifier hs-var">pre</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679086166"><span class="annot"><span class="annottext">[Token Int]
-</span><a href="#local-6989586621679086166"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679086165"><span class="annot"><span class="annottext">[[Token Int]]
-</span><a href="#local-6989586621679086165"><span class="hs-identifier hs-var">post</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">[[[Token Int]]]
+</span><a href="#local-6989586621679086627"><span class="hs-identifier hs-var">input</span></a></span><span>
+</span><span id="line-61"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679086625"><span class="annot"><span class="annottext">sums :: [[Token Int]]
+</span><a href="#local-6989586621679086625"><span class="hs-identifier hs-var hs-var">sums</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-62"></span><span>            </span><span class="hs-special">(</span><span id="local-6989586621679086624"><span class="annot"><span class="annottext">[[Token Int]]
+</span><a href="#local-6989586621679086624"><span class="hs-identifier hs-var">pre</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679086623"><span class="annot"><span class="annottext">[Token Int]
+</span><a href="#local-6989586621679086623"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span> </span><span id="local-6989586621679086622"><span class="annot"><span class="annottext">[[Token Int]]
+</span><a href="#local-6989586621679086622"><span class="hs-identifier hs-var">post</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">[[[Token Int]]]
 -&gt; [[[Token Int]]] -&gt; [([[Token Int]], [[Token Int]])]
 forall a b. [a] -&gt; [b] -&gt; [(a, b)]
 </span><span class="hs-identifier hs-var">zip</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Token Int]] -&gt; [[[Token Int]]]
 forall a. [a] -&gt; [[a]]
 </span><span class="hs-identifier hs-var">inits</span></span><span> </span><span class="annot"><span class="annottext">[[Token Int]]
-</span><a href="#local-6989586621679086169"><span class="hs-identifier hs-var">list</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Token Int]] -&gt; [[[Token Int]]]
+</span><a href="#local-6989586621679086626"><span class="hs-identifier hs-var">list</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Token Int]] -&gt; [[[Token Int]]]
 forall a. [a] -&gt; [[a]]
 </span><span class="hs-identifier hs-var">tails</span></span><span> </span><span class="annot"><span class="annottext">[[Token Int]]
-</span><a href="#local-6989586621679086169"><span class="hs-identifier hs-var">list</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-63"></span><span>            </span><span id="local-6989586621679086164"><span class="annot"><span class="annottext">[Token Int]
-</span><a href="#local-6989586621679086164"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">[[Token Int]]
-</span><a href="#local-6989586621679086167"><span class="hs-identifier hs-var">pre</span></a></span><span> </span><span class="annot"><span class="annottext">[[Token Int]] -&gt; [[Token Int]] -&gt; [[Token Int]]
+</span><a href="#local-6989586621679086626"><span class="hs-identifier hs-var">list</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-63"></span><span>            </span><span id="local-6989586621679086621"><span class="annot"><span class="annottext">[Token Int]
+</span><a href="#local-6989586621679086621"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">[[Token Int]]
+</span><a href="#local-6989586621679086624"><span class="hs-identifier hs-var">pre</span></a></span><span> </span><span class="annot"><span class="annottext">[[Token Int]] -&gt; [[Token Int]] -&gt; [[Token Int]]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[[Token Int]]
-</span><a href="#local-6989586621679086165"><span class="hs-identifier hs-var">post</span></a></span><span>
+</span><a href="#local-6989586621679086622"><span class="hs-identifier hs-var">post</span></a></span><span>
 </span><span id="line-64"></span><span>            </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Token Int] -&gt; [Token Int] -&gt; [Token Int]
 forall a.
 (Integral a, Ord a) =&gt;
 [Token a] -&gt; [Token a] -&gt; [Token a]
 </span><a href="Day18.html#add"><span class="hs-identifier hs-var">add</span></a></span><span> </span><span class="annot"><span class="annottext">[Token Int]
-</span><a href="#local-6989586621679086166"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[Token Int]
-</span><a href="#local-6989586621679086164"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Token Int] -&gt; [Token Int] -&gt; [Token Int]
+</span><a href="#local-6989586621679086623"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[Token Int]
+</span><a href="#local-6989586621679086621"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Token Int] -&gt; [Token Int] -&gt; [Token Int]
 forall a.
 (Integral a, Ord a) =&gt;
 [Token a] -&gt; [Token a] -&gt; [Token a]
 </span><a href="Day18.html#add"><span class="hs-identifier hs-var">add</span></a></span><span> </span><span class="annot"><span class="annottext">[Token Int]
-</span><a href="#local-6989586621679086164"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">[Token Int]
-</span><a href="#local-6989586621679086166"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679086621"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">[Token Int]
+</span><a href="#local-6989586621679086623"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-65"></span><span>    </span><span class="annot"><span class="annottext">Maybe Int -&gt; Either (ParseErrorBundle Text Void) (Maybe Int)
 forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
 </span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">(Maybe Int -&gt; Either (ParseErrorBundle Text Void) (Maybe Int))
@@ -473,7 +473,7 @@ forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
 </span><span class="hs-identifier hs-var">mapM</span></span><span> </span><span class="annot"><span class="annottext">[Token Int] -&gt; Maybe Int
 forall a. Num a =&gt; [Token a] -&gt; Maybe a
 </span><a href="Day18.html#magnitude"><span class="hs-identifier hs-var">magnitude</span></a></span><span> </span><span class="annot"><span class="annottext">[[Token Int]]
-</span><a href="#local-6989586621679086168"><span class="hs-identifier hs-var">sums</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe [Int]
+</span><a href="#local-6989586621679086625"><span class="hs-identifier hs-var">sums</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe [Int]
 -&gt; ([Int] -&gt; Maybe (NonEmpty Int)) -&gt; Maybe (NonEmpty Int)
 forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
 </span><span class="hs-operator hs-var">&gt;&gt;=</span></span><span> </span><span class="annot"><span class="annottext">[Int] -&gt; Maybe (NonEmpty Int)

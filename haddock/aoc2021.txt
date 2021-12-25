@@ -153,6 +153,10 @@ day23b :: Text -> Maybe Int
 instance (GHC.Show.Show a, GHC.Show.Show b) => GHC.Show.Show (Day23.Diagram a b)
 
 
+module Day25
+day25 :: Text -> Maybe Int
+
+
 module Day3
 common :: Ord a => [a] -> a
 uncommon :: Ord a => [a] -> a
