@@ -28,9 +28,12 @@ library:
   - array
   - containers
   - fgl
+  - hashable
   - heap
   - megaparsec
   - mtl
+  - primitive
+  - random
   - split
   - template-haskell
   - text
