@@ -3,6 +3,8 @@ package com.github.ephemient.aoc2021
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@ExperimentalMultiplatform
+@JsIgnore
 class Day24Test {
     @Test
     fun part1() {

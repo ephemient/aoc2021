@@ -1,11 +1,13 @@
 package com.github.ephemient.aoc2021
 
-expect fun getInput(day: Int): List<String>
+internal expect fun getInput(day: Int): List<String>
+
+internal expect fun getRunAllIfArgsEmpty(): Boolean
 
 @Suppress("ComplexMethod", "LongMethod")
 @ExperimentalStdlibApi
 fun main(args: Array<String>) {
-    val days = args.mapNotNull { it.toIntOrNull() }.takeIf { it.isNotEmpty() }
+    val days = args.mapNotNull { it.toIntOrNull() }.takeIf { !getRunAllIfArgsEmpty() || it.isNotEmpty() }
 
     if (days?.contains(1) != false) {
         val day1 = Day1(getInput(1))

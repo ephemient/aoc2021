@@ -75,7 +75,7 @@ val nonJvmSources by tasks.registering {
     doLast {
         File(outputs.files.singleFile, "Resources.kt").bufferedWriter().use { out ->
             out.write("package com.github.ephemient.aoc2021\n\n")
-            out.write("actual fun getInput(day: Int): List<String> = when (day) {\n")
+            out.write("internal actual fun getInput(day: Int): List<String> = when (day) {\n")
             for (
                 (day, file) in inputs.files.files
                     .mapNotNull { file ->
@@ -108,12 +108,12 @@ kotlin {
     jvm()
     for ((jsTarget, compiler) in jsTargets) {
         js(jsTarget, compiler) {
-            // https://youtrack.jetbrains.com/issue/KT-31888
-            // binaries.executable()
-            compilations.getByName("main").kotlinOptions.freeCompilerArgs += listOf("-main", "noCall")
-            nodejs {
-                testTask {
-                    useMocha()
+            binaries.executable()
+            if (compiler != KotlinJsCompilerType.LEGACY) {
+                nodejs {
+                    testTask {
+                        useMocha()
+                    }
                 }
             }
         }
@@ -138,13 +138,17 @@ kotlin {
             val common = findByName("common$compilation") ?: create("common$compilation") {
                 parentCompilation?.also { dependsOn(getByName("common$it")) }
             }
-            getByName("jvm$compilation") {
-                dependsOn(common)
-                parentCompilation?.also { dependsOn(getByName("jvm$it")) }
-            }
             val nonJvm = create("nonJvm$compilation") {
                 dependsOn(common)
                 parentCompilation?.also { dependsOn(getByName("nonJvm$it")) }
+            }
+            val nonJs = create("nonJs$compilation") {
+                dependsOn(common)
+                parentCompilation?.also { dependsOn(getByName("nonJs$it")) }
+            }
+            getByName("jvm$compilation") {
+                dependsOn(nonJs)
+                parentCompilation?.also { dependsOn(getByName("jvm$it")) }
             }
             val js = create("js$compilation") {
                 dependsOn(nonJvm)
@@ -159,6 +163,7 @@ kotlin {
             }
             val native = create("native$compilation") {
                 dependsOn(nonJvm)
+                dependsOn(nonJs)
                 parentCompilation?.also { dependsOn(getByName("native$it")) }
             }
             val parents = nativeTargets.groupingBy { nativeTarget -> nativeTarget.takeWhile { it.isLowerCase() } }

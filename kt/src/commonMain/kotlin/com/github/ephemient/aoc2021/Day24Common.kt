@@ -5,27 +5,29 @@ import kotlin.reflect.KProperty1
 
 class Day24Common(private val lines: List<String>) : Day24Impl {
     private val initialAlu = ALU()
-    private val groups: List<Pair<String, List<Instruction>>> = buildList<Pair<String, MutableList<Instruction>>> {
-        for (line in lines) {
-            if (line.startsWith("inp ")) {
-                add(line.substring(4) to mutableListOf())
-            } else {
-                check(line[3] == ' ' && line[5] == ' ')
-                val op = Op.valueOf(line.substring(0, 3))
-                val lhs = ALU[line.substring(4, 5)]
-                val rhs = line.substring(6)
-                val instruction = rhs.toIntOrNull()
-                    ?.let { Instruction.RegImm(lhs, it, op) }
-                    ?: Instruction.RegReg(lhs, ALU[rhs], op)
-                lastOrNull()?.also { (_, group) -> group.add(instruction) } ?: instruction(initialAlu)
+    private val groups: List<Pair<KMutableProperty1<ALU, Int>, List<Instruction>>> =
+        buildList<Pair<KMutableProperty1<ALU, Int>, MutableList<Instruction>>> {
+            for (line in lines) {
+                if (line.startsWith("inp ")) {
+                    add(ALU[line.substring(4)] to mutableListOf())
+                } else {
+                    check(line[3] == ' ' && line[5] == ' ')
+                    val op = Op.valueOf(line.substring(0, 3))
+                    val lhs = ALU[line.substring(4, 5)]
+                    val rhs = line.substring(6)
+                    val instruction = rhs.toIntOrNull()
+                        ?.let { Instruction.RegImm(lhs, it, op) }
+                        ?: Instruction.RegReg(lhs, ALU[rhs], op)
+                    lastOrNull()?.also { (_, group) -> group.add(instruction) } ?: instruction(initialAlu)
+                }
             }
         }
-    }
 
     override fun part1(): Long? = solve(9 downTo 1)
 
     override fun part2(): Long? = solve(1..9)
 
+    @Suppress("ReturnCount")
     private fun solve(
         range: IntProgression,
         alu: ALU = initialAlu.copy(),
@@ -36,7 +38,8 @@ class Day24Common(private val lines: List<String>) : Day24Impl {
         if (!visited.add(State(index, alu.w, alu.x, alu.y, alu.z))) return null
         val (inp, group) = groups.getOrNull(index) ?: return prefix.takeIf { alu.z == 0 }
         return range.firstNotNullOfOrNull {
-            val aluCopy = alu.copy(inp, it)
+            val aluCopy = alu.copy()
+            inp.set(aluCopy, it)
             for (instruction in group) instruction(aluCopy)
             solve(range, aluCopy, index + 1, 10 * prefix + it, visited)
         }
@@ -53,14 +56,6 @@ class Day24Common(private val lines: List<String>) : Day24Impl {
     }
 
     private data class ALU(var w: Int = 0, var x: Int = 0, var y: Int = 0, var z: Int = 0) {
-        fun copy(key: String, value: Int) = when (key) {
-            "w" -> copy(w = value)
-            "x" -> copy(x = value)
-            "y" -> copy(y = value)
-            "z" -> copy(z = value)
-            else -> TODO()
-        }
-
         companion object {
             operator fun get(key: String): KMutableProperty1<ALU, Int> = when (key) {
                 "w" -> ALU::w
