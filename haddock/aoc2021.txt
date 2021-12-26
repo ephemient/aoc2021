@@ -153,6 +153,25 @@ day23b :: Text -> Maybe Int
 instance (GHC.Show.Show a, GHC.Show.Show b) => GHC.Show.Show (Day23.Diagram a b)
 
 
+module Day24
+data Register
+W :: Register
+X :: Register
+Y :: Register
+Z :: Register
+data Instruction a b
+Inp :: a -> Instruction a b
+Add :: a -> Either a b -> Instruction a b
+Mul :: a -> Either a b -> Instruction a b
+Div :: a -> Either a b -> Instruction a b
+Mod :: a -> Either a b -> Instruction a b
+Eql :: a -> Either a b -> Instruction a b
+parser :: (MonadParsec e s m, IsString (Tokens s), Token s ~ Char, Num a) => m (Instruction Register a)
+day24 :: (PrimMonad m, Eq a, Hashable a, Integral a) => Text -> [a] -> Int -> m (Either (ParseErrorBundle Text Void) (Maybe a))
+day24a :: Text -> IO (Either (ParseErrorBundle Text Void) (Maybe Int))
+day24b :: Text -> IO (Either (ParseErrorBundle Text Void) (Maybe Int))
+
+
 module Day25
 day25 :: Text -> Maybe Int
 

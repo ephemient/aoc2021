@@ -1,0 +1,714 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">{-|
+Module:         Day24
+Description:    &lt;https://adventofcode.com/2021/day/24 Day 24: Arithmetic Logic Unit&gt;
+-}</span><span>
+</span><span id="line-5"></span><span class="hs-pragma">{-# LANGUAGE FlexibleContexts, OverloadedStrings, TypeFamilies #-}</span><span>
+</span><span id="line-6"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Day24</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day24.html#day24a"><span class="hs-identifier">day24a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Day24.html#day24b"><span class="hs-identifier">day24b</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-7"></span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Monad.Primitive</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">PrimMonad</span></span><span class="hs-special">)</span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Bits</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(.&amp;.)</span></span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Hashable</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Hashable</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">hashWithSalt</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.String</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">IsString</span></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Text</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Text</span></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Vector.Mutable</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">MV</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">exchange</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">replicate</span></span><span class="hs-special">)</span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Void</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Void</span></span><span class="hs-special">)</span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">System.Random</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">randomIO</span></span><span class="hs-special">)</span><span>
+</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Text.Megaparsec</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">MonadParsec</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ParseErrorBundle</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Token</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Tokens</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-operator">(&lt;|&gt;)</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">choice</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">chunk</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">eof</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">parse</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">sepEndBy</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">single</span></span><span class="hs-special">)</span><span>
+</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Text.Megaparsec.Char</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">newline</span></span><span class="hs-special">)</span><span>
+</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Text.Megaparsec.Char.Lexer</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">decimal</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">signed</span></span><span class="hs-special">)</span><span>
+</span><span id="line-19"></span><span>
+</span><span id="line-20"></span><span class="hs-keyword">data</span><span> </span><span id="Register"><span class="annot"><a href="Day24.html#Register"><span class="hs-identifier hs-var">Register</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="W"><span class="annot"><a href="Day24.html#W"><span class="hs-identifier hs-var">W</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="X"><span class="annot"><a href="Day24.html#X"><span class="hs-identifier hs-var">X</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Y"><span class="annot"><a href="Day24.html#Y"><span class="hs-identifier hs-var">Y</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Z"><span class="annot"><a href="Day24.html#Z"><span class="hs-identifier hs-var">Z</span></a></span></span><span>
+</span><span id="line-21"></span><span>
+</span><span id="line-22"></span><span class="hs-keyword">data</span><span> </span><span id="Instruction"><span class="annot"><a href="Day24.html#Instruction"><span class="hs-identifier hs-var">Instruction</span></a></span></span><span> </span><span id="local-6989586621679090764"><span class="annot"><a href="#local-6989586621679090764"><span class="hs-identifier hs-type">a</span></a></span></span><span> </span><span id="local-6989586621679090763"><span class="annot"><a href="#local-6989586621679090763"><span class="hs-identifier hs-type">b</span></a></span></span><span>
+</span><span id="line-23"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span id="Inp"><span class="annot"><a href="Day24.html#Inp"><span class="hs-identifier hs-var">Inp</span></a></span></span><span> </span><span class="annot"><a href="#local-6989586621679090764"><span class="hs-identifier hs-type">a</span></a></span><span>
+</span><span id="line-24"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="Add"><span class="annot"><a href="Day24.html#Add"><span class="hs-identifier hs-var">Add</span></a></span></span><span> </span><span class="annot"><a href="#local-6989586621679090764"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><a href="#local-6989586621679090764"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679090763"><span class="hs-identifier hs-type">b</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-25"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="Mul"><span class="annot"><a href="Day24.html#Mul"><span class="hs-identifier hs-var">Mul</span></a></span></span><span> </span><span class="annot"><a href="#local-6989586621679090764"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><a href="#local-6989586621679090764"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679090763"><span class="hs-identifier hs-type">b</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-26"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="Div"><span class="annot"><a href="Day24.html#Div"><span class="hs-identifier hs-var">Div</span></a></span></span><span> </span><span class="annot"><a href="#local-6989586621679090764"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><a href="#local-6989586621679090764"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679090763"><span class="hs-identifier hs-type">b</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-27"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="Mod"><span class="annot"><a href="Day24.html#Mod"><span class="hs-identifier hs-var">Mod</span></a></span></span><span> </span><span class="annot"><a href="#local-6989586621679090764"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><a href="#local-6989586621679090764"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679090763"><span class="hs-identifier hs-type">b</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-28"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="Eql"><span class="annot"><a href="Day24.html#Eql"><span class="hs-identifier hs-var">Eql</span></a></span></span><span> </span><span class="annot"><a href="#local-6989586621679090764"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><a href="#local-6989586621679090764"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679090763"><span class="hs-identifier hs-type">b</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-29"></span><span>
+</span><span id="line-30"></span><span id="local-6989586621679090713"><span id="local-6989586621679090714"><span id="local-6989586621679090715"><span id="local-6989586621679090716"><span class="annot"><a href="Day24.html#parser"><span class="hs-identifier hs-type">parser</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">MonadParsec</span></span><span> </span><span class="annot"><a href="#local-6989586621679090716"><span class="hs-identifier hs-type">e</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679090715"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679090714"><span class="hs-identifier hs-type">m</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IsString</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Tokens</span></span><span> </span><span class="annot"><a href="#local-6989586621679090715"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Token</span></span><span> </span><span class="annot"><a href="#local-6989586621679090715"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><span class="hs-glyph hs-type">~</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Char</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Num</span></span><span> </span><span class="annot"><a href="#local-6989586621679090713"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679090714"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Day24.html#Instruction"><span class="hs-identifier hs-type">Instruction</span></a></span><span> </span><span class="annot"><a href="Day24.html#Register"><span class="hs-identifier hs-type">Register</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679090713"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span></span></span></span></span><span>
+</span><span id="line-31"></span><span id="parser"><span class="annot"><span class="annottext">parser :: m (Instruction Register a)
+</span><a href="Day24.html#parser"><span class="hs-identifier hs-var hs-var">parser</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[m (Instruction Register a)] -&gt; m (Instruction Register a)
+forall (f :: * -&gt; *) (m :: * -&gt; *) a.
+(Foldable f, Alternative m) =&gt;
+f (m a) -&gt; m a
+</span><span class="hs-identifier hs-var">choice</span></span><span>
+</span><span id="line-32"></span><span>  </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">Register -&gt; Instruction Register a
+forall a b. a -&gt; Instruction a b
+</span><a href="Day24.html#Inp"><span class="hs-identifier hs-var">Inp</span></a></span><span> </span><span class="annot"><span class="annottext">(Register -&gt; Instruction Register a)
+-&gt; m Register -&gt; m (Instruction Register a)
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Tokens s -&gt; m (Tokens s)
+forall e s (m :: * -&gt; *).
+MonadParsec e s m =&gt;
+Tokens s -&gt; m (Tokens s)
+</span><span class="hs-identifier hs-var">chunk</span></span><span> </span><span class="annot"><span class="annottext">Tokens s
+</span><span class="hs-string">&quot;inp &quot;</span></span><span> </span><span class="annot"><span class="annottext">m (Tokens s) -&gt; m Register -&gt; m Register
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f a -&gt; f b -&gt; f b
+</span><span class="hs-operator hs-var">*&gt;</span></span><span> </span><span class="annot"><span class="annottext">m Register
+</span><a href="#local-6989586621679090625"><span class="hs-identifier hs-var">reg</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-33"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Register -&gt; Either Register a -&gt; Instruction Register a
+forall a b. a -&gt; Either a b -&gt; Instruction a b
+</span><a href="Day24.html#Add"><span class="hs-identifier hs-var">Add</span></a></span><span> </span><span class="annot"><span class="annottext">(Register -&gt; Either Register a -&gt; Instruction Register a)
+-&gt; m Register -&gt; m (Either Register a -&gt; Instruction Register a)
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Tokens s -&gt; m (Tokens s)
+forall e s (m :: * -&gt; *).
+MonadParsec e s m =&gt;
+Tokens s -&gt; m (Tokens s)
+</span><span class="hs-identifier hs-var">chunk</span></span><span> </span><span class="annot"><span class="annottext">Tokens s
+</span><span class="hs-string">&quot;add &quot;</span></span><span> </span><span class="annot"><span class="annottext">m (Tokens s) -&gt; m Register -&gt; m Register
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f a -&gt; f b -&gt; f b
+</span><span class="hs-operator hs-var">*&gt;</span></span><span> </span><span class="annot"><span class="annottext">m Register
+</span><a href="#local-6989586621679090625"><span class="hs-identifier hs-var">reg</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">m (Either Register a -&gt; Instruction Register a)
+-&gt; m (Either Register a) -&gt; m (Instruction Register a)
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Token s -&gt; m (Token s)
+forall e s (m :: * -&gt; *).
+MonadParsec e s m =&gt;
+Token s -&gt; m (Token s)
+</span><span class="hs-identifier hs-var">single</span></span><span> </span><span class="annot"><span class="annottext">Char
+Token s
+</span><span class="hs-char">' '</span></span><span> </span><span class="annot"><span class="annottext">m Char -&gt; m (Either Register a) -&gt; m (Either Register a)
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f a -&gt; f b -&gt; f b
+</span><span class="hs-operator hs-var">*&gt;</span></span><span> </span><span class="annot"><span class="annottext">m (Either Register a)
+</span><a href="#local-6989586621679090624"><span class="hs-identifier hs-var">value</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-34"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Register -&gt; Either Register a -&gt; Instruction Register a
+forall a b. a -&gt; Either a b -&gt; Instruction a b
+</span><a href="Day24.html#Mul"><span class="hs-identifier hs-var">Mul</span></a></span><span> </span><span class="annot"><span class="annottext">(Register -&gt; Either Register a -&gt; Instruction Register a)
+-&gt; m Register -&gt; m (Either Register a -&gt; Instruction Register a)
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Tokens s -&gt; m (Tokens s)
+forall e s (m :: * -&gt; *).
+MonadParsec e s m =&gt;
+Tokens s -&gt; m (Tokens s)
+</span><span class="hs-identifier hs-var">chunk</span></span><span> </span><span class="annot"><span class="annottext">Tokens s
+</span><span class="hs-string">&quot;mul &quot;</span></span><span> </span><span class="annot"><span class="annottext">m (Tokens s) -&gt; m Register -&gt; m Register
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f a -&gt; f b -&gt; f b
+</span><span class="hs-operator hs-var">*&gt;</span></span><span> </span><span class="annot"><span class="annottext">m Register
+</span><a href="#local-6989586621679090625"><span class="hs-identifier hs-var">reg</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">m (Either Register a -&gt; Instruction Register a)
+-&gt; m (Either Register a) -&gt; m (Instruction Register a)
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Token s -&gt; m (Token s)
+forall e s (m :: * -&gt; *).
+MonadParsec e s m =&gt;
+Token s -&gt; m (Token s)
+</span><span class="hs-identifier hs-var">single</span></span><span> </span><span class="annot"><span class="annottext">Char
+Token s
+</span><span class="hs-char">' '</span></span><span> </span><span class="annot"><span class="annottext">m Char -&gt; m (Either Register a) -&gt; m (Either Register a)
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f a -&gt; f b -&gt; f b
+</span><span class="hs-operator hs-var">*&gt;</span></span><span> </span><span class="annot"><span class="annottext">m (Either Register a)
+</span><a href="#local-6989586621679090624"><span class="hs-identifier hs-var">value</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-35"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Register -&gt; Either Register a -&gt; Instruction Register a
+forall a b. a -&gt; Either a b -&gt; Instruction a b
+</span><a href="Day24.html#Div"><span class="hs-identifier hs-var">Div</span></a></span><span> </span><span class="annot"><span class="annottext">(Register -&gt; Either Register a -&gt; Instruction Register a)
+-&gt; m Register -&gt; m (Either Register a -&gt; Instruction Register a)
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Tokens s -&gt; m (Tokens s)
+forall e s (m :: * -&gt; *).
+MonadParsec e s m =&gt;
+Tokens s -&gt; m (Tokens s)
+</span><span class="hs-identifier hs-var">chunk</span></span><span> </span><span class="annot"><span class="annottext">Tokens s
+</span><span class="hs-string">&quot;div &quot;</span></span><span> </span><span class="annot"><span class="annottext">m (Tokens s) -&gt; m Register -&gt; m Register
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f a -&gt; f b -&gt; f b
+</span><span class="hs-operator hs-var">*&gt;</span></span><span> </span><span class="annot"><span class="annottext">m Register
+</span><a href="#local-6989586621679090625"><span class="hs-identifier hs-var">reg</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">m (Either Register a -&gt; Instruction Register a)
+-&gt; m (Either Register a) -&gt; m (Instruction Register a)
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Token s -&gt; m (Token s)
+forall e s (m :: * -&gt; *).
+MonadParsec e s m =&gt;
+Token s -&gt; m (Token s)
+</span><span class="hs-identifier hs-var">single</span></span><span> </span><span class="annot"><span class="annottext">Char
+Token s
+</span><span class="hs-char">' '</span></span><span> </span><span class="annot"><span class="annottext">m Char -&gt; m (Either Register a) -&gt; m (Either Register a)
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f a -&gt; f b -&gt; f b
+</span><span class="hs-operator hs-var">*&gt;</span></span><span> </span><span class="annot"><span class="annottext">m (Either Register a)
+</span><a href="#local-6989586621679090624"><span class="hs-identifier hs-var">value</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-36"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Register -&gt; Either Register a -&gt; Instruction Register a
+forall a b. a -&gt; Either a b -&gt; Instruction a b
+</span><a href="Day24.html#Mod"><span class="hs-identifier hs-var">Mod</span></a></span><span> </span><span class="annot"><span class="annottext">(Register -&gt; Either Register a -&gt; Instruction Register a)
+-&gt; m Register -&gt; m (Either Register a -&gt; Instruction Register a)
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Tokens s -&gt; m (Tokens s)
+forall e s (m :: * -&gt; *).
+MonadParsec e s m =&gt;
+Tokens s -&gt; m (Tokens s)
+</span><span class="hs-identifier hs-var">chunk</span></span><span> </span><span class="annot"><span class="annottext">Tokens s
+</span><span class="hs-string">&quot;mod &quot;</span></span><span> </span><span class="annot"><span class="annottext">m (Tokens s) -&gt; m Register -&gt; m Register
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f a -&gt; f b -&gt; f b
+</span><span class="hs-operator hs-var">*&gt;</span></span><span> </span><span class="annot"><span class="annottext">m Register
+</span><a href="#local-6989586621679090625"><span class="hs-identifier hs-var">reg</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">m (Either Register a -&gt; Instruction Register a)
+-&gt; m (Either Register a) -&gt; m (Instruction Register a)
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Token s -&gt; m (Token s)
+forall e s (m :: * -&gt; *).
+MonadParsec e s m =&gt;
+Token s -&gt; m (Token s)
+</span><span class="hs-identifier hs-var">single</span></span><span> </span><span class="annot"><span class="annottext">Char
+Token s
+</span><span class="hs-char">' '</span></span><span> </span><span class="annot"><span class="annottext">m Char -&gt; m (Either Register a) -&gt; m (Either Register a)
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f a -&gt; f b -&gt; f b
+</span><span class="hs-operator hs-var">*&gt;</span></span><span> </span><span class="annot"><span class="annottext">m (Either Register a)
+</span><a href="#local-6989586621679090624"><span class="hs-identifier hs-var">value</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-37"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Register -&gt; Either Register a -&gt; Instruction Register a
+forall a b. a -&gt; Either a b -&gt; Instruction a b
+</span><a href="Day24.html#Eql"><span class="hs-identifier hs-var">Eql</span></a></span><span> </span><span class="annot"><span class="annottext">(Register -&gt; Either Register a -&gt; Instruction Register a)
+-&gt; m Register -&gt; m (Either Register a -&gt; Instruction Register a)
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Tokens s -&gt; m (Tokens s)
+forall e s (m :: * -&gt; *).
+MonadParsec e s m =&gt;
+Tokens s -&gt; m (Tokens s)
+</span><span class="hs-identifier hs-var">chunk</span></span><span> </span><span class="annot"><span class="annottext">Tokens s
+</span><span class="hs-string">&quot;eql &quot;</span></span><span> </span><span class="annot"><span class="annottext">m (Tokens s) -&gt; m Register -&gt; m Register
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f a -&gt; f b -&gt; f b
+</span><span class="hs-operator hs-var">*&gt;</span></span><span> </span><span class="annot"><span class="annottext">m Register
+</span><a href="#local-6989586621679090625"><span class="hs-identifier hs-var">reg</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">m (Either Register a -&gt; Instruction Register a)
+-&gt; m (Either Register a) -&gt; m (Instruction Register a)
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;*&gt;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Token s -&gt; m (Token s)
+forall e s (m :: * -&gt; *).
+MonadParsec e s m =&gt;
+Token s -&gt; m (Token s)
+</span><span class="hs-identifier hs-var">single</span></span><span> </span><span class="annot"><span class="annottext">Char
+Token s
+</span><span class="hs-char">' '</span></span><span> </span><span class="annot"><span class="annottext">m Char -&gt; m (Either Register a) -&gt; m (Either Register a)
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f a -&gt; f b -&gt; f b
+</span><span class="hs-operator hs-var">*&gt;</span></span><span> </span><span class="annot"><span class="annottext">m (Either Register a)
+</span><a href="#local-6989586621679090624"><span class="hs-identifier hs-var">value</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-38"></span><span>  </span><span class="hs-special">]</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-39"></span><span>    </span><span id="local-6989586621679090625"><span class="annot"><span class="annottext">reg :: m Register
+</span><a href="#local-6989586621679090625"><span class="hs-identifier hs-var hs-var">reg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[m Register] -&gt; m Register
+forall (f :: * -&gt; *) (m :: * -&gt; *) a.
+(Foldable f, Alternative m) =&gt;
+f (m a) -&gt; m a
+</span><span class="hs-identifier hs-var">choice</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Register
+</span><a href="Day24.html#W"><span class="hs-identifier hs-var">W</span></a></span><span> </span><span class="annot"><span class="annottext">Register -&gt; m Char -&gt; m Register
+forall (f :: * -&gt; *) a b. Functor f =&gt; a -&gt; f b -&gt; f a
+</span><span class="hs-operator hs-var">&lt;$</span></span><span> </span><span class="annot"><span class="annottext">Token s -&gt; m (Token s)
+forall e s (m :: * -&gt; *).
+MonadParsec e s m =&gt;
+Token s -&gt; m (Token s)
+</span><span class="hs-identifier hs-var">single</span></span><span> </span><span class="annot"><span class="annottext">Char
+Token s
+</span><span class="hs-char">'w'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Register
+</span><a href="Day24.html#X"><span class="hs-identifier hs-var">X</span></a></span><span> </span><span class="annot"><span class="annottext">Register -&gt; m Char -&gt; m Register
+forall (f :: * -&gt; *) a b. Functor f =&gt; a -&gt; f b -&gt; f a
+</span><span class="hs-operator hs-var">&lt;$</span></span><span> </span><span class="annot"><span class="annottext">Token s -&gt; m (Token s)
+forall e s (m :: * -&gt; *).
+MonadParsec e s m =&gt;
+Token s -&gt; m (Token s)
+</span><span class="hs-identifier hs-var">single</span></span><span> </span><span class="annot"><span class="annottext">Char
+Token s
+</span><span class="hs-char">'x'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Register
+</span><a href="Day24.html#Y"><span class="hs-identifier hs-var">Y</span></a></span><span> </span><span class="annot"><span class="annottext">Register -&gt; m Char -&gt; m Register
+forall (f :: * -&gt; *) a b. Functor f =&gt; a -&gt; f b -&gt; f a
+</span><span class="hs-operator hs-var">&lt;$</span></span><span> </span><span class="annot"><span class="annottext">Token s -&gt; m (Token s)
+forall e s (m :: * -&gt; *).
+MonadParsec e s m =&gt;
+Token s -&gt; m (Token s)
+</span><span class="hs-identifier hs-var">single</span></span><span> </span><span class="annot"><span class="annottext">Char
+Token s
+</span><span class="hs-char">'y'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Register
+</span><a href="Day24.html#Z"><span class="hs-identifier hs-var">Z</span></a></span><span> </span><span class="annot"><span class="annottext">Register -&gt; m Char -&gt; m Register
+forall (f :: * -&gt; *) a b. Functor f =&gt; a -&gt; f b -&gt; f a
+</span><span class="hs-operator hs-var">&lt;$</span></span><span> </span><span class="annot"><span class="annottext">Token s -&gt; m (Token s)
+forall e s (m :: * -&gt; *).
+MonadParsec e s m =&gt;
+Token s -&gt; m (Token s)
+</span><span class="hs-identifier hs-var">single</span></span><span> </span><span class="annot"><span class="annottext">Char
+Token s
+</span><span class="hs-char">'z'</span></span><span class="hs-special">]</span><span>
+</span><span id="line-40"></span><span>    </span><span id="local-6989586621679090624"><span class="annot"><span class="annottext">value :: m (Either Register a)
+</span><a href="#local-6989586621679090624"><span class="hs-identifier hs-var hs-var">value</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Register -&gt; Either Register a
+forall a b. a -&gt; Either a b
+</span><span class="hs-identifier hs-var">Left</span></span><span> </span><span class="annot"><span class="annottext">(Register -&gt; Either Register a)
+-&gt; m Register -&gt; m (Either Register a)
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">m Register
+</span><a href="#local-6989586621679090625"><span class="hs-identifier hs-var">reg</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">m (Either Register a)
+-&gt; m (Either Register a) -&gt; m (Either Register a)
+forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; Either Register a
+forall a b. b -&gt; Either a b
+</span><span class="hs-identifier hs-var">Right</span></span><span> </span><span class="annot"><span class="annottext">(a -&gt; Either Register a) -&gt; m a -&gt; m (Either Register a)
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">m () -&gt; m a -&gt; m a
+forall e s (m :: * -&gt; *) a.
+(MonadParsec e s m, Token s ~ Char, Num a) =&gt;
+m () -&gt; m a -&gt; m a
+</span><span class="hs-identifier hs-var">signed</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">() -&gt; m ()
+forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
+</span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">m a
+forall e s (m :: * -&gt; *) a.
+(MonadParsec e s m, Token s ~ Char, Num a) =&gt;
+m a
+</span><span class="hs-identifier hs-var">decimal</span></span><span class="hs-special">)</span><span>
+</span><span id="line-41"></span><span>
+</span><span id="line-42"></span><span id="local-6989586621679090662"><span id="local-6989586621679090663"><span class="annot"><a href="Day24.html#day24"><span class="hs-identifier hs-type">day24</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">PrimMonad</span></span><span> </span><span class="annot"><a href="#local-6989586621679090663"><span class="hs-identifier hs-type">m</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Eq</span></span><span> </span><span class="annot"><a href="#local-6989586621679090662"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Hashable</span></span><span> </span><span class="annot"><a href="#local-6989586621679090662"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Integral</span></span><span> </span><span class="annot"><a href="#local-6989586621679090662"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679090662"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679090663"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ParseErrorBundle</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Void</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="#local-6989586621679090662"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span></span></span><span>
+</span><span id="line-43"></span><span id="day24"><span class="annot"><span class="annottext">day24 :: Text
+-&gt; [a] -&gt; Int -&gt; m (Either (ParseErrorBundle Text Void) (Maybe a))
+</span><a href="Day24.html#day24"><span class="hs-identifier hs-var hs-var">day24</span></a></span></span><span> </span><span id="local-6989586621679090621"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679090621"><span class="hs-identifier hs-var">input</span></a></span></span><span> </span><span id="local-6989586621679090620"><span class="annot"><span class="annottext">[a]
+</span><a href="#local-6989586621679090620"><span class="hs-identifier hs-var">nums</span></a></span></span><span> </span><span id="local-6989586621679090619"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679090619"><span class="hs-identifier hs-var">salt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Parsec Void Text [Instruction Register a]
+-&gt; String
+-&gt; Text
+-&gt; Either (ParseErrorBundle Text Void) [Instruction Register a]
+forall e s a.
+Parsec e s a -&gt; String -&gt; s -&gt; Either (ParseErrorBundle s e) a
+</span><span class="hs-identifier hs-var">parse</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ParsecT Void Text Identity (Instruction Register a)
+forall e s (m :: * -&gt; *) a.
+(MonadParsec e s m, IsString (Tokens s), Token s ~ Char, Num a) =&gt;
+m (Instruction Register a)
+</span><a href="Day24.html#parser"><span class="hs-identifier hs-var">parser</span></a></span><span> </span><span class="annot"><span class="annottext">ParsecT Void Text Identity (Instruction Register a)
+-&gt; ParsecT Void Text Identity Char
+-&gt; Parsec Void Text [Instruction Register a]
+forall (m :: * -&gt; *) a sep. MonadPlus m =&gt; m a -&gt; m sep -&gt; m [a]
+</span><span class="hs-operator hs-var">`sepEndBy`</span></span><span> </span><span class="annot"><span class="annottext">ParsecT Void Text Identity Char
+forall e s (m :: * -&gt; *).
+(MonadParsec e s m, Token s ~ Char) =&gt;
+m (Token s)
+</span><span class="hs-identifier hs-var">newline</span></span><span> </span><span class="annot"><span class="annottext">Parsec Void Text [Instruction Register a]
+-&gt; ParsecT Void Text Identity ()
+-&gt; Parsec Void Text [Instruction Register a]
+forall (f :: * -&gt; *) a b. Applicative f =&gt; f a -&gt; f b -&gt; f a
+</span><span class="hs-operator hs-var">&lt;*</span></span><span> </span><span class="annot"><span class="annottext">ParsecT Void Text Identity ()
+forall e s (m :: * -&gt; *). MonadParsec e s m =&gt; m ()
+</span><span class="hs-identifier hs-var">eof</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;&quot;</span></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679090621"><span class="hs-identifier hs-var">input</span></a></span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-44"></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">Left</span></span><span> </span><span id="local-6989586621679090617"><span class="annot"><span class="annottext">ParseErrorBundle Text Void
+</span><a href="#local-6989586621679090617"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Either (ParseErrorBundle Text Void) (Maybe a)
+-&gt; m (Either (ParseErrorBundle Text Void) (Maybe a))
+forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
+</span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">(Either (ParseErrorBundle Text Void) (Maybe a)
+ -&gt; m (Either (ParseErrorBundle Text Void) (Maybe a)))
+-&gt; Either (ParseErrorBundle Text Void) (Maybe a)
+-&gt; m (Either (ParseErrorBundle Text Void) (Maybe a))
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ParseErrorBundle Text Void
+-&gt; Either (ParseErrorBundle Text Void) (Maybe a)
+forall a b. a -&gt; Either a b
+</span><span class="hs-identifier hs-var">Left</span></span><span> </span><span class="annot"><span class="annottext">ParseErrorBundle Text Void
+</span><a href="#local-6989586621679090617"><span class="hs-identifier hs-var">e</span></a></span><span>
+</span><span id="line-45"></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">Right</span></span><span> </span><span id="local-6989586621679090616"><span class="annot"><span class="annottext">[Instruction Register a]
+</span><a href="#local-6989586621679090616"><span class="hs-identifier hs-var">ins</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Maybe a -&gt; Either (ParseErrorBundle Text Void) (Maybe a)
+forall a b. b -&gt; Either a b
+</span><span class="hs-identifier hs-var">Right</span></span><span> </span><span class="annot"><span class="annottext">(Maybe a -&gt; Either (ParseErrorBundle Text Void) (Maybe a))
+-&gt; m (Maybe a) -&gt; m (Either (ParseErrorBundle Text Void) (Maybe a))
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-46"></span><span>        </span><span id="local-6989586621679090615"><span class="annot"><span class="annottext">MVector (PrimState m) (Maybe (Int, (a, a, a, a)))
+</span><a href="#local-6989586621679090615"><span class="hs-identifier hs-var">cache</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Int
+-&gt; Maybe (Int, (a, a, a, a))
+-&gt; m (MVector (PrimState m) (Maybe (Int, (a, a, a, a))))
+forall (m :: * -&gt; *) a.
+PrimMonad m =&gt;
+Int -&gt; a -&gt; m (MVector (PrimState m) a)
+</span><span class="hs-identifier hs-var">MV.replicate</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0x1000000</span></span><span> </span><span class="annot"><span class="annottext">Maybe (Int, (a, a, a, a))
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-47"></span><span>        </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679090614"><span class="annot"><span class="annottext">go :: a -&gt; (a, a, a, a) -&gt; [(Int, Instruction Register a)] -&gt; m (Maybe a)
+</span><a href="#local-6989586621679090614"><span class="hs-identifier hs-var hs-var">go</span></a></span></span><span> </span><span id="local-6989586621679090613"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679090613"><span class="hs-identifier hs-var">prefix</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">a
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">a
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">a
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe a -&gt; m (Maybe a)
+forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
+</span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">(Maybe a -&gt; m (Maybe a)) -&gt; Maybe a -&gt; m (Maybe a)
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; Maybe a
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679090613"><span class="hs-identifier hs-var">prefix</span></a></span><span>
+</span><span id="line-48"></span><span>            </span><span class="annot"><a href="#local-6989586621679090614"><span class="hs-identifier hs-var">go</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">a
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">a
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">a
+</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe a -&gt; m (Maybe a)
+forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
+</span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">Maybe a
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-49"></span><span>            </span><span class="annot"><a href="#local-6989586621679090614"><span class="hs-identifier hs-var">go</span></a></span><span> </span><span id="local-6989586621679090612"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679090612"><span class="hs-identifier hs-var">prefix</span></a></span></span><span> </span><span id="local-6989586621679090611"><span class="annot"><span class="annottext">(a, a, a, a)
+</span><a href="#local-6989586621679090611"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span id="local-6989586621679090610"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679090610"><span class="hs-identifier hs-var">i</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Day24.html#Inp"><span class="hs-identifier hs-type">Inp</span></a></span><span> </span><span id="local-6989586621679090609"><span class="annot"><span class="annottext">Register
+</span><a href="#local-6989586621679090609"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">)</span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679090608"><span class="annot"><span class="annottext">[(Int, Instruction Register a)]
+</span><a href="#local-6989586621679090608"><span class="hs-identifier hs-var">ins'</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-50"></span><span>                </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679090607"><span class="annot"><span class="annottext">state :: (Int, (a, a, a, a))
+</span><a href="#local-6989586621679090607"><span class="hs-identifier hs-var hs-var">state</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679090610"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(a, a, a, a)
+</span><a href="#local-6989586621679090611"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-51"></span><span>                    </span><span id="local-6989586621679090606"><span class="annot"><span class="annottext">go' :: a -&gt; m (Maybe a) -&gt; m (Maybe a)
+</span><a href="#local-6989586621679090606"><span class="hs-identifier hs-var hs-var">go'</span></a></span></span><span> </span><span id="local-6989586621679090605"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679090605"><span class="hs-identifier hs-var">num</span></a></span></span><span> </span><span id="local-6989586621679090604"><span class="annot"><span class="annottext">m (Maybe a)
+</span><a href="#local-6989586621679090604"><span class="hs-identifier hs-var">cont</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-52"></span><span>                        </span><span class="annot"><span class="annottext">a -&gt; (a, a, a, a) -&gt; [(Int, Instruction Register a)] -&gt; m (Maybe a)
+</span><a href="#local-6989586621679090614"><span class="hs-identifier hs-var">go</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a
+</span><span class="hs-number">10</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679090612"><span class="hs-identifier hs-var">prefix</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679090605"><span class="hs-identifier hs-var">num</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(a, a, a, a) -&gt; Register -&gt; a -&gt; (a, a, a, a)
+forall d. (d, d, d, d) -&gt; Register -&gt; d -&gt; (d, d, d, d)
+</span><a href="#local-6989586621679090601"><span class="hs-identifier hs-var">set</span></a></span><span> </span><span class="annot"><span class="annottext">(a, a, a, a)
+</span><a href="#local-6989586621679090611"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="annot"><span class="annottext">Register
+</span><a href="#local-6989586621679090609"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679090605"><span class="hs-identifier hs-var">num</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(Int, Instruction Register a)]
+</span><a href="#local-6989586621679090608"><span class="hs-identifier hs-var">ins'</span></a></span><span> </span><span class="annot"><span class="annottext">m (Maybe a) -&gt; (Maybe a -&gt; m (Maybe a)) -&gt; m (Maybe a)
+forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
+</span><span class="hs-operator hs-var">&gt;&gt;=</span></span><span> </span><span class="annot"><span class="annottext">m (Maybe a) -&gt; (a -&gt; m (Maybe a)) -&gt; Maybe a -&gt; m (Maybe a)
+forall b a. b -&gt; (a -&gt; b) -&gt; Maybe a -&gt; b
+</span><span class="hs-identifier hs-var">maybe</span></span><span> </span><span class="annot"><span class="annottext">m (Maybe a)
+</span><a href="#local-6989586621679090604"><span class="hs-identifier hs-var">cont</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Maybe a -&gt; m (Maybe a)
+forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
+</span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">(Maybe a -&gt; m (Maybe a)) -&gt; (a -&gt; Maybe a) -&gt; a -&gt; m (Maybe a)
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; Maybe a
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span class="hs-special">)</span><span>
+</span><span id="line-53"></span><span>                </span><span id="local-6989586621679090598"><span class="annot"><span class="annottext">Maybe (Int, (a, a, a, a))
+</span><a href="#local-6989586621679090598"><span class="hs-identifier hs-var">seen</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">MVector (PrimState m) (Maybe (Int, (a, a, a, a)))
+-&gt; Int
+-&gt; Maybe (Int, (a, a, a, a))
+-&gt; m (Maybe (Int, (a, a, a, a)))
+forall (m :: * -&gt; *) a.
+PrimMonad m =&gt;
+MVector (PrimState m) a -&gt; Int -&gt; a -&gt; m a
+</span><span class="hs-identifier hs-var">MV.exchange</span></span><span> </span><span class="annot"><span class="annottext">MVector (PrimState m) (Maybe (Int, (a, a, a, a)))
+</span><a href="#local-6989586621679090615"><span class="hs-identifier hs-var">cache</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; (Int, (a, a, a, a)) -&gt; Int
+forall a. Hashable a =&gt; Int -&gt; a -&gt; Int
+</span><span class="hs-identifier hs-var">hashWithSalt</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679090619"><span class="hs-identifier hs-var">salt</span></a></span><span> </span><span class="annot"><span class="annottext">(Int, (a, a, a, a))
+</span><a href="#local-6989586621679090607"><span class="hs-identifier hs-var">state</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+forall a. Bits a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">.&amp;.</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0xffffff</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Maybe (Int, (a, a, a, a)) -&gt; m (Maybe (Int, (a, a, a, a))))
+-&gt; Maybe (Int, (a, a, a, a)) -&gt; m (Maybe (Int, (a, a, a, a)))
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Int, (a, a, a, a)) -&gt; Maybe (Int, (a, a, a, a))
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">(Int, (a, a, a, a))
+</span><a href="#local-6989586621679090607"><span class="hs-identifier hs-var">state</span></a></span><span>
+</span><span id="line-54"></span><span>                </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Maybe (Int, (a, a, a, a))
+</span><a href="#local-6989586621679090598"><span class="hs-identifier hs-var">seen</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe (Int, (a, a, a, a)) -&gt; Maybe (Int, (a, a, a, a)) -&gt; Bool
+forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">(Int, (a, a, a, a)) -&gt; Maybe (Int, (a, a, a, a))
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">(Int, (a, a, a, a))
+</span><a href="#local-6989586621679090607"><span class="hs-identifier hs-var">state</span></a></span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">Maybe a -&gt; m (Maybe a)
+forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
+</span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">Maybe a
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">(a -&gt; m (Maybe a) -&gt; m (Maybe a))
+-&gt; m (Maybe a) -&gt; [a] -&gt; m (Maybe a)
+forall (t :: * -&gt; *) a b.
+Foldable t =&gt;
+(a -&gt; b -&gt; b) -&gt; b -&gt; t a -&gt; b
+</span><span class="hs-identifier hs-var">foldr</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; m (Maybe a) -&gt; m (Maybe a)
+</span><a href="#local-6989586621679090606"><span class="hs-identifier hs-var">go'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Maybe a -&gt; m (Maybe a)
+forall (f :: * -&gt; *) a. Applicative f =&gt; a -&gt; f a
+</span><span class="hs-identifier hs-var">pure</span></span><span> </span><span class="annot"><span class="annottext">Maybe a
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[a]
+</span><a href="#local-6989586621679090620"><span class="hs-identifier hs-var">nums</span></a></span><span>
+</span><span id="line-55"></span><span>            </span><span class="annot"><a href="#local-6989586621679090614"><span class="hs-identifier hs-var">go</span></a></span><span> </span><span id="local-6989586621679090596"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679090596"><span class="hs-identifier hs-var">prefix</span></a></span></span><span> </span><span id="local-6989586621679090595"><span class="annot"><span class="annottext">(a, a, a, a)
+</span><a href="#local-6989586621679090595"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Day24.html#Add"><span class="hs-identifier hs-type">Add</span></a></span><span> </span><span id="local-6989586621679090594"><span class="annot"><span class="annottext">Register
+</span><a href="#local-6989586621679090594"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679090593"><span class="annot"><span class="annottext">Either Register a
+</span><a href="#local-6989586621679090593"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679090592"><span class="annot"><span class="annottext">[(Int, Instruction Register a)]
+</span><a href="#local-6989586621679090592"><span class="hs-identifier hs-var">ins'</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-56"></span><span>                </span><span class="annot"><span class="annottext">a -&gt; (a, a, a, a) -&gt; [(Int, Instruction Register a)] -&gt; m (Maybe a)
+</span><a href="#local-6989586621679090614"><span class="hs-identifier hs-var">go</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679090596"><span class="hs-identifier hs-var">prefix</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(a, a, a, a) -&gt; Register -&gt; a -&gt; (a, a, a, a)
+forall d. (d, d, d, d) -&gt; Register -&gt; d -&gt; (d, d, d, d)
+</span><a href="#local-6989586621679090601"><span class="hs-identifier hs-var">set</span></a></span><span> </span><span class="annot"><span class="annottext">(a, a, a, a)
+</span><a href="#local-6989586621679090595"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="annot"><span class="annottext">Register
+</span><a href="#local-6989586621679090594"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">(a -&gt; (a, a, a, a)) -&gt; a -&gt; (a, a, a, a)
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(a, a, a, a) -&gt; Register -&gt; a
+forall p. (p, p, p, p) -&gt; Register -&gt; p
+</span><a href="#local-6989586621679090591"><span class="hs-identifier hs-var">get</span></a></span><span> </span><span class="annot"><span class="annottext">(a, a, a, a)
+</span><a href="#local-6989586621679090595"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="annot"><span class="annottext">Register
+</span><a href="#local-6989586621679090594"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">(Register -&gt; a) -&gt; (a -&gt; a) -&gt; Either Register a -&gt; a
+forall a c b. (a -&gt; c) -&gt; (b -&gt; c) -&gt; Either a b -&gt; c
+</span><span class="hs-identifier hs-var">either</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(a, a, a, a) -&gt; Register -&gt; a
+forall p. (p, p, p, p) -&gt; Register -&gt; p
+</span><a href="#local-6989586621679090591"><span class="hs-identifier hs-var">get</span></a></span><span> </span><span class="annot"><span class="annottext">(a, a, a, a)
+</span><a href="#local-6989586621679090595"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">a -&gt; a
+forall a. a -&gt; a
+</span><span class="hs-identifier hs-var">id</span></span><span> </span><span class="annot"><span class="annottext">Either Register a
+</span><a href="#local-6989586621679090593"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(Int, Instruction Register a)]
+</span><a href="#local-6989586621679090592"><span class="hs-identifier hs-var">ins'</span></a></span><span>
+</span><span id="line-57"></span><span>            </span><span class="annot"><a href="#local-6989586621679090614"><span class="hs-identifier hs-var">go</span></a></span><span> </span><span id="local-6989586621679090588"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679090588"><span class="hs-identifier hs-var">prefix</span></a></span></span><span> </span><span id="local-6989586621679090587"><span class="annot"><span class="annottext">(a, a, a, a)
+</span><a href="#local-6989586621679090587"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Day24.html#Mul"><span class="hs-identifier hs-type">Mul</span></a></span><span> </span><span id="local-6989586621679090586"><span class="annot"><span class="annottext">Register
+</span><a href="#local-6989586621679090586"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679090585"><span class="annot"><span class="annottext">Either Register a
+</span><a href="#local-6989586621679090585"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679090584"><span class="annot"><span class="annottext">[(Int, Instruction Register a)]
+</span><a href="#local-6989586621679090584"><span class="hs-identifier hs-var">ins'</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-58"></span><span>                </span><span class="annot"><span class="annottext">a -&gt; (a, a, a, a) -&gt; [(Int, Instruction Register a)] -&gt; m (Maybe a)
+</span><a href="#local-6989586621679090614"><span class="hs-identifier hs-var">go</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679090588"><span class="hs-identifier hs-var">prefix</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(a, a, a, a) -&gt; Register -&gt; a -&gt; (a, a, a, a)
+forall d. (d, d, d, d) -&gt; Register -&gt; d -&gt; (d, d, d, d)
+</span><a href="#local-6989586621679090601"><span class="hs-identifier hs-var">set</span></a></span><span> </span><span class="annot"><span class="annottext">(a, a, a, a)
+</span><a href="#local-6989586621679090587"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="annot"><span class="annottext">Register
+</span><a href="#local-6989586621679090586"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">(a -&gt; (a, a, a, a)) -&gt; a -&gt; (a, a, a, a)
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(a, a, a, a) -&gt; Register -&gt; a
+forall p. (p, p, p, p) -&gt; Register -&gt; p
+</span><a href="#local-6989586621679090591"><span class="hs-identifier hs-var">get</span></a></span><span> </span><span class="annot"><span class="annottext">(a, a, a, a)
+</span><a href="#local-6989586621679090587"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="annot"><span class="annottext">Register
+</span><a href="#local-6989586621679090586"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">(Register -&gt; a) -&gt; (a -&gt; a) -&gt; Either Register a -&gt; a
+forall a c b. (a -&gt; c) -&gt; (b -&gt; c) -&gt; Either a b -&gt; c
+</span><span class="hs-identifier hs-var">either</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(a, a, a, a) -&gt; Register -&gt; a
+forall p. (p, p, p, p) -&gt; Register -&gt; p
+</span><a href="#local-6989586621679090591"><span class="hs-identifier hs-var">get</span></a></span><span> </span><span class="annot"><span class="annottext">(a, a, a, a)
+</span><a href="#local-6989586621679090587"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">a -&gt; a
+forall a. a -&gt; a
+</span><span class="hs-identifier hs-var">id</span></span><span> </span><span class="annot"><span class="annottext">Either Register a
+</span><a href="#local-6989586621679090585"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(Int, Instruction Register a)]
+</span><a href="#local-6989586621679090584"><span class="hs-identifier hs-var">ins'</span></a></span><span>
+</span><span id="line-59"></span><span>            </span><span class="annot"><a href="#local-6989586621679090614"><span class="hs-identifier hs-var">go</span></a></span><span> </span><span id="local-6989586621679090583"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679090583"><span class="hs-identifier hs-var">prefix</span></a></span></span><span> </span><span id="local-6989586621679090582"><span class="annot"><span class="annottext">(a, a, a, a)
+</span><a href="#local-6989586621679090582"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Day24.html#Div"><span class="hs-identifier hs-type">Div</span></a></span><span> </span><span id="local-6989586621679090581"><span class="annot"><span class="annottext">Register
+</span><a href="#local-6989586621679090581"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679090580"><span class="annot"><span class="annottext">Either Register a
+</span><a href="#local-6989586621679090580"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679090579"><span class="annot"><span class="annottext">[(Int, Instruction Register a)]
+</span><a href="#local-6989586621679090579"><span class="hs-identifier hs-var">ins'</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-60"></span><span>                </span><span class="annot"><span class="annottext">a -&gt; (a, a, a, a) -&gt; [(Int, Instruction Register a)] -&gt; m (Maybe a)
+</span><a href="#local-6989586621679090614"><span class="hs-identifier hs-var">go</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679090583"><span class="hs-identifier hs-var">prefix</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(a, a, a, a) -&gt; Register -&gt; a -&gt; (a, a, a, a)
+forall d. (d, d, d, d) -&gt; Register -&gt; d -&gt; (d, d, d, d)
+</span><a href="#local-6989586621679090601"><span class="hs-identifier hs-var">set</span></a></span><span> </span><span class="annot"><span class="annottext">(a, a, a, a)
+</span><a href="#local-6989586621679090582"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="annot"><span class="annottext">Register
+</span><a href="#local-6989586621679090581"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">(a -&gt; (a, a, a, a)) -&gt; a -&gt; (a, a, a, a)
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(a, a, a, a) -&gt; Register -&gt; a
+forall p. (p, p, p, p) -&gt; Register -&gt; p
+</span><a href="#local-6989586621679090591"><span class="hs-identifier hs-var">get</span></a></span><span> </span><span class="annot"><span class="annottext">(a, a, a, a)
+</span><a href="#local-6989586621679090582"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="annot"><span class="annottext">Register
+</span><a href="#local-6989586621679090581"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+forall a. Integral a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">`div`</span></span><span> </span><span class="annot"><span class="annottext">(Register -&gt; a) -&gt; (a -&gt; a) -&gt; Either Register a -&gt; a
+forall a c b. (a -&gt; c) -&gt; (b -&gt; c) -&gt; Either a b -&gt; c
+</span><span class="hs-identifier hs-var">either</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(a, a, a, a) -&gt; Register -&gt; a
+forall p. (p, p, p, p) -&gt; Register -&gt; p
+</span><a href="#local-6989586621679090591"><span class="hs-identifier hs-var">get</span></a></span><span> </span><span class="annot"><span class="annottext">(a, a, a, a)
+</span><a href="#local-6989586621679090582"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">a -&gt; a
+forall a. a -&gt; a
+</span><span class="hs-identifier hs-var">id</span></span><span> </span><span class="annot"><span class="annottext">Either Register a
+</span><a href="#local-6989586621679090580"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(Int, Instruction Register a)]
+</span><a href="#local-6989586621679090579"><span class="hs-identifier hs-var">ins'</span></a></span><span>
+</span><span id="line-61"></span><span>            </span><span class="annot"><a href="#local-6989586621679090614"><span class="hs-identifier hs-var">go</span></a></span><span> </span><span id="local-6989586621679090577"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679090577"><span class="hs-identifier hs-var">prefix</span></a></span></span><span> </span><span id="local-6989586621679090576"><span class="annot"><span class="annottext">(a, a, a, a)
+</span><a href="#local-6989586621679090576"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Day24.html#Mod"><span class="hs-identifier hs-type">Mod</span></a></span><span> </span><span id="local-6989586621679090575"><span class="annot"><span class="annottext">Register
+</span><a href="#local-6989586621679090575"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679090574"><span class="annot"><span class="annottext">Either Register a
+</span><a href="#local-6989586621679090574"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679090573"><span class="annot"><span class="annottext">[(Int, Instruction Register a)]
+</span><a href="#local-6989586621679090573"><span class="hs-identifier hs-var">ins'</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-62"></span><span>                </span><span class="annot"><span class="annottext">a -&gt; (a, a, a, a) -&gt; [(Int, Instruction Register a)] -&gt; m (Maybe a)
+</span><a href="#local-6989586621679090614"><span class="hs-identifier hs-var">go</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679090577"><span class="hs-identifier hs-var">prefix</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(a, a, a, a) -&gt; Register -&gt; a -&gt; (a, a, a, a)
+forall d. (d, d, d, d) -&gt; Register -&gt; d -&gt; (d, d, d, d)
+</span><a href="#local-6989586621679090601"><span class="hs-identifier hs-var">set</span></a></span><span> </span><span class="annot"><span class="annottext">(a, a, a, a)
+</span><a href="#local-6989586621679090576"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="annot"><span class="annottext">Register
+</span><a href="#local-6989586621679090575"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">(a -&gt; (a, a, a, a)) -&gt; a -&gt; (a, a, a, a)
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(a, a, a, a) -&gt; Register -&gt; a
+forall p. (p, p, p, p) -&gt; Register -&gt; p
+</span><a href="#local-6989586621679090591"><span class="hs-identifier hs-var">get</span></a></span><span> </span><span class="annot"><span class="annottext">(a, a, a, a)
+</span><a href="#local-6989586621679090576"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="annot"><span class="annottext">Register
+</span><a href="#local-6989586621679090575"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+forall a. Integral a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">`mod`</span></span><span> </span><span class="annot"><span class="annottext">(Register -&gt; a) -&gt; (a -&gt; a) -&gt; Either Register a -&gt; a
+forall a c b. (a -&gt; c) -&gt; (b -&gt; c) -&gt; Either a b -&gt; c
+</span><span class="hs-identifier hs-var">either</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(a, a, a, a) -&gt; Register -&gt; a
+forall p. (p, p, p, p) -&gt; Register -&gt; p
+</span><a href="#local-6989586621679090591"><span class="hs-identifier hs-var">get</span></a></span><span> </span><span class="annot"><span class="annottext">(a, a, a, a)
+</span><a href="#local-6989586621679090576"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">a -&gt; a
+forall a. a -&gt; a
+</span><span class="hs-identifier hs-var">id</span></span><span> </span><span class="annot"><span class="annottext">Either Register a
+</span><a href="#local-6989586621679090574"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(Int, Instruction Register a)]
+</span><a href="#local-6989586621679090573"><span class="hs-identifier hs-var">ins'</span></a></span><span>
+</span><span id="line-63"></span><span>            </span><span class="annot"><a href="#local-6989586621679090614"><span class="hs-identifier hs-var">go</span></a></span><span> </span><span id="local-6989586621679090571"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679090571"><span class="hs-identifier hs-var">prefix</span></a></span></span><span> </span><span id="local-6989586621679090570"><span class="annot"><span class="annottext">(a, a, a, a)
+</span><a href="#local-6989586621679090570"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Day24.html#Eql"><span class="hs-identifier hs-type">Eql</span></a></span><span> </span><span id="local-6989586621679090569"><span class="annot"><span class="annottext">Register
+</span><a href="#local-6989586621679090569"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679090568"><span class="annot"><span class="annottext">Either Register a
+</span><a href="#local-6989586621679090568"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679090567"><span class="annot"><span class="annottext">[(Int, Instruction Register a)]
+</span><a href="#local-6989586621679090567"><span class="hs-identifier hs-var">ins'</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-64"></span><span>                </span><span class="annot"><span class="annottext">a -&gt; (a, a, a, a) -&gt; [(Int, Instruction Register a)] -&gt; m (Maybe a)
+</span><a href="#local-6989586621679090614"><span class="hs-identifier hs-var">go</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679090571"><span class="hs-identifier hs-var">prefix</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(a, a, a, a) -&gt; Register -&gt; a -&gt; (a, a, a, a)
+forall d. (d, d, d, d) -&gt; Register -&gt; d -&gt; (d, d, d, d)
+</span><a href="#local-6989586621679090601"><span class="hs-identifier hs-var">set</span></a></span><span> </span><span class="annot"><span class="annottext">(a, a, a, a)
+</span><a href="#local-6989586621679090570"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="annot"><span class="annottext">Register
+</span><a href="#local-6989586621679090569"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">(a -&gt; (a, a, a, a)) -&gt; a -&gt; (a, a, a, a)
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">(a, a, a, a) -&gt; Register -&gt; a
+forall p. (p, p, p, p) -&gt; Register -&gt; p
+</span><a href="#local-6989586621679090591"><span class="hs-identifier hs-var">get</span></a></span><span> </span><span class="annot"><span class="annottext">(a, a, a, a)
+</span><a href="#local-6989586621679090570"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="annot"><span class="annottext">Register
+</span><a href="#local-6989586621679090569"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; Bool
+forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">(Register -&gt; a) -&gt; (a -&gt; a) -&gt; Either Register a -&gt; a
+forall a c b. (a -&gt; c) -&gt; (b -&gt; c) -&gt; Either a b -&gt; c
+</span><span class="hs-identifier hs-var">either</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(a, a, a, a) -&gt; Register -&gt; a
+forall p. (p, p, p, p) -&gt; Register -&gt; p
+</span><a href="#local-6989586621679090591"><span class="hs-identifier hs-var">get</span></a></span><span> </span><span class="annot"><span class="annottext">(a, a, a, a)
+</span><a href="#local-6989586621679090570"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">a -&gt; a
+forall a. a -&gt; a
+</span><span class="hs-identifier hs-var">id</span></span><span> </span><span class="annot"><span class="annottext">Either Register a
+</span><a href="#local-6989586621679090568"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">a
+</span><span class="hs-number">1</span></span><span> </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">a
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(Int, Instruction Register a)]
+</span><a href="#local-6989586621679090567"><span class="hs-identifier hs-var">ins'</span></a></span><span>
+</span><span id="line-65"></span><span>        </span><span class="annot"><span class="annottext">a -&gt; (a, a, a, a) -&gt; [(Int, Instruction Register a)] -&gt; m (Maybe a)
+</span><a href="#local-6989586621679090614"><span class="hs-identifier hs-var">go</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><span class="hs-number">0</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">a
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">a
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">a
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([(Int, Instruction Register a)] -&gt; m (Maybe a))
+-&gt; [(Int, Instruction Register a)] -&gt; m (Maybe a)
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Int]
+-&gt; [Instruction Register a] -&gt; [(Int, Instruction Register a)]
+forall a b. [a] -&gt; [b] -&gt; [(a, b)]
+</span><span class="hs-identifier hs-var">zip</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">..</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Instruction Register a]
+</span><a href="#local-6989586621679090616"><span class="hs-identifier hs-var">ins</span></a></span><span>
+</span><span id="line-66"></span><span>  </span><span class="hs-keyword">where</span><span>
+</span><span id="line-67"></span><span>    </span><span id="local-6989586621679090591"><span class="annot"><span class="annottext">get :: (p, p, p, p) -&gt; Register -&gt; p
+</span><a href="#local-6989586621679090591"><span class="hs-identifier hs-var hs-var">get</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679090566"><span class="annot"><span class="annottext">p
+</span><a href="#local-6989586621679090566"><span class="hs-identifier hs-var">w</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">p
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">p
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">p
+</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Register
+</span><a href="Day24.html#W"><span class="hs-identifier hs-var">W</span></a></span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">p
+</span><a href="#local-6989586621679090566"><span class="hs-identifier hs-var">w</span></a></span><span>
+</span><span id="line-68"></span><span>    </span><span class="annot"><a href="#local-6989586621679090591"><span class="hs-identifier hs-var">get</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">p
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679090565"><span class="annot"><span class="annottext">p
+</span><a href="#local-6989586621679090565"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">p
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">p
+</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Register
+</span><a href="Day24.html#X"><span class="hs-identifier hs-var">X</span></a></span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">p
+</span><a href="#local-6989586621679090565"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-69"></span><span>    </span><span class="annot"><a href="#local-6989586621679090591"><span class="hs-identifier hs-var">get</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">p
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">p
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679090564"><span class="annot"><span class="annottext">p
+</span><a href="#local-6989586621679090564"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">p
+</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Register
+</span><a href="Day24.html#Y"><span class="hs-identifier hs-var">Y</span></a></span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">p
+</span><a href="#local-6989586621679090564"><span class="hs-identifier hs-var">y</span></a></span><span>
+</span><span id="line-70"></span><span>    </span><span class="annot"><a href="#local-6989586621679090591"><span class="hs-identifier hs-var">get</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">p
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">p
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">p
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679090563"><span class="annot"><span class="annottext">p
+</span><a href="#local-6989586621679090563"><span class="hs-identifier hs-var">z</span></a></span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Register
+</span><a href="Day24.html#Z"><span class="hs-identifier hs-var">Z</span></a></span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">p
+</span><a href="#local-6989586621679090563"><span class="hs-identifier hs-var">z</span></a></span><span>
+</span><span id="line-71"></span><span>    </span><span id="local-6989586621679090601"><span class="annot"><span class="annottext">set :: (d, d, d, d) -&gt; Register -&gt; d -&gt; (d, d, d, d)
+</span><a href="#local-6989586621679090601"><span class="hs-identifier hs-var hs-var">set</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">d
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679090562"><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090562"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679090561"><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090561"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679090560"><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090560"><span class="hs-identifier hs-var">z</span></a></span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Register
+</span><a href="Day24.html#W"><span class="hs-identifier hs-var">W</span></a></span><span> </span><span id="local-6989586621679090559"><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090559"><span class="hs-identifier hs-var">w</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090559"><span class="hs-identifier hs-var">w</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090562"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090561"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090560"><span class="hs-identifier hs-var">z</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-72"></span><span>    </span><span class="annot"><a href="#local-6989586621679090601"><span class="hs-identifier hs-var">set</span></a></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679090558"><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090558"><span class="hs-identifier hs-var">w</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">d
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679090557"><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090557"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679090556"><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090556"><span class="hs-identifier hs-var">z</span></a></span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Register
+</span><a href="Day24.html#X"><span class="hs-identifier hs-var">X</span></a></span><span> </span><span id="local-6989586621679090555"><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090555"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090558"><span class="hs-identifier hs-var">w</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090555"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090557"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090556"><span class="hs-identifier hs-var">z</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-73"></span><span>    </span><span class="annot"><a href="#local-6989586621679090601"><span class="hs-identifier hs-var">set</span></a></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679090554"><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090554"><span class="hs-identifier hs-var">w</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679090553"><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090553"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">d
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679090552"><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090552"><span class="hs-identifier hs-var">z</span></a></span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Register
+</span><a href="Day24.html#Y"><span class="hs-identifier hs-var">Y</span></a></span><span> </span><span id="local-6989586621679090551"><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090551"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090554"><span class="hs-identifier hs-var">w</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090553"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090551"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090552"><span class="hs-identifier hs-var">z</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-74"></span><span>    </span><span class="annot"><a href="#local-6989586621679090601"><span class="hs-identifier hs-var">set</span></a></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679090550"><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090550"><span class="hs-identifier hs-var">w</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679090549"><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090549"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679090548"><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090548"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">d
+</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Register
+</span><a href="Day24.html#Z"><span class="hs-identifier hs-var">Z</span></a></span><span> </span><span id="local-6989586621679090547"><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090547"><span class="hs-identifier hs-var">z</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090550"><span class="hs-identifier hs-var">w</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090549"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090548"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">d
+</span><a href="#local-6989586621679090547"><span class="hs-identifier hs-var">z</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-75"></span><span>
+</span><span id="line-76"></span><span class="annot"><a href="Day24.html#day24a"><span class="hs-identifier hs-type">day24a</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ParseErrorBundle</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Void</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-77"></span><span id="day24a"><span class="annot"><span class="annottext">day24a :: Text -&gt; IO (Either (ParseErrorBundle Text Void) (Maybe Int))
+</span><a href="Day24.html#day24a"><span class="hs-identifier hs-var hs-var">day24a</span></a></span></span><span> </span><span id="local-6989586621679090546"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679090546"><span class="hs-identifier hs-var">input</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Text
+-&gt; [Int]
+-&gt; Int
+-&gt; IO (Either (ParseErrorBundle Text Void) (Maybe Int))
+forall (m :: * -&gt; *) a.
+(PrimMonad m, Eq a, Hashable a, Integral a) =&gt;
+Text
+-&gt; [a] -&gt; Int -&gt; m (Either (ParseErrorBundle Text Void) (Maybe a))
+</span><a href="Day24.html#day24"><span class="hs-identifier hs-var">day24</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679090546"><span class="hs-identifier hs-var">input</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">9</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">8</span></span><span class="hs-glyph">..</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">1</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">(Int -&gt; IO (Either (ParseErrorBundle Text Void) (Maybe Int)))
+-&gt; IO Int -&gt; IO (Either (ParseErrorBundle Text Void) (Maybe Int))
+forall (m :: * -&gt; *) a b. Monad m =&gt; (a -&gt; m b) -&gt; m a -&gt; m b
+</span><span class="hs-operator hs-var">=&lt;&lt;</span></span><span> </span><span class="annot"><span class="annottext">IO Int
+forall a (m :: * -&gt; *). (Random a, MonadIO m) =&gt; m a
+</span><span class="hs-identifier hs-var">randomIO</span></span><span>
+</span><span id="line-78"></span><span>
+</span><span id="line-79"></span><span class="annot"><a href="Day24.html#day24b"><span class="hs-identifier hs-type">day24b</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ParseErrorBundle</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Void</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-80"></span><span id="day24b"><span class="annot"><span class="annottext">day24b :: Text -&gt; IO (Either (ParseErrorBundle Text Void) (Maybe Int))
+</span><a href="Day24.html#day24b"><span class="hs-identifier hs-var hs-var">day24b</span></a></span></span><span> </span><span id="local-6989586621679090544"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679090544"><span class="hs-identifier hs-var">input</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Text
+-&gt; [Int]
+-&gt; Int
+-&gt; IO (Either (ParseErrorBundle Text Void) (Maybe Int))
+forall (m :: * -&gt; *) a.
+(PrimMonad m, Eq a, Hashable a, Integral a) =&gt;
+Text
+-&gt; [a] -&gt; Int -&gt; m (Either (ParseErrorBundle Text Void) (Maybe a))
+</span><a href="Day24.html#day24"><span class="hs-identifier hs-var">day24</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679090544"><span class="hs-identifier hs-var">input</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">1</span></span><span class="hs-glyph">..</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">9</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">(Int -&gt; IO (Either (ParseErrorBundle Text Void) (Maybe Int)))
+-&gt; IO Int -&gt; IO (Either (ParseErrorBundle Text Void) (Maybe Int))
+forall (m :: * -&gt; *) a b. Monad m =&gt; (a -&gt; m b) -&gt; m a -&gt; m b
+</span><span class="hs-operator hs-var">=&lt;&lt;</span></span><span> </span><span class="annot"><span class="annottext">IO Int
+forall a (m :: * -&gt; *). (Random a, MonadIO m) =&gt; m a
+</span><span class="hs-identifier hs-var">randomIO</span></span><span>
+</span><span id="line-81"></span></pre></body></html>
