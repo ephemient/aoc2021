@@ -1,37 +1,55 @@
 package com.github.ephemient.aoc2021
 
-class Day24Common(private val lines: List<String>) {
-    fun part1(): Long? = solve(9 downTo 1)
+import kotlin.reflect.KMutableProperty1
+import kotlin.reflect.KProperty1
 
-    fun part2(): Long? = solve(1..9)
+class Day24Common(private val lines: List<String>) : Day24Impl {
+    private val initialAlu = ALU()
+    private val groups: List<Pair<String, List<Instruction>>> = buildList<Pair<String, MutableList<Instruction>>> {
+        for (line in lines) {
+            if (line.startsWith("inp ")) {
+                add(line.substring(4) to mutableListOf())
+            } else {
+                check(line[3] == ' ' && line[5] == ' ')
+                val op = Op.valueOf(line.substring(0, 3))
+                val lhs = ALU[line.substring(4, 5)]
+                val rhs = line.substring(6)
+                val instruction = rhs.toIntOrNull()
+                    ?.let { Instruction.RegImm(lhs, it, op) }
+                    ?: Instruction.RegReg(lhs, ALU[rhs], op)
+                lastOrNull()?.also { (_, group) -> group.add(instruction) } ?: instruction(initialAlu)
+            }
+        }
+    }
+
+    override fun part1(): Long? = solve(9 downTo 1)
+
+    override fun part2(): Long? = solve(1..9)
 
     private fun solve(
         range: IntProgression,
-        alu: ALU = ALU(),
+        alu: ALU = initialAlu.copy(),
         index: Int = 0,
         prefix: Long = 0L,
-        visited: MutableSet<in State> = LruSet(1 shl 24),
+        visited: MutableSet<in State> = CacheSet(0x1000000),
     ): Long? {
-        var i = index
-        while (i < lines.size) {
-            val line = lines[i++]
-            if (line.startsWith("inp ")) {
-                return if (visited.add(State(i, alu))) {
-                    val lhs = line.substring(4, 5)
-                    range.firstNotNullOfOrNull { solve(range, alu.copy(lhs, it), i, 10 * prefix + it, visited) }
-                } else null
-            } else {
-                val op = ops.getValue(line.substring(0, 3))
-                val lhs = line.substring(4, 5)
-                val rhs = line.substring(6)
-                alu[lhs] = op(alu[lhs], rhs.toIntOrNull() ?: alu[rhs])
-            }
+        if (!visited.add(State(index, alu.w, alu.x, alu.y, alu.z))) return null
+        val (inp, group) = groups.getOrNull(index) ?: return prefix.takeIf { alu.z == 0 }
+        return range.firstNotNullOfOrNull {
+            val aluCopy = alu.copy(inp, it)
+            for (instruction in group) instruction(aluCopy)
+            solve(range, aluCopy, index + 1, 10 * prefix + it, visited)
         }
-        return if (alu.z == 0) prefix else null
     }
 
-    private data class State(val index: Int, var w: Int = 0, var x: Int = 0, var y: Int = 0, var z: Int = 0) {
-        constructor(index: Int, alu: ALU) : this(index, alu.w, alu.x, alu.y, alu.z)
+    internal data class State(
+        val index: Int,
+        val w: Int = 0,
+        val x: Int = 0,
+        val y: Int = 0,
+        val z: Int = 0,
+    ) : HashWithSalt {
+        override fun hashWithSalt(salt: Int): Int = 31 * (31 * (31 * (31 * (31 * salt + index) + w) + x) + y) + z
     }
 
     private data class ALU(var w: Int = 0, var x: Int = 0, var y: Int = 0, var z: Int = 0) {
@@ -43,32 +61,63 @@ class Day24Common(private val lines: List<String>) {
             else -> TODO()
         }
 
-        operator fun get(key: String) = when (key) {
-            "w" -> w
-            "x" -> x
-            "y" -> y
-            "z" -> z
-            else -> TODO()
-        }
-
-        operator fun set(key: String, value: Int) {
-            when (key) {
-                "w" -> w = value
-                "x" -> x = value
-                "y" -> y = value
-                "z" -> z = value
+        companion object {
+            operator fun get(key: String): KMutableProperty1<ALU, Int> = when (key) {
+                "w" -> ALU::w
+                "x" -> ALU::x
+                "y" -> ALU::y
+                "z" -> ALU::z
                 else -> TODO()
             }
         }
     }
 
-    companion object {
-        private val ops: Map<String, (Int, Int) -> Int> = mapOf(
-            "add" to Int::plus,
-            "mul" to Int::times,
-            "div" to Int::div,
-            "mod" to Int::rem,
-            "eql" to { x, y -> if (x == y) 1 else 0 },
-        )
+    private sealed class Instruction {
+        abstract operator fun invoke(alu: ALU)
+
+        class RegImm(
+            private val lhs: KMutableProperty1<ALU, Int>,
+            private val rhs: Int,
+            private val op: Op,
+        ) : Instruction() {
+            override fun invoke(alu: ALU) {
+                lhs.set(alu, op(lhs.get(alu), rhs))
+            }
+        }
+
+        class RegReg(
+            private val lhs: KMutableProperty1<ALU, Int>,
+            private val rhs: KProperty1<ALU, Int>,
+            private val op: Op,
+        ) : Instruction() {
+            override fun invoke(alu: ALU) {
+                lhs.set(alu, op(lhs.get(alu), rhs.get(alu)))
+            }
+        }
+    }
+
+    @Suppress("EnumNaming")
+    private enum class Op {
+        add {
+            override fun invoke(x: Int, y: Int): Int = x + y
+        },
+        mul {
+            override fun invoke(x: Int, y: Int): Int = x * y
+        },
+        div {
+            override fun invoke(x: Int, y: Int): Int = x / y
+        },
+        mod {
+            override fun invoke(x: Int, y: Int): Int = x % y
+        },
+        eql {
+            override fun invoke(x: Int, y: Int): Int = if (x == y) 1 else 0
+        };
+
+        abstract operator fun invoke(x: Int, y: Int): Int
+    }
+
+    class Provider : Day24Impl.Provider<Day24Common> {
+        override fun invoke(lines: List<String>): Day24Common = Day24Common(lines)
     }
 }

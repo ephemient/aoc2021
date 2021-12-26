@@ -3,6 +3,7 @@ asm = "9.2"
 dependency-updates = "0.39.0"
 detekt = "1.19.0"
 dokka = "1.6.0"
+graal-sdk = "21.3.0"
 junit-jupiter = "5.8.2"
 kotlin = "1.6.10"
 kotlinx-benchmark = "0.4.0"
@@ -19,6 +20,7 @@ native-image = { id = "org.graalvm.buildtools.native", version.ref = "native-ima
 asm = { module = "org.ow2.asm:asm", version.ref = "asm" }
 asm-commons = { module = "org.ow2.asm:asm-commons", version.ref = "asm" }
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
+graal-sdk = { module = "org.graalvm.sdk:graal-sdk", version.ref = "graal-sdk" }
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
 kotlinx-benchmark-runtime = { module = "org.jetbrains.kotlinx:kotlinx-benchmark-runtime", version.ref = "kotlinx-benchmark" }

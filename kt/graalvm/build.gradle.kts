@@ -10,6 +10,9 @@ application {
 graalvmNative.binaries.named("main") {
     imageName.set(rootProject.name)
     buildArgs.add("-H:IncludeResources=day.*\\.txt")
+    agent {
+        enabled.set(true)
+    }
 }
 
 dependencies {

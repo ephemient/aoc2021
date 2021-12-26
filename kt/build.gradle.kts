@@ -1,6 +1,7 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import org.gradle.api.plugins.ApplicationPlugin.APPLICATION_GROUP
 import org.gradle.language.base.plugins.LifecycleBasePlugin.VERIFICATION_GROUP
+import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.plugin.KotlinJsCompilerType
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 import org.jetbrains.kotlin.gradle.plugin.KotlinTargetPreset
@@ -107,7 +108,9 @@ kotlin {
     jvm()
     for ((jsTarget, compiler) in jsTargets) {
         js(jsTarget, compiler) {
-            binaries.executable()
+            // https://youtrack.jetbrains.com/issue/KT-31888
+            // binaries.executable()
+            compilations.getByName("main").kotlinOptions.freeCompilerArgs += listOf("-main", "noCall")
             nodejs {
                 testTask {
                     useMocha()
@@ -195,6 +198,7 @@ kotlin {
             dependencies {
                 implementation(libs.asm)
                 implementation(libs.asm.commons)
+                implementation(libs.graal.sdk)
             }
         }
         getByName("jvmTest") {
@@ -282,6 +286,12 @@ distributions {
 
 tasks.named<Test>("jvmTest") {
     useJUnitPlatform()
+}
+
+tasks.withType<DokkaTask>().configureEach {
+    dokkaSourceSets.configureEach {
+        includeNonPublic.set(true)
+    }
 }
 
 val detektKotlinScripts by tasks.registering(Detekt::class) {

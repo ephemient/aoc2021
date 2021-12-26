@@ -1,5 +1,7 @@
 package com.github.ephemient.aoc2021
 
+import com.github.ephemient.aoc2021.Day24Common.State
+import org.graalvm.nativeimage.ImageInfo
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Opcodes
@@ -7,13 +9,11 @@ import org.objectweb.asm.Type
 import org.objectweb.asm.commons.AnalyzerAdapter
 import org.objectweb.asm.commons.GeneratorAdapter
 import org.objectweb.asm.commons.Method
+import org.objectweb.asm.signature.SignatureWriter
 import java.lang.invoke.MethodHandles
-import java.util.Collections
-import java.util.WeakHashMap
+import java.lang.invoke.MethodType
 
-actual typealias Day24 = Day24Jvm
-
-class Day24Jvm(lines: List<String>) {
+class Day24Jvm(lines: List<String>) : Day24Impl {
     private val aluClass = with(ClassWriter(ClassWriter.COMPUTE_FRAMES or ClassWriter.COMPUTE_MAXS)) {
         val implName = ALU::class.java.binaryName + "\$Impl"
         visit(
@@ -28,7 +28,15 @@ class Day24Jvm(lines: List<String>) {
             Opcodes.ACC_PRIVATE or Opcodes.ACC_FINAL,
             "visited",
             Type.getDescriptor(MutableSet::class.java),
-            null,
+            with(SignatureWriter()) {
+                visitClassType(MutableSet::class.java.binaryName)
+                with(visitTypeArgument('-')) {
+                    visitClassType(State::class.java.binaryName)
+                    visitEnd()
+                }
+                visitEnd()
+                toString()
+            },
             null,
         )
         with(
@@ -36,7 +44,18 @@ class Day24Jvm(lines: List<String>) {
                 Opcodes.ACC_PUBLIC,
                 "<init>",
                 Type.getMethodDescriptor(Type.VOID_TYPE, Type.getType(MutableSet::class.java)),
-                null,
+                with(SignatureWriter()) {
+                    with(visitParameterType()) {
+                        visitClassType(MutableSet::class.java.binaryName)
+                        with(visitTypeArgument('-')) {
+                            visitClassType(State::class.java.binaryName)
+                            visitEnd()
+                        }
+                        visitEnd()
+                    }
+                    visitReturnType().visitBaseType('V')
+                    toString()
+                },
                 null,
             )
         ) {
@@ -192,21 +211,19 @@ class Day24Jvm(lines: List<String>) {
         @Suppress("UNCHECKED_CAST")
         MethodHandles.lookup().defineHiddenClass(toByteArray(), true).lookupClass() as Class<out ALU>
     }
+    private val aluConstructor = MethodHandles.lookup()
+        .findConstructor(aluClass, MethodType.methodType(Nothing::class.javaPrimitiveType, MutableSet::class.java))
 
-    fun part1(): Long? = aluClass
-        .getDeclaredConstructor(MutableSet::class.java)
-        .newInstance(Collections.newSetFromMap<State>(WeakHashMap()))
-        .solve(9 downTo 1)
+    override fun part1(): Long? = (aluConstructor.invoke(CacheSet<State>(0x1000000)) as ALU).solve(9 downTo 1)
 
-    fun part2(): Long? = aluClass
-        .getDeclaredConstructor(MutableSet::class.java)
-        .newInstance(Collections.newSetFromMap<State>(WeakHashMap()))
-        .solve(1..9)
-
-    private data class State(val index: Int, val w: Int, val x: Int, val y: Int, val z: Int)
+    override fun part2(): Long? = (aluConstructor.invoke(CacheSet<State>(0x1000000)) as ALU).solve(1..9)
 
     private interface ALU {
         fun solve(range: Iterable<Int>): Long?
+    }
+
+    class Provider : Day24Impl.Provider<Day24Jvm> {
+        override fun invoke(lines: List<String>): Day24Jvm? = if (ImageInfo.inImageCode()) null else Day24Jvm(lines)
     }
 
     companion object {

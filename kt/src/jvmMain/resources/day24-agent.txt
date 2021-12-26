@@ -1,0 +1,43 @@
+inp w
+mul z 31
+add z w
+inp w
+mul z 31
+add z w
+inp w
+mul z 31
+add z w
+inp w
+mul z 31
+add z w
+inp w
+mul z 31
+add z w
+inp w
+mul z 31
+add z w
+inp w
+mul z 31
+add z w
+inp w
+mul z 31
+add z w
+inp w
+mul z 31
+add z w
+inp w
+mul z 31
+add z w
+inp w
+mul z 31
+add z w
+inp w
+mul z 31
+add z w
+inp w
+mul z 31
+add z w
+inp w
+mul z 31
+add z w
+mod z 16777216
