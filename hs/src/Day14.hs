@@ -1,6 +1,6 @@
 {-|
 Module:         Day14
-Description:    <https://adventofcode.com/21421/day/14 Day 14: Extended Polymerization>
+Description:    <https://adventofcode.com/2021/day/14 Day 14: Extended Polymerization>
 -}
 {-# LANGUAGE OverloadedStrings, TupleSections #-}
 module Day14 (day14a, day14b) where
