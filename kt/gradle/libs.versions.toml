@@ -6,7 +6,7 @@ dokka = "1.6.0"
 graal-sdk = "21.3.0"
 junit-jupiter = "5.8.2"
 kotlin = "1.6.10"
-kotlinx-benchmark = "0.4.0"
+kotlinx-benchmark = "0.4.1"
 native-image-plugin = "0.9.8"
 
 [plugins]
