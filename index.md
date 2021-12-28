@@ -21,6 +21,6 @@
 
 [Criterion](criterion/index.html)
 
-## [Hyperfine](https://github.com/sharkdp/hyperfine)
+## All
 
-{% include_relative hyperfine.md %}
+[Hyperfine](hyperfine.md)
