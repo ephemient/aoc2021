@@ -207,6 +207,11 @@ kotlin {
             kotlin.srcDir(nonJvmSources)
         }
 
+        getByName("jsMain") {
+            dependencies {
+                implementation(npm("detect-mocha", "0.1.0"))
+            }
+        }
         getByName("jsTest") {
             dependencies {
                 implementation(kotlin("test-js"))
