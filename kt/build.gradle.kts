@@ -2,7 +2,6 @@ import io.gitlab.arturbosch.detekt.Detekt
 import org.gradle.api.plugins.ApplicationPlugin.APPLICATION_GROUP
 import org.gradle.language.base.plugins.LifecycleBasePlugin.VERIFICATION_GROUP
 import org.jetbrains.dokka.gradle.DokkaTask
-import org.jetbrains.kotlin.gradle.plugin.KotlinJsCompilerType
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 import org.jetbrains.kotlin.gradle.plugin.KotlinTargetPreset
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
@@ -101,20 +100,15 @@ val nonJvmSources by tasks.registering {
     }
 }
 
-val jsTargets = mapOf("jsIr" to KotlinJsCompilerType.IR, "jsLegacy" to KotlinJsCompilerType.LEGACY)
 val nativeTargets = setOf("linuxX64", "linuxArm64", "mingwX86", "mingwX64", "macosX64", "macosArm64", "wasm32")
 
 kotlin {
     jvm()
-    for ((jsTarget, compiler) in jsTargets) {
-        js(jsTarget, compiler) {
-            binaries.executable()
-            if (compiler != KotlinJsCompilerType.LEGACY) {
-                nodejs {
-                    testTask {
-                        useMocha()
-                    }
-                }
+    js(IR) {
+        binaries.executable()
+        nodejs {
+            testTask {
+                useMocha()
             }
         }
     }
@@ -150,15 +144,10 @@ kotlin {
                 dependsOn(nonJs)
                 parentCompilation?.also { dependsOn(getByName("jvm$it")) }
             }
-            val js = create("js$compilation") {
-                dependsOn(nonJvm)
-                parentCompilation?.also { dependsOn(getByName("js$it")) }
-            }
-            for (jsTarget in jsTargets.keys) {
-                if (compilation == "Bench" && targets.getByName(jsTarget) is KotlinJsIrTarget) continue
-                getByName("$jsTarget$compilation") {
-                    dependsOn(js)
-                    parentCompilation?.also { dependsOn(getByName("$jsTarget$it")) }
+            if (compilation != "Bench") {
+                getByName("js$compilation") {
+                    dependsOn(nonJvm)
+                    parentCompilation?.also { dependsOn(getByName("js$it")) }
                 }
             }
             val native = create("native$compilation") {
@@ -233,8 +222,7 @@ allOpen {
 benchmark {
     targets {
         register("jvmBench")
-        // register("jsIrBench") // https://github.com/Kotlin/kotlinx-benchmark/issues/30
-        // register("jsLegacyBench")
+        // register("jsBench") // https://github.com/Kotlin/kotlinx-benchmark/issues/30
         // for (nativeTarget in nativeTargets) register("${nativeTarget}Bench") // https://github.com/Kotlin/kotlinx-benchmark/issues/67
     }
 
