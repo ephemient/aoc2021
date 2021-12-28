@@ -7,7 +7,7 @@ graal-sdk = "21.3.0"
 junit-jupiter = "5.8.2"
 kotlin = "1.6.10"
 kotlinx-benchmark = "0.4.1"
-native-image-plugin = "0.9.8"
+native-image-plugin = "0.9.9"
 
 [plugins]
 dependency-updates = { id = "com.github.ben-manes.versions", version.ref = "dependency-updates" }
