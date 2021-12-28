@@ -19,7 +19,7 @@ spec :: Spec
 spec = do
     describe "part 1" $ do
         it "examples" $ do
-            day23a example `shouldBe` Just 12521
+            day23a example `shouldBe` Right (Just 12521)
     describe "part 2" $ do
         it "examples" $ do
-            day23b example `shouldBe` Just 44169
+            day23b example `shouldBe` Right (Just 44169)
