@@ -168,11 +168,37 @@ jobs:
   hyperfine:
     needs: [ haskell, kotlin, kotlin-native, kotlin-graalvm, python, rust ]
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        day:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          - 6
+          - 7
+          - 8
+          - 9
+          - 10
+          - 11
+          - 12
+          - 13
+          - 14
+          - 15
+          - 16
+          - 17
+          - 18
+          - 19
+          - 20
+          - 21
+          - 22
+          # - 23
+          # - 24
+          # - 25
+          - all
 
     steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: gh-docs
       - name: sudo apt install hyperfine
         run: |
           wget https://github.com/sharkdp/hyperfine/releases/download/v1.12.0/hyperfine_1.12.0_amd64.deb
@@ -196,15 +222,44 @@ jobs:
       - name: Run hyperfine
         run: |
           hyperfine \
-            -n Haskell 'aoc2021_datadir=inputs aoc2021-hs/aoc2021-exe' \
-            -n Kotlin/JVM 'aoc2021-kt/aoc2021/bin/aoc2021' \
-            -n Kotlin/Native 'aoc2021-kexe/aoc2021.kexe' \
-            -n Kotlin/GraalVM 'aoc2021-graalvm/aoc2021' \
-            -n Python 'PYTHON_HOME=aoc2021-py aoc2021-py/bin/aoc2021' \
-            -n Rust 'aoc2021-rs/aoc2021' \
-            --export-markdown hyperfine.md
+            --min-runs 2 \
+            --command-name Haskell 'aoc2021_datadir=inputs aoc2021-hs/aoc2021-exe ${{ matrix.day }}' \
+            --command-name Kotlin/JVM 'aoc2021-kt/aoc2021/bin/aoc2021 ${{ matrix.day }}' \
+            --command-name Kotlin/Native 'aoc2021-kexe/aoc2021.kexe ${{ matrix.day }}' \
+            --command-name Kotlin/GraalVM 'aoc2021-graalvm/aoc2021 ${{ matrix.day }}' \
+            --command-name Python 'PYTHON_HOME=aoc2021-py aoc2021-py/bin/aoc2021 ${{ matrix.day }}' \
+            --command-name Rust 'aoc2021-rs/aoc2021 ${{ matrix.day }}' \
+            --export-markdown '${{ matrix.day }}.md'
+      - uses: actions/upload-artifact@v2
+        with:
+          name: hyperfine-${{ matrix.day }}
+          path: ${{ matrix.day }}.md
+
+  build:
+    needs: [ hyperfine ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: gh-docs
+      - uses: actions/download-artifact@v2
+      - run: rsync --archive --delete --verbose --whole-file hyperfine-*/ hyperfine/
+      - name: Build hyperfine.md
+        run: |
+          {
+            for day in $(find hyperfine -mindepth 1 -maxdepth 1 -name '*[0-9]*.md' -exec basename -s.md {} \; | sort -n); do
+              echo "### Day $day"
+              echo
+              echo "{% include_relative hyperfine/$day.md %}"
+              echo
+            done
+            echo '### All days'
+            echo
+            echo '{% include_relative hyperfine/all.md %}'
+          } >hyperfine.md
       - uses: EndBug/add-and-commit@v7
         with:
           branch: gh-docs
-          add: hyperfine.md
+          add: hyperfine.md hyperfine/
           message: 'Hyperfine ${{ github.sha }}'
