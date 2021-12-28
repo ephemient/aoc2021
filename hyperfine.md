@@ -1,8 +1,91 @@
-| Command | Mean [s] | Min [s] | Max [s] | Relative |
-|:---|---:|---:|---:|---:|
-| `Haskell` | 10.296 ± 0.199 | 9.959 | 10.509 | 12.54 ± 0.40 |
-| `Kotlin/JVM` | 3.462 ± 0.179 | 3.084 | 3.656 | 4.21 ± 0.24 |
-| `Kotlin/Native` | 9.351 ± 0.273 | 9.034 | 9.890 | 11.39 ± 0.44 |
-| `Kotlin/GraalVM` | 4.072 ± 0.061 | 3.998 | 4.180 | 4.96 ± 0.15 |
-| `Python` | 16.291 ± 0.517 | 15.581 | 17.170 | 19.84 ± 0.81 |
-| `Rust` | 0.821 ± 0.021 | 0.782 | 0.854 | 1.00 |
+### Day 1
+
+{% include_relative hyperfine/1.md %}
+
+### Day 2
+
+{% include_relative hyperfine/2.md %}
+
+### Day 3
+
+{% include_relative hyperfine/3.md %}
+
+### Day 4
+
+{% include_relative hyperfine/4.md %}
+
+### Day 5
+
+{% include_relative hyperfine/5.md %}
+
+### Day 6
+
+{% include_relative hyperfine/6.md %}
+
+### Day 7
+
+{% include_relative hyperfine/7.md %}
+
+### Day 8
+
+{% include_relative hyperfine/8.md %}
+
+### Day 9
+
+{% include_relative hyperfine/9.md %}
+
+### Day 10
+
+{% include_relative hyperfine/10.md %}
+
+### Day 11
+
+{% include_relative hyperfine/11.md %}
+
+### Day 12
+
+{% include_relative hyperfine/12.md %}
+
+### Day 13
+
+{% include_relative hyperfine/13.md %}
+
+### Day 14
+
+{% include_relative hyperfine/14.md %}
+
+### Day 15
+
+{% include_relative hyperfine/15.md %}
+
+### Day 16
+
+{% include_relative hyperfine/16.md %}
+
+### Day 17
+
+{% include_relative hyperfine/17.md %}
+
+### Day 18
+
+{% include_relative hyperfine/18.md %}
+
+### Day 19
+
+{% include_relative hyperfine/19.md %}
+
+### Day 20
+
+{% include_relative hyperfine/20.md %}
+
+### Day 21
+
+{% include_relative hyperfine/21.md %}
+
+### Day 22
+
+{% include_relative hyperfine/22.md %}
+
+### All days
+
+{% include_relative hyperfine/all.md %}
