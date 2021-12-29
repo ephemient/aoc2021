@@ -5,10 +5,10 @@ import pkg_resources
 
 
 def main():
-    args = set(sys.argv[1:])
+    args = set(int(arg) for arg in sys.argv[1:] if arg.isnumeric())
     days = pkg_resources.get_entry_map("aoc2021", "aoc2021.days")
     for day, entry in sorted(days.items(), key=lambda item: int(item[0])):
-        if args and day not in args:
+        if args and int(day) not in args:
             continue
         print(f"Day {day}")
         with io.TextIOWrapper(

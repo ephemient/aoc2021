@@ -12,30 +12,32 @@ use std::io;
 build_const!("aoc2021");
 
 fn main() -> io::Result<()> {
-    let args = env::args().skip(1).collect::<HashSet<_>>();
+    let args = env::args().skip(1)
+        .filter_map(|s| s.parse().ok())
+        .collect::<HashSet<u32>>();
 
-    if args.is_empty() || args.contains("1") {
+    if args.is_empty() || args.contains(&1) {
         println!("Day 1");
         println!("{:?}", day1::part1(DAY1).map_err(util::to_ioerror)?);
         println!("{:?}", day1::part2(DAY1).map_err(util::to_ioerror)?);
         println!();
     }
 
-    if args.is_empty() || args.contains("2") {
+    if args.is_empty() || args.contains(&2) {
         println!("Day 2");
         println!("{:?}", day2::part1(DAY2).map_err(util::to_ioerror)?);
         println!("{:?}", day2::part2(DAY2).map_err(util::to_ioerror)?);
         println!();
     }
 
-    if args.is_empty() || args.contains("3") {
+    if args.is_empty() || args.contains(&3) {
         println!("Day 3");
         println!("{:?}", day3::part1(DAY3).map_err(util::to_ioerror)?);
         println!("{:?}", day3::part2(DAY3).map_err(util::to_ioerror)?);
         println!();
     }
 
-    if args.is_empty() || args.contains("4") {
+    if args.is_empty() || args.contains(&4) {
         println!("Day 4");
         let (part1, part2) = day4::solve(DAY4)
             .and_then(|x| Ok(x.ok_or(util::Error)?))
@@ -45,28 +47,28 @@ fn main() -> io::Result<()> {
         println!();
     }
 
-    if args.is_empty() || args.contains("5") {
+    if args.is_empty() || args.contains(&5) {
         println!("Day 5");
         println!("{:?}", day5::part1(DAY5).map_err(util::to_ioerror)?);
         println!("{:?}", day5::part2(DAY5).map_err(util::to_ioerror)?);
         println!();
     }
 
-    if args.is_empty() || args.contains("6") {
+    if args.is_empty() || args.contains(&6) {
         println!("Day 6");
         println!("{:?}", day6::part1(DAY6).map_err(util::to_ioerror)?);
         println!("{:?}", day6::part2(DAY6).map_err(util::to_ioerror)?);
         println!();
     }
 
-    if args.is_empty() || args.contains("7") {
+    if args.is_empty() || args.contains(&7) {
         println!("Day 7");
         println!("{:?}", day7::part1(DAY7).map_err(util::to_ioerror)?);
         println!("{:?}", day7::part2(DAY7).map_err(util::to_ioerror)?);
         println!();
     }
 
-    if args.is_empty() || args.contains("8") {
+    if args.is_empty() || args.contains(&8) {
         println!("Day 8");
         println!(
             "{:?}",
@@ -79,14 +81,14 @@ fn main() -> io::Result<()> {
         println!();
     }
 
-    if args.is_empty() || args.contains("9") {
+    if args.is_empty() || args.contains(&9) {
         println!("Day 9");
         println!("{:?}", day9::part1(DAY9));
         println!("{:?}", day9::part2(DAY9));
         println!();
     }
 
-    if args.is_empty() || args.contains("10") {
+    if args.is_empty() || args.contains(&10) {
         println!("Day 10");
         println!("{:?}", day10::part1(DAY10));
         println!(
@@ -96,7 +98,7 @@ fn main() -> io::Result<()> {
         println!();
     }
 
-    if args.is_empty() || args.contains("11") {
+    if args.is_empty() || args.contains(&11) {
         println!("Day 11");
         println!(
             "{:?}",
@@ -105,7 +107,7 @@ fn main() -> io::Result<()> {
         println!();
     }
 
-    if args.is_empty() || args.contains("12") {
+    if args.is_empty() || args.contains(&12) {
         println!("Day 12");
         println!(
             "{:?}",
@@ -118,14 +120,14 @@ fn main() -> io::Result<()> {
         println!();
     }
 
-    if args.is_empty() || args.contains("13") {
+    if args.is_empty() || args.contains(&13) {
         println!("Day 13");
         println!("{:?}", day13::part1(DAY13).map_err(util::to_ioerror)?);
         println!("{}", day13::part2(DAY13).map_err(util::to_ioerror)?);
         println!();
     }
 
-    if args.is_empty() || args.contains("14") {
+    if args.is_empty() || args.contains(&14) {
         println!("Day 14");
         println!(
             "{:?}",
@@ -138,7 +140,7 @@ fn main() -> io::Result<()> {
         println!();
     }
 
-    if args.is_empty() || args.contains("15") {
+    if args.is_empty() || args.contains(&15) {
         println!("Day 15");
         println!(
             "{:?}",
@@ -151,7 +153,7 @@ fn main() -> io::Result<()> {
         println!();
     }
 
-    if args.is_empty() || args.contains("16") {
+    if args.is_empty() || args.contains(&16) {
         println!("Day 16");
         println!(
             "{:?}",
@@ -164,7 +166,7 @@ fn main() -> io::Result<()> {
         println!();
     }
 
-    if args.is_empty() || args.contains("17") {
+    if args.is_empty() || args.contains(&17) {
         println!("Day 17");
         let (part1, part2) = day17::solve(DAY17).map_err(util::to_ioerror)?;
         println!("{:?}", part1);
@@ -172,7 +174,7 @@ fn main() -> io::Result<()> {
         println!();
     }
 
-    if args.is_empty() || args.contains("18") {
+    if args.is_empty() || args.contains(&18) {
         println!("Day 18");
         println!(
             "{:?}",
@@ -185,7 +187,7 @@ fn main() -> io::Result<()> {
         println!();
     }
 
-    if args.is_empty() || args.contains("19") {
+    if args.is_empty() || args.contains(&19) {
         println!("Day 19");
         let (part1, part2) = day19::solve(DAY19).map_err(util::to_ioerror)?;
         println!("{:?}", part1);
@@ -193,7 +195,7 @@ fn main() -> io::Result<()> {
         println!();
     }
 
-    if args.is_empty() || args.contains("20") {
+    if args.is_empty() || args.contains(&20) {
         println!("Day 20");
         println!(
             "{:?}",
@@ -206,14 +208,14 @@ fn main() -> io::Result<()> {
         println!();
     }
 
-    if args.is_empty() || args.contains("21") {
+    if args.is_empty() || args.contains(&21) {
         println!("Day 21");
         println!("{:?}", day21::part1(DAY21).map_err(util::to_ioerror)?);
         println!("{:?}", day21::part2(DAY21).map_err(util::to_ioerror)?);
         println!();
     }
 
-    if args.is_empty() || args.contains("22") {
+    if args.is_empty() || args.contains(&22) {
         println!("Day 22");
         println!("{:?}", day22::part1(DAY22).map_err(util::to_ioerror)?);
         println!("{:?}", day22::part2(DAY22).map_err(util::to_ioerror)?);
