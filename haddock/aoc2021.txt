@@ -164,10 +164,20 @@ Mul :: a -> Either a b -> Instruction a b
 Div :: a -> Either a b -> Instruction a b
 Mod :: a -> Either a b -> Instruction a b
 Eql :: a -> Either a b -> Instruction a b
+data State a
+State :: !a -> !a -> !a -> !a -> State a
+[w] :: State a -> !a
+[x] :: State a -> !a
+[y] :: State a -> !a
+[z] :: State a -> !a
+get :: State a -> Register -> a
+set :: State a -> Register -> a -> State a
 parser :: (MonadParsec e s m, IsString (Tokens s), Token s ~ Char, Num a) => m (Instruction Register a)
-day24 :: (PrimMonad m, Eq a, Hashable a, Integral a) => Text -> [a] -> Int -> m (Either (ParseErrorBundle Text Void) (Maybe a))
-day24a :: Text -> IO (Either (ParseErrorBundle Text Void) (Maybe Int))
-day24b :: Text -> IO (Either (ParseErrorBundle Text Void) (Maybe Int))
+run :: Integral a => [a] -> a -> [Instruction Register a] -> State a -> Maybe a
+runRange :: Integral a => (a, a) -> [Instruction Register (a, a)] -> State (a, a) -> Bool
+day24 :: Text -> Either (ParseErrorBundle Text Void) (Maybe (Integer, Integer))
+instance GHC.Base.Functor (Day24.Instruction a)
+instance GHC.Base.Functor Day24.State
 
 
 module Day25
