@@ -35,8 +35,10 @@ class Day24Common(private val lines: List<String>) : Day24Impl {
         prefix: Long = 0L,
         visited: MutableSet<in State> = CacheSet(0x1000000),
     ): Long? {
-        if (!visited.add(State(index, alu.w, alu.x, alu.y, alu.z))) return null
         val (inp, group) = groups.getOrNull(index) ?: return prefix.takeIf { alu.z == 0 }
+        with(alu.copy().also { inp.set(it, 0) }) {
+            if (!visited.add(State(index, w, x, y, z))) return null
+        }
         return range.firstNotNullOfOrNull {
             val aluCopy = alu.copy()
             inp.set(aluCopy, it)

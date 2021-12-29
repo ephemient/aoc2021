@@ -104,7 +104,7 @@ class Day24Jvm(lines: List<String>) : Day24Impl {
                     newInstance(Type.getType(State::class.java))
                     dup()
                     push(i)
-                    repeat(vars.length) { loadArg(it + 2) }
+                    vars.forEachIndexed { i, c -> if (c == line[4]) push(0) else loadArg(i + 2) }
                     invokeConstructor(
                         Type.getType(State::class.java),
                         Method.getMethod(
