@@ -12,7 +12,8 @@ use std::io;
 build_const!("aoc2021");
 
 fn main() -> io::Result<()> {
-    let args = env::args().skip(1)
+    let args = env::args()
+        .skip(1)
         .filter_map(|s| s.parse().ok())
         .collect::<HashSet<u32>>();
 
