@@ -24,7 +24,7 @@ import Day20 (day20a, day20b)
 import Day21 (day21a, day21b)
 import Day22 (day22a, day22b)
 import Day23 (day23a, day23b)
-import Day24 (day24a, day24b)
+import Day24 (day24)
 import Day25 (day25)
 
 import Control.Monad ((<=<), when)
@@ -80,5 +80,5 @@ main = do
     run 21 (print <=< rightOrFail) [day21a, day21b]
     run 22 (print <=< rightOrFail) [day22a, day22b]
     run 23 (print <=< justOrFail <=< rightOrFail) [day23a, day23b]
-    run 24 (>>= print <=< justOrFail <=< rightOrFail) [day24a, day24b]
+    run 24 (print <=< justOrFail <=< rightOrFail) [day24]
     run 25 (print <=< justOrFail) [day25]

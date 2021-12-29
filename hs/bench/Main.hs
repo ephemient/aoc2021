@@ -1,6 +1,6 @@
 module Main (main) where
 
-import Criterion.Main (bench, bgroup, defaultMain, env, nf, nfIO)
+import Criterion.Main (bench, bgroup, defaultMain, env, nf)
 import Data.Text (Text)
 import qualified Data.Text.IO as TIO (readFile)
 import Day1 (day1a, day1b)
@@ -26,7 +26,7 @@ import Day20 (day20a, day20b)
 import Day21 (day21a, day21b)
 import Day22 (day22a, day22b)
 import Day23 (day23a, day23b)
-import Day24 (day24a, day24b)
+import Day24 (day24)
 import Day25 (day25)
 import Paths_aoc2021 (getDataFileName)
 
@@ -115,9 +115,6 @@ main = defaultMain
       [ bench "part 1" $ nf day23a input
       , bench "part 2" $ nf day23b input
       ]
-  , env (getDayInput 24) $ \input -> bgroup "Day 24"
-      [ bench "part 1" $ nfIO $ day24a input
-      , bench "part 2" $ nfIO $ day24b input
-      ]
+  , env (getDayInput 24) $ \input -> bgroup "Day 24" [bench "both" $ nf day24 input]
   , env (getDayInput 25) $ \input -> bgroup "Day 25" [bench "part 1" $ nf day25 input]
   ]
