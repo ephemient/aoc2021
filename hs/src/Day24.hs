@@ -47,7 +47,7 @@ day24 input nums salt = case parse (parser `sepEndBy` newline <* eof) "" input o
         let go prefix (_, _, _, 0) [] = pure $ Just prefix
             go _ (_, _, _, _) [] = pure Nothing
             go prefix r ((i, Inp a):ins') = do
-                let state = (i, r)
+                let state = (i, set r a 0)
                     go' num cont =
                         go (10 * prefix + num) (set r a num) ins' >>= maybe cont (pure . Just)
                 seen <- MV.exchange cache (hashWithSalt salt state .&. 0xffffff) $ Just state
