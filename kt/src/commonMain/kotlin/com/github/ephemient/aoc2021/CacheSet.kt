@@ -1,11 +1,6 @@
 package com.github.ephemient.aoc2021
 
-import kotlin.random.Random
-
-internal class CacheSet<T : HashWithSalt>(
-    capacity: Int,
-    private val salt: Int = Random.nextInt(),
-) : AbstractMutableSet<T>() {
+internal class CacheSet<T : Any>(capacity: Int) : AbstractMutableSet<T>() {
     init {
         require(capacity > 0)
     }
@@ -14,17 +9,17 @@ internal class CacheSet<T : HashWithSalt>(
     override var size: Int = 0
         private set
 
-    override fun contains(element: T): Boolean = data[element.hashWithSalt(salt).mod(data.size)] == element
+    override fun contains(element: T): Boolean = data[element.hashCode().mod(data.size)] == element
 
     override fun add(element: T): Boolean {
-        val index = element.hashWithSalt(salt).mod(data.size)
+        val index = element.hashCode().mod(data.size)
         val previous = data[index]
         data[index] = element
         return element != previous
     }
 
     override fun remove(element: T): Boolean {
-        val index = element.hashWithSalt(salt).mod(data.size)
+        val index = element.hashCode().mod(data.size)
         val previous = data[index]
         return if (element == previous) {
             data[index] = null

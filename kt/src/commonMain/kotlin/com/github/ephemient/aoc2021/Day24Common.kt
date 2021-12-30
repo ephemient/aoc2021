@@ -53,9 +53,7 @@ class Day24Common(private val lines: List<String>) : Day24Impl {
         val x: Int = 0,
         val y: Int = 0,
         val z: Int = 0,
-    ) : HashWithSalt {
-        override fun hashWithSalt(salt: Int): Int = 31 * (31 * (31 * (31 * (31 * salt + index) + w) + x) + y) + z
-    }
+    )
 
     private data class ALU(var w: Int = 0, var x: Int = 0, var y: Int = 0, var z: Int = 0) {
         companion object {
