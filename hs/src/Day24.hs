@@ -95,8 +95,8 @@ runRange r ins0 state0 = runRange' ins0 state0 /= Just False where
         else (0, c - 1)
       | otherwise = Nothing
     (a, b) =: (c, d)
-      | a == c && b == d = Just (1, 1)
-      | a <= d && c <= d = Just (0, 1)
+      | a == b && b == c && c == d = Just (1, 1)
+      | a <= d && c <= b = Just (0, 1)
       | otherwise = Just (0, 0)
 
 day24 :: Text -> Either (ParseErrorBundle Text Void) (Maybe (Integer, Integer))
