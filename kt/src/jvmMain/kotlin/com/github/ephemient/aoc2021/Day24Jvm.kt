@@ -95,7 +95,7 @@ class Day24Jvm(lines: List<String>) : Day24Impl {
             visitEnd()
         }
         lines.foldIndexed(visitSolveMethodGenerator(implName, "solve").apply { visitCode() }) { i, generator, line ->
-            with(generator) {
+            generator.apply {
                 if (line.startsWith("inp ")) {
                     check(line[4] in vars)
                     val endLoop = newLabel()
@@ -164,36 +164,34 @@ class Day24Jvm(lines: List<String>) : Day24Impl {
                     push(null as String?)
                     returnValue()
                     endMethod()
-                    visitSolveMethodGenerator(implName, "solve$i").apply { visitCode() }
-                } else {
-                    val lhs = vars.indexOf(line[4])
-                    check(lhs >= 0)
-                    loadArg(lhs + 2)
-                    if (line.substring(6).toIntOrNull()?.also { push(it) } == null) {
-                        val rhs = vars.indexOf(line[6])
-                        check(rhs >= 0)
-                        loadArg(rhs + 2)
-                    }
-                    when (line.substring(0, 4)) {
-                        "add " -> math(GeneratorAdapter.ADD, Type.INT_TYPE)
-                        "mul " -> math(GeneratorAdapter.MUL, Type.INT_TYPE)
-                        "div " -> math(GeneratorAdapter.DIV, Type.INT_TYPE)
-                        "mod " -> math(GeneratorAdapter.REM, Type.INT_TYPE)
-                        "eql " -> {
-                            val zero = newLabel()
-                            val done = newLabel()
-                            ifICmp(GeneratorAdapter.NE, zero)
-                            push(1)
-                            goTo(done)
-                            mark(zero)
-                            push(0)
-                            mark(done)
-                        }
-                        else -> TODO()
-                    }
-                    storeArg(lhs + 2)
-                    generator
+                    return@foldIndexed visitSolveMethodGenerator(implName, "solve$i").apply { visitCode() }
                 }
+                val lhs = vars.indexOf(line[4])
+                check(lhs >= 0)
+                loadArg(lhs + 2)
+                if (line.substring(6).toIntOrNull()?.also { push(it) } == null) {
+                    val rhs = vars.indexOf(line[6])
+                    check(rhs >= 0)
+                    loadArg(rhs + 2)
+                }
+                when (line.substring(0, 4)) {
+                    "add " -> math(GeneratorAdapter.ADD, Type.INT_TYPE)
+                    "mul " -> math(GeneratorAdapter.MUL, Type.INT_TYPE)
+                    "div " -> math(GeneratorAdapter.DIV, Type.INT_TYPE)
+                    "mod " -> math(GeneratorAdapter.REM, Type.INT_TYPE)
+                    "eql " -> {
+                        val zero = newLabel()
+                        val done = newLabel()
+                        ifICmp(GeneratorAdapter.NE, zero)
+                        push(1)
+                        goTo(done)
+                        mark(zero)
+                        push(0)
+                        mark(done)
+                    }
+                    else -> TODO()
+                }
+                storeArg(lhs + 2)
             }
         }.run {
             val end = newLabel()
@@ -208,8 +206,7 @@ class Day24Jvm(lines: List<String>) : Day24Impl {
             endMethod()
         }
         visitEnd()
-        @Suppress("UNCHECKED_CAST")
-        MethodHandles.lookup().defineHiddenClass(toByteArray(), true).lookupClass() as Class<out ALU>
+        MethodHandles.lookup().defineHiddenClass(toByteArray(), true).lookupClass()
     }
     private val aluConstructor = MethodHandles.lookup()
         .findConstructor(aluClass, MethodType.methodType(Nothing::class.javaPrimitiveType, MutableSet::class.java))
