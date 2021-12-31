@@ -156,9 +156,9 @@ def skip_range(lines, w, x, y, z):
                     else getattr(alu, rhs)
                 )
                 if c > 0:
-                    r = a // d, a // c
+                    r = a // d, b // c
                 elif d < 0:
-                    r = a // c, a // d
+                    r = a // c, b // d
                 else:
                     return None
                 setattr(alu, lhs, r)
