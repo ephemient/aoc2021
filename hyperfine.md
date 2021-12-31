@@ -86,6 +86,10 @@
 
 {% include_relative hyperfine/22.md %}
 
+### Day 23
+
+{% include_relative hyperfine/23.md %}
+
 ### All days
 
 {% include_relative hyperfine/all.md %}
