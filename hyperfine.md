@@ -90,6 +90,10 @@
 
 {% include_relative hyperfine/23.md %}
 
+### Day 24
+
+{% include_relative hyperfine/24.md %}
+
 ### All days
 
 {% include_relative hyperfine/all.md %}
