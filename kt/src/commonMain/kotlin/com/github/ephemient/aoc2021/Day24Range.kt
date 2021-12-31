@@ -38,15 +38,15 @@ class Day24Range(lines: List<String>) : Day24Impl {
         ) : Instruction()
     }
 
-    private data class ALU(var w: Int, var x: Int, var y: Int, var z: Int) {
-        operator fun get(register: Register): Int = when (register) {
+    private data class ALU(var w: Long, var x: Long, var y: Long, var z: Long) {
+        operator fun get(register: Register): Long = when (register) {
             Register.w -> w
             Register.x -> x
             Register.y -> y
             Register.z -> z
         }
 
-        operator fun set(register: Register, value: Int) {
+        operator fun set(register: Register, value: Long) {
             when (register) {
                 Register.w -> w = value
                 Register.x -> x = value
@@ -56,18 +56,18 @@ class Day24Range(lines: List<String>) : Day24Impl {
         }
     }
 
-    private data class ALURange(var w: IntPair, var x: IntPair, var y: IntPair, var z: IntPair) {
-        constructor(w: Int, x: Int, y: Int, z: Int) : this(w to w, x to x, y to y, z to z)
+    private data class ALURange(var w: LongPair, var x: LongPair, var y: LongPair, var z: LongPair) {
+        constructor(w: Long, x: Long, y: Long, z: Long) : this(w to w, x to x, y to y, z to z)
         constructor(alu: ALU) : this(alu.w, alu.x, alu.y, alu.z)
 
-        operator fun get(register: Register): IntPair = when (register) {
+        operator fun get(register: Register): LongPair = when (register) {
             Register.w -> w
             Register.x -> x
             Register.y -> y
             Register.z -> z
         }
 
-        operator fun set(register: Register, value: IntPair) {
+        operator fun set(register: Register, value: LongPair) {
             when (register) {
                 Register.w -> w = value
                 Register.x -> x = value
@@ -100,7 +100,7 @@ class Day24Range(lines: List<String>) : Day24Impl {
                     is Instruction.Input -> {
                         val instructions2 = instructions.subList(i + 1, instructions.size)
                         return nums.firstNotNullOfOrNull { num ->
-                            alu[instruction.lhs] = num
+                            alu[instruction.lhs] = num.toLong()
                             if (checkRange(instructions2, ALURange(alu)) != RangeResult.IMPOSSIBLE) {
                                 solve(instructions2, nums, 10 * prefix + num, alu.copy())
                             } else null
@@ -109,7 +109,7 @@ class Day24Range(lines: List<String>) : Day24Impl {
                     is Instruction.Operation -> {
                         val lhs = alu[instruction.lhs]
                         val rhs = when (instruction.rhs) {
-                            null -> instruction.value
+                            null -> instruction.value.toLong()
                             else -> alu[instruction.rhs]
                         }
                         alu[instruction.lhs] = when (instruction.operator) {
@@ -122,18 +122,18 @@ class Day24Range(lines: List<String>) : Day24Impl {
                     }
                 }
             }
-            return if (alu.z == 0) prefix else null
+            return if (alu.z == 0L) prefix else null
         }
 
         @Suppress("ComplexMethod", "NestedBlockDepth", "ReturnCount")
         private fun checkRange(instructions: List<Instruction>, alu: ALURange): RangeResult {
             for (instruction in instructions) {
                 when (instruction) {
-                    is Instruction.Input -> alu[instruction.lhs] = 1 to 9
+                    is Instruction.Input -> alu[instruction.lhs] = 1L to 9L
                     is Instruction.Operation -> {
                         val (a, b) = alu[instruction.lhs]
                         val (c, d) = when (instruction.rhs) {
-                            null -> instruction.value to instruction.value
+                            null -> instruction.value.toLong() to instruction.value.toLong()
                             else -> alu[instruction.rhs]
                         }
                         alu[instruction.lhs] = when (instruction.operator) {
@@ -144,8 +144,8 @@ class Day24Range(lines: List<String>) : Day24Impl {
                                 a >= 0 && c <= 0 -> a * d to b * c
                                 a <= 0 && c >= 0 -> b * c to a * d
                                 else -> {
-                                    val xs = intArrayOf(a * c, a * d, b * c, b * d)
-                                    xs.fold(0, ::minOf) to xs.fold(0, ::maxOf)
+                                    val xs = longArrayOf(a * c, a * d, b * c, b * d)
+                                    xs.fold(0L, ::minOf) to xs.fold(0L, ::maxOf)
                                 }
                             }
                             Operator.div -> when {
@@ -154,12 +154,12 @@ class Day24Range(lines: List<String>) : Day24Impl {
                                 else -> return RangeResult.UNKNOWN
                             }
                             Operator.mod -> if (0 < c && c == d) {
-                                if (b - a + 1 < c && a % c <= b % c) a % c to b % c else 0 to c - 1
+                                if (b - a + 1 < c && a % c <= b % c) a % c to b % c else 0L to c - 1
                             } else return RangeResult.UNKNOWN
                             Operator.eql -> when {
-                                a == b && b == c && c == d -> 1 to 1
-                                a <= d && c <= b -> 0 to 1
-                                else -> 0 to 0
+                                a == b && b == c && c == d -> 1L to 1L
+                                a <= d && c <= b -> 0L to 1L
+                                else -> 0L to 0L
                             }
                         }
                     }
