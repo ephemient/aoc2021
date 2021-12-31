@@ -199,6 +199,7 @@ kotlin {
             dependencies {
                 implementation(kotlin("test-junit5"))
                 implementation(libs.junit.jupiter.api)
+                implementation(libs.junit.jupiter.params)
                 runtimeOnly(libs.junit.jupiter.engine)
             }
         }

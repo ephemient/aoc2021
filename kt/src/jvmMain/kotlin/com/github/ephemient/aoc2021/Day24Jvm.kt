@@ -221,6 +221,8 @@ class Day24Jvm(lines: List<String>) : Day24Impl {
 
     class Provider : Day24Impl.Provider<Day24Jvm> {
         override fun invoke(lines: List<String>): Day24Jvm? = if (ImageInfo.inImageCode()) null else Day24Jvm(lines)
+
+        override fun toString(): String = "Day24Jvm"
     }
 
     companion object {

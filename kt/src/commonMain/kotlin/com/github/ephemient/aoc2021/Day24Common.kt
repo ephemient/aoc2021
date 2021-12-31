@@ -114,5 +114,7 @@ class Day24Common(private val lines: List<String>) : Day24Impl {
 
     class Provider : Day24Impl.Provider<Day24Common> {
         override fun invoke(lines: List<String>): Day24Common = Day24Common(lines)
+
+        override fun toString(): String = "Day24Common"
     }
 }
