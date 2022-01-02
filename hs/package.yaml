@@ -27,13 +27,21 @@ library:
   dependencies:
   - array
   - containers
+  - deepseq
   - fgl
+  - hashable
   - heap
   - megaparsec
+  - monad-loops
   - mtl
+  - parallel
+  - parser-combinators
+  - primitive
+  - random
   - split
   - template-haskell
   - text
+  - unordered-containers
   - vector
   other-modules:
   - Day6Meta
@@ -67,6 +75,7 @@ tests:
     dependencies:
     - QuickCheck
     - aoc2021
+    - containers
     - hspec
     - text
 

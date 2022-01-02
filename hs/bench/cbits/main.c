@@ -15,6 +15,8 @@ static void envRtsMsgFunction(const char *s, va_list ap) {
 
 int main(int argc, char *argv[]) {
     RtsConfig rtsConfig = defaultRtsConfig;
+    rtsConfig.rts_opts_enabled = RtsOptsAll;
+    rtsConfig.rts_opts_suggestions = true;
     rtsConfig.rts_opts = "-N -qg";
     rtsConfig.rts_hs_main = true;
     debugMsgFn = envRtsMsgFunction;

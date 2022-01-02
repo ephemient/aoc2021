@@ -1,0 +1,10 @@
+#!/usr/bin/env perl
+use feature 'say';
+my $c = '[';
+while (<>) {
+    chomp;
+    s/(.*)/  $c "$1"/;
+    say;
+    $c = ',';
+}
+print "  ]\n";

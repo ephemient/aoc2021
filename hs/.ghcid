@@ -1,0 +1,2 @@
+--command="stack ghci aoc2021:lib --ghci-options -w"
+--allow-eval
