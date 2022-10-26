@@ -24,7 +24,7 @@ black = "^21.12b0"
 flake8 = "^4.0.1"
 isort = "^5.10.1"
 pytest = "^6.2.5"
-pytest-benchmark = { version = "^3.4.1", extras = ["histogram"] }
+pytest-benchmark = { version = "^4.0.0", extras = ["histogram"] }
 
 [tool.poetry.scripts]
 aoc2021 = "aoc2021.main:main"
