@@ -15,35 +15,30 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [package.extras]
-dev = ["cloudpickle", "coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "mypy", "pytest-mypy-plugins", "zope.interface", "furo", "sphinx", "sphinx-notfound-page", "pre-commit"]
-docs = ["furo", "sphinx", "zope.interface", "sphinx-notfound-page"]
-tests = ["cloudpickle", "coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "mypy", "pytest-mypy-plugins", "zope.interface"]
-tests_no_zope = ["cloudpickle", "coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "mypy", "pytest-mypy-plugins"]
+dev = ["cloudpickle", "coverage[toml] (>=5.0.2)", "furo", "hypothesis", "mypy", "pre-commit", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins", "six", "sphinx", "sphinx-notfound-page", "zope.interface"]
+docs = ["furo", "sphinx", "sphinx-notfound-page", "zope.interface"]
+tests = ["cloudpickle", "coverage[toml] (>=5.0.2)", "hypothesis", "mypy", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins", "six", "zope.interface"]
+tests-no-zope = ["cloudpickle", "coverage[toml] (>=5.0.2)", "hypothesis", "mypy", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins", "six"]
 
 [[package]]
 name = "black"
-version = "21.12b0"
+version = "23.1a1"
 description = "The uncompromising code formatter."
 category = "dev"
 optional = false
-python-versions = ">=3.6.2"
+python-versions = ">=3.7"
 
 [package.dependencies]
-click = ">=7.1.2"
+click = ">=8.0.0"
 mypy-extensions = ">=0.4.3"
-pathspec = ">=0.9.0,<1"
+pathspec = ">=0.9.0"
 platformdirs = ">=2"
-tomli = ">=0.2.6,<2.0.0"
-typing-extensions = [
-    {version = ">=3.10.0.0", markers = "python_version < \"3.10\""},
-    {version = "!=3.10.0.1", markers = "python_version >= \"3.10\""},
-]
+tomli = {version = ">=1.1.0", markers = "python_version < \"3.11\""}
 
 [package.extras]
 colorama = ["colorama (>=0.4.3)"]
 d = ["aiohttp (>=3.7.4)"]
 jupyter = ["ipython (>=7.8.0)", "tokenize-rt (>=3.2.0)"]
-python2 = ["typed-ast (>=1.4.3)"]
 uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
@@ -95,10 +90,10 @@ optional = false
 python-versions = ">=3.6.1,<4.0"
 
 [package.extras]
-pipfile_deprecated_finder = ["pipreqs", "requirementslib"]
-requirements_deprecated_finder = ["pipreqs", "pip-api"]
 colors = ["colorama (>=0.4.3,<0.5.0)"]
+pipfile-deprecated-finder = ["pipreqs", "requirementslib"]
 plugins = ["setuptools"]
+requirements-deprecated-finder = ["pip-api", "pipreqs"]
 
 [[package]]
 name = "mccabe"
@@ -200,10 +195,10 @@ optional = false
 python-versions = "*"
 
 [package.extras]
-docs = ["sphinx", "sphinx-rtd-theme", "pygal-sphinx-directives"]
+docs = ["pygal-sphinx-directives", "sphinx", "sphinx-rtd-theme"]
 lxml = ["lxml"]
 png = ["cairosvg"]
-test = ["pyquery", "flask", "cairosvg", "lxml", "pygal-maps-world", "pygal-maps-fr", "pygal-maps-ch", "coveralls", "pytest-runner", "pytest-cov", "pytest-flake8", "pytest-isort", "pytest"]
+test = ["cairosvg", "coveralls", "flask", "lxml", "pygal-maps-ch", "pygal-maps-fr", "pygal-maps-world", "pyquery", "pytest", "pytest-cov", "pytest-flake8", "pytest-isort", "pytest-runner"]
 
 [[package]]
 name = "pygaljs"
@@ -280,18 +275,10 @@ category = "dev"
 optional = false
 python-versions = ">=3.6"
 
-[[package]]
-name = "typing-extensions"
-version = "4.0.1"
-description = "Backported and Experimental Type Hints for Python 3.6+"
-category = "dev"
-optional = false
-python-versions = ">=3.6"
-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "f6c4f014d9ea30fc8af91d7d57bc07d576cb60dab70f9d55ef05b69d90d6f1a9"
+content-hash = "b16c68a811c6fc83a863d5401ba01c582ed495413f5e4824152f25c7e027c850"
 
 [metadata.files]
 atomicwrites = [
@@ -303,8 +290,18 @@ attrs = [
     {file = "attrs-21.3.0.tar.gz", hash = "sha256:50f3c9b216dc9021042f71b392859a773b904ce1a029077f58f6598272432045"},
 ]
 black = [
-    {file = "black-21.12b0-py3-none-any.whl", hash = "sha256:a615e69ae185e08fdd73e4715e260e2479c861b5740057fde6e8b4e3b7dd589f"},
-    {file = "black-21.12b0.tar.gz", hash = "sha256:77b80f693a569e2e527958459634f18df9b0ba2625ba4e0c2d5da5be42e6f2b3"},
+    {file = "black-23.1a1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:5fb7641d442ede92538bc70fa0201f884753a7d0f62f26c722b7b00301b95902"},
+    {file = "black-23.1a1-cp310-cp310-win_amd64.whl", hash = "sha256:88288a645402106b8eb9f50d7340ae741e16240bb01c2eed8466549153daa96e"},
+    {file = "black-23.1a1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:4db1d8027ce7ae53f0ccf02b0be0b8808fefb291d6cb1543420f4165d96d364c"},
+    {file = "black-23.1a1-cp311-cp311-win_amd64.whl", hash = "sha256:88ec25a64063945b4591b6378bead544c5d3260de1c93ad96f3ad2d76ddd76fd"},
+    {file = "black-23.1a1-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8dff6f0157e47fbbeada046fca144b6557d3be2fb2602d668881cd179f04a352"},
+    {file = "black-23.1a1-cp37-cp37m-win_amd64.whl", hash = "sha256:ca658b69260a18bf7aa0b0a6562dbbd304a737487d1318998aaca5a75901fd2c"},
+    {file = "black-23.1a1-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:85dede655442f5e246e7abd667fe07e14916897ba52f3640b5489bf11f7dbf67"},
+    {file = "black-23.1a1-cp38-cp38-win_amd64.whl", hash = "sha256:ddbf9da228726d46f45c29024263e160d41030a415097254817d65127012d1a2"},
+    {file = "black-23.1a1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:63330069d8ec909cf4e2c4d43a7f00aeb03335430ef9fec6cd2328e6ebde8a77"},
+    {file = "black-23.1a1-cp39-cp39-win_amd64.whl", hash = "sha256:793c9176beb2adf295f6b863d9a4dc953fe2ac359ca3da108d71d14cb2c09e52"},
+    {file = "black-23.1a1-py3-none-any.whl", hash = "sha256:e88e4b633d64b9e7adc4a6b922f52bb204af9f90d7b1e3317e6490f2b598b1ea"},
+    {file = "black-23.1a1.tar.gz", hash = "sha256:0b945a5a1e5a5321f884de0061d5a8585d947c9b608e37b6d26ceee4dfdf4b62"},
 ]
 click = [
     {file = "click-8.0.3-py3-none-any.whl", hash = "sha256:353f466495adaeb40b6b5f592f9f91cb22372351c84caeb068132442a4518ef3"},
@@ -392,8 +389,4 @@ toml = [
 tomli = [
     {file = "tomli-1.2.3-py3-none-any.whl", hash = "sha256:e3069e4be3ead9668e21cb9b074cd948f7b3113fd9c8bba083f48247aab8b11c"},
     {file = "tomli-1.2.3.tar.gz", hash = "sha256:05b6166bff487dc068d322585c7ea4ef78deed501cc124060e0f238e89a9231f"},
-]
-typing-extensions = [
-    {file = "typing_extensions-4.0.1-py3-none-any.whl", hash = "sha256:7f001e5ac290a0c0401508864c7ec868be4e701886d5b573a9528ed3973d9d3b"},
-    {file = "typing_extensions-4.0.1.tar.gz", hash = "sha256:4ca091dea149f945ec56afb48dae714f21e8692ef22a395223bcd328961b6a0e"},
 ]
